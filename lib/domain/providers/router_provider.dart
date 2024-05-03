@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konsuldoc/domain/models/user.dart';
+import 'package:konsuldoc/data/models/user.dart';
 import 'package:konsuldoc/domain/providers/user_state_provider.dart';
 import 'package:konsuldoc/router/admin_router.dart';
 import 'package:konsuldoc/router/app_router.dart';
