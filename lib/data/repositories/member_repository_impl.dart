@@ -29,14 +29,14 @@ class MemberRepositoryImpl implements MemberRepository {
   @override
   Future<List<Member>> getMember() async {
     return (await _supabase.from(TableConstants.member).select())
-        .map((e) => MemberModel.fromJson(e))
+        .map((e) => MemberModel.fromMap(e))
         .toList();
   }
 
   @override
   Future<Member> getMemberById(String id) async {
     return (await _supabase.from(TableConstants.member).select(id))
-        .map((e) => MemberModel.fromJson(e))
+        .map((e) => MemberModel.fromMap(e))
         .first;
   }
 

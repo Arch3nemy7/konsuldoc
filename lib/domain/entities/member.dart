@@ -1,13 +1,13 @@
-import 'dart:io';
+import 'package:konsuldoc/domain/entities/user.dart';
+import 'package:konsuldoc/domain/enums/role.dart';
 
 enum Gender {
   male,
   female,
 }
 
-class Member {
-  final String id;
-  final File? avatar;
+class Member extends User {
+  final String? avatar;
   final String name;
   final String email;
   final String? phone;
@@ -17,7 +17,7 @@ class Member {
   final DateTime createdAt;
 
   Member({
-    required this.id,
+    required super.id,
     required this.avatar,
     required this.name,
     required this.email,
@@ -26,5 +26,5 @@ class Member {
     required this.dob,
     required this.gender,
     required this.createdAt,
-  });
+  }) : super(role: Role.member);
 }

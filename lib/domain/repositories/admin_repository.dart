@@ -1,15 +1,28 @@
+import 'dart:io';
+
 import 'package:konsuldoc/domain/entities/admin.dart';
 
 abstract interface class AdminRepository {
-  Future<List<Admin>> getAdmins();
+  Future<List<Admin>> fetch(
+    int page,
+    int perPage,
+  );
 
-  Future<Admin> getAdminById(String id);
+  Future<Admin> fetchById(String id);
 
-  Future<void> addAdmin(
-      String id, String? avatar, String email, String name, String? phone);
+  Future<void> add({
+    File? avatar,
+    required String email,
+    required String password,
+    required String name,
+    String? phone,
+  });
 
-  Future<void> updateAdmin(
-      String id, String? avatar, String email, String name, String? phone);
-
-  Future<void> deleteAdmin(String id);
+  Future<void> edit({
+    required String id,
+    String? avatar,
+    required String email,
+    required String name,
+    String? phone,
+  });
 }

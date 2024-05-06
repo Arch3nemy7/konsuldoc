@@ -13,7 +13,7 @@ class MemberModel extends Member {
     required super.createdAt,
   });
 
-  factory MemberModel.fromJson(Map<String, dynamic> map) {
+  factory MemberModel.fromMap(Map<String, dynamic> map) {
     return MemberModel(
         id: map['id'],
         avatar: map['avatar'],
