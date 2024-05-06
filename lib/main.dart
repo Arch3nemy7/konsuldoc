@@ -1,13 +1,14 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konsuldoc/constants/constants.dart';
-import 'package:konsuldoc/domain/providers/router_provider.dart';
+import 'package:konsuldoc/core/constants/supabase_constants.dart';
+import 'package:konsuldoc/presentations/providers/router_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   await Supabase.initialize(
-    url: Constants.supabaseUrl,
-    anonKey: Constants.supabaseKey,
+    url: SupabaseConstants.url,
+    anonKey: SupabaseConstants.anonKey,
   );
 
   runApp(const ProviderScope(child: MainApp()));
@@ -20,8 +21,9 @@ class MainApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'KonsulDoc',
-      routerConfig: ref.watch(routerProvider),
+      builder: BotToastInit(),
       debugShowCheckedModeBanner: false,
+      routerConfig: ref.watch(routerProvider),
     );
   }
 }
