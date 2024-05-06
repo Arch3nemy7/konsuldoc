@@ -14,13 +14,13 @@ class AdminRepositoryImpl implements AdminRepository {
   @override
   Future<List<AdminModel>> fetch(int page, int perPage) async {
     return (await _supabase.from(TableConstants.admin).select())
-        .map((e) => AdminModel.fromJson(e))
+        .map((e) => AdminModel.fromMap(e))
         .toList();
   }
 
   @override
   Future<AdminModel> fetchById(String id) async {
-    return AdminModel.fromJson(
+    return AdminModel.fromMap(
       (await _supabase.from(TableConstants.admin).select().eq('id', id)).first,
     );
   }

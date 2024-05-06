@@ -9,7 +9,7 @@ class AdminModel extends Admin {
     required super.phone,
   });
 
-  factory AdminModel.fromJson(Map<String, dynamic> map) {
+  factory AdminModel.fromMap(Map<String, dynamic> map) {
     return AdminModel(
       id: map['id'],
       avatar: map['avatar'],
