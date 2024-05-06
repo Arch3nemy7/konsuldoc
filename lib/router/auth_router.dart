@@ -5,7 +5,9 @@ import 'package:konsuldoc/router/auth_router.gr.dart';
 class AuthRouter extends $AuthRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(page: LoginRoute.page, initial: true),
-        AutoRoute(page: RegisterRoute.page),
+        AutoRoute(
+          page: SignInRoute.page,
+          initial: true,
+        )
       ];
 }

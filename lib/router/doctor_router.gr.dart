@@ -25,13 +25,13 @@ abstract class $DoctorRouter extends _i5.RootStackRouter {
         child: const _i1.HomePage(),
       );
     },
-    LoginRoute.name: (routeData) {
+    SignInRoute.name: (routeData) {
       return _i5.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i2.SignInPage(),
       );
     },
-    RegisterRoute.name: (routeData) {
+    SignUpRoute.name: (routeData) {
       return _i5.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i3.SignUpPage(),
@@ -62,28 +62,28 @@ class HomeRoute extends _i5.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.SignInPage]
-class LoginRoute extends _i5.PageRouteInfo<void> {
-  const LoginRoute({List<_i5.PageRouteInfo>? children})
+class SignInRoute extends _i5.PageRouteInfo<void> {
+  const SignInRoute({List<_i5.PageRouteInfo>? children})
       : super(
-          LoginRoute.name,
+          SignInRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'LoginRoute';
+  static const String name = 'SignInRoute';
 
   static const _i5.PageInfo<void> page = _i5.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i3.SignUpPage]
-class RegisterRoute extends _i5.PageRouteInfo<void> {
-  const RegisterRoute({List<_i5.PageRouteInfo>? children})
+class SignUpRoute extends _i5.PageRouteInfo<void> {
+  const SignUpRoute({List<_i5.PageRouteInfo>? children})
       : super(
-          RegisterRoute.name,
+          SignUpRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'RegisterRoute';
+  static const String name = 'SignUpRoute';
 
   static const _i5.PageInfo<void> page = _i5.PageInfo<void>(name);
 }

@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:konsuldoc/router/app_router.gr.dart';
+import 'package:konsuldoc/router/member_router.gr.dart';
 
 @AutoRouterConfig()
-class AppRouter extends $AppRouter {
+class MemberRouter extends $MemberRouter {
   @override
   List<AutoRoute> get routes => [];
 }
