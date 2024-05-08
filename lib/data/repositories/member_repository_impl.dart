@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:konsuldoc/constants/table_constants.dart';
+import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/member_model.dart';
 import 'package:konsuldoc/domain/entities/member.dart';
 import 'package:konsuldoc/domain/repositories/member_repository.dart';
@@ -13,9 +13,17 @@ class MemberRepositoryImpl implements MemberRepository {
       : _supabase = supabase;
 
   @override
-  Future<void> editMember(String id, File? avatar, String name, String email,
-      String? phone, String? address, DateTime? dob, Gender? gender) async {
-    await _supabase.from(TableConstants.member).update({
+  Future<void> edit({
+    required String id,
+    File? avatar,
+    required String name,
+    required String email,
+    String? phone,
+    String? address,
+    DateTime? dob,
+    Gender? gender,
+  }) async {
+    await _supabase.from(TableConstants.members).update({
       'avatar': avatar,
       'email': email,
       'name': name,
@@ -27,23 +35,23 @@ class MemberRepositoryImpl implements MemberRepository {
   }
 
   @override
-  Future<List<Member>> getMember() async {
-    return (await _supabase.from(TableConstants.member).select())
-        .map((e) => MemberModel.fromMap(e))
-        .toList();
-  }
-
-  @override
-  Future<Member> getMemberById(String id) async {
-    return (await _supabase.from(TableConstants.member).select(id))
+  Future<Member> fetchById(String id) async {
+    return (await _supabase.from(TableConstants.members).select(id))
         .map((e) => MemberModel.fromMap(e))
         .first;
   }
 
   @override
-  Future<void> addMember(File? avatar, String name, String email, String? phone,
-      String? address, DateTime? dob, Gender? gender) async {
-    await _supabase.from(TableConstants.member).insert({
+  Future<void> add({
+    File? avatar,
+    required String name,
+    required String email,
+    String? phone,
+    String? address,
+    DateTime? dob,
+    Gender? gender,
+  }) async {
+    await _supabase.from(TableConstants.members).insert({
       'avatar': avatar,
       'name': name,
       'email': email,

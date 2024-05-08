@@ -30,15 +30,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-<<<<<<< HEAD
-.linux/
-.macos/
-.windows/
-=======
 /linux/
 /macos/
 /windows/
->>>>>>> development
 
 # Symbolication related
 app.*.symbols
