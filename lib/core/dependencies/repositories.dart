@@ -1,3 +1,4 @@
+import 'package:konsuldoc/core/dependencies/supabase.dart';
 import 'package:konsuldoc/data/repositories/admin_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/auth_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/doctor_repository_impl.dart';
@@ -8,8 +9,6 @@ import 'package:konsuldoc/domain/repositories/auth_repository.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:konsuldoc/domain/repositories/member_repository.dart';
 import 'package:konsuldoc/domain/repositories/storage_repository.dart';
-import 'package:konsuldoc/presentations/providers/supabase_admin_provider.dart';
-import 'package:konsuldoc/presentations/providers/supabase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repositories.g.dart';
