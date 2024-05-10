@@ -14,10 +14,15 @@ class StorageRepositoryImpl implements StorageRepository {
   }
 
   @override
-  Future<String> uploadFile(File file, String bucket, String id) async {
+  Future<String> uploadFile({
+    required File file,
+    required String bucket,
+    required String id,
+  }) async {
     await _supabase.storage.from(bucket).upload(
-      id, file,
-    );
+          id,
+          file,
+        );
     return _supabase.storage.from(bucket).getPublicUrl(id);
   }
 }
