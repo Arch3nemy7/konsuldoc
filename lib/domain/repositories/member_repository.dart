@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:konsuldoc/domain/entities/member.dart';
 
 abstract interface class MemberRepository {
-  Future<Member> fetchById(String id);
+  Stream<Member> fetchById(String id);
   Future<void> add({
     required String id,
     File? avatar,

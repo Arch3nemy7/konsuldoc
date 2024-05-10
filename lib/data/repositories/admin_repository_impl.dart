@@ -25,10 +25,12 @@ class AdminRepositoryImpl implements AdminRepository {
   }
 
   @override
-  Future<AdminModel> fetchById(String id) async {
-    return AdminModel.fromMap(
-      (await _supabase.from(TableConstants.admins).select().eq('id', id)).first,
-    );
+  Stream<AdminModel> fetchById(String id) {
+    return _supabase
+        .from(TableConstants.admins)
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((event) => AdminModel.fromMap(event.first));
   }
 
   @override

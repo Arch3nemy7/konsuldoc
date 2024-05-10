@@ -5,7 +5,7 @@ import 'package:konsuldoc/domain/entities/schedule.dart';
 
 abstract interface class DoctorRepository {
   Future<List<Doctor>> fetch(int page, int perPage);
-  Future<Doctor> fetchById(String id);
+  Stream<Doctor> fetchById(String id);
   Future<void> add({
     File? avatar,
     required String name,
