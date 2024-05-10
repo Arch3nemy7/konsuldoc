@@ -1,43 +1,36 @@
-import 'package:konsuldoc/core/constants/table_constants.dart';
-import 'package:konsuldoc/data/models/admin_model.dart';
-import 'package:konsuldoc/data/models/doctor_model.dart';
-import 'package:konsuldoc/data/models/member_model.dart';
-import 'package:konsuldoc/data/models/user_model.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
-import 'package:konsuldoc/presentations/providers/supabase_admin_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:konsuldoc/domain/repositories/member_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-part 'auth_repository_impl.g.dart';
-
-@riverpod
-AuthRepositoryImp authRepositoryImpl(AuthRepositoryImplRef ref) {
-  return AuthRepositoryImp(supabase: ref.watch(supabaseAdminProvider));
-}
 
 class AuthRepositoryImp implements AuthRepository {
   final SupabaseClient _supabase;
+  final MemberRepository _memberRepository;
 
-  AuthRepositoryImp({required SupabaseClient supabase}) : _supabase = supabase;
+  AuthRepositoryImp({
+    required SupabaseClient supabase,
+    required MemberRepository memberRepository,
+  })  : _supabase = supabase,
+        _memberRepository = memberRepository;
 
   @override
-  Future<void> addUser({
+  Future<String> addUser({
     required String email,
     required String password,
     required Role role,
   }) async {
-    await _supabase.auth.admin.createUser(
+    final res = await _supabase.auth.admin.createUser(
       AdminUserAttributes(
         email: email,
         password: password,
         userMetadata: {'role': role.name},
       ),
     );
+    return res.user!.id;
   }
 
   @override
-  Future<UserModel> signIn({
+  Future<void> signIn({
     required String email,
     required String password,
   }) async {
@@ -46,21 +39,10 @@ class AuthRepositoryImp implements AuthRepository {
       password: password,
     );
     if (res.user == null) throw 'Terjadi kesalahan';
-
-    final role = Role.values.byName(res.user!.userMetadata!['role']);
-    final data =
-        (await _supabase.from(role.table).select().eq('id', res.user!.id))
-            .first;
-
-    return switch (role) {
-      Role.member => MemberModel.fromMap(data),
-      Role.admin => AdminModel.fromMap(data),
-      Role.doctor => DoctorModel.fromMap(data),
-    };
   }
 
   @override
-  Future<MemberModel> signUp({
+  Future<void> signUp({
     required String name,
     required String email,
     required String password,
@@ -70,15 +52,11 @@ class AuthRepositoryImp implements AuthRepository {
       password: password,
     );
     if (res.user == null) throw 'Terjadi kesalahan';
-
-    final data = await _supabase
-        .from(TableConstants.members)
-        .select()
-        .eq('id', res.user!.id);
-
-    // TODO: save member data to database
-
-    return MemberModel.fromMap(data.first);
+    await _memberRepository.add(
+      id: res.user!.id,
+      name: name,
+      email: email,
+    );
   }
 
   @override

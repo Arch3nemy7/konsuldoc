@@ -1,16 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
-import 'package:konsuldoc/data/repositories/auth_repository_impl.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'auth_controller.g.dart';
-
-@riverpod
-AuthController authController(AuthControllerRef ref) {
-  return AuthController(repository: ref.watch(authRepositoryImplProvider));
-}
 
 class AuthController {
   final AuthRepository _repository;

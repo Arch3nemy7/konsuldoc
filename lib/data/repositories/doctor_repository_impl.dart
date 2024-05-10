@@ -4,14 +4,20 @@ import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/doctor_model.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/enums/role.dart';
+import 'package:konsuldoc/domain/repositories/auth_repository.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DoctorRepositoryImpl implements DoctorRepository {
   final SupabaseClient _supabase;
+  final AuthRepository _authRepository;
 
-  DoctorRepositoryImpl({required SupabaseClient supabase})
-      : _supabase = supabase;
+  DoctorRepositoryImpl({
+    required SupabaseClient supabase,
+    required AuthRepository authRepository,
+  })  : _supabase = supabase,
+        _authRepository = authRepository;
 
   @override
   Future<List<Doctor>> fetch(int page, int perPage) async {
@@ -29,16 +35,23 @@ class DoctorRepositoryImpl implements DoctorRepository {
   }
 
   @override
-  Future<void> add(
+  Future<void> add({
     File? avatar,
-    String name,
-    String email,
-    String specialist,
-    String phone,
-    String about,
-    List<Schedule> schedules,
-  ) async {
+    required String name,
+    required String email,
+    required String password,
+    required String specialist,
+    required String phone,
+    required String about,
+    required List<Schedule> schedules,
+  }) async {
+    final id = await _authRepository.addUser(
+      email: email,
+      password: password,
+      role: Role.doctor,
+    );
     await _supabase.from(TableConstants.doctors).insert({
+      'id': id,
       "name": name,
       "email": email,
       "specialist": specialist,
@@ -50,15 +63,15 @@ class DoctorRepositoryImpl implements DoctorRepository {
 
   @override
   Future<void> edit(
-    String id,
+    String id, {
     File? avatar,
-    String name,
-    String email,
-    String specialist,
-    String phone,
-    String about,
-    List<Schedule> schedules,
-  ) async {
+    required String name,
+    required String email,
+    required String specialist,
+    required String phone,
+    required String about,
+    required List<Schedule> schedules,
+  }) async {
     await _supabase.from(TableConstants.doctors).update({
       "name": name,
       "email": email,
