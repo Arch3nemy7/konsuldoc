@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
-import 'package:konsuldoc/presentations/providers/user_state_provider.dart';
+import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
 import 'package:konsuldoc/core/router/admin_router.dart';
 import 'package:konsuldoc/core/router/member_router.dart';
 import 'package:konsuldoc/core/router/auth_router.dart';
@@ -12,8 +12,13 @@ part 'router_provider.g.dart';
 
 @riverpod
 RouterConfig<Object> router(RouterRef ref) {
-  final userRole = ref.watch(userStateProvider.select((user) => user?.role));
-  final router = switch (userRole) {
+  final user = ref.watch(authStateProvider);
+  final role = user == null
+      ? null
+      : Role.values.byName(
+          user.appMetadata['role'],
+        );
+  final router = switch (role) {
     Role.admin => AdminRouter(),
     Role.doctor => DoctorRouter(),
     Role.member => MemberRouter(),

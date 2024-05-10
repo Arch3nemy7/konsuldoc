@@ -13,10 +13,12 @@ class MemberRepositoryImpl implements MemberRepository {
       : _supabase = supabase;
 
   @override
-  Future<Member> fetchById(String id) async {
-    return (await _supabase.from(TableConstants.members).select(id))
-        .map((e) => MemberModel.fromMap(e))
-        .first;
+  Stream<Member> fetchById(String id) {
+    return _supabase
+        .from(TableConstants.members)
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((event) => MemberModel.fromMap(event.first));
   }
 
   @override

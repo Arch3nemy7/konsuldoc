@@ -27,11 +27,12 @@ class DoctorRepositoryImpl implements DoctorRepository {
   }
 
   @override
-  Future<Doctor> fetchById(String id) async {
-    return DoctorModel.fromMap(
-      (await _supabase.from(TableConstants.doctors).select().eq('id', id))
-          .first,
-    );
+  Stream<Doctor> fetchById(String id) {
+    return _supabase
+        .from(TableConstants.doctors)
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((event) => DoctorModel.fromMap(event.first));
   }
 
   @override
