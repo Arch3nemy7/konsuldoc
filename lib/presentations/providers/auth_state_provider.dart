@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:konsuldoc/presentations/providers/supabase_provider.dart';
+import 'package:konsuldoc/core/dependencies/supabase.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sp;
 
