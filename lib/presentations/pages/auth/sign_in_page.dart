@@ -5,7 +5,7 @@ import 'package:konsuldoc/presentations/widgets/custom_divider.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_outlined_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_text_field.dart';
-import 'package:konsuldoc/core/theme/styles/styles.dart';
+import 'package:konsuldoc/core/theme/styles.dart';
 import 'package:konsuldoc/core/router/auth_router.gr.dart';
 
 @RoutePage()
