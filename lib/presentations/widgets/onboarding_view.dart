@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:konsuldoc/presentations/widgets/styles.dart';
+import 'package:konsuldoc/core/theme/styles/styles.dart';
 
 class OnboardingView extends StatelessWidget {
   final String image;

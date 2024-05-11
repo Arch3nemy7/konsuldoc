@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
 import 'package:konsuldoc/presentations/widgets/onboarding_view.dart';
-import 'package:konsuldoc/router/auth_router.gr.dart';
+import 'package:konsuldoc/core/router/auth_router.gr.dart';
 
 @RoutePage()
 class OnBoardingPage extends StatefulWidget {
