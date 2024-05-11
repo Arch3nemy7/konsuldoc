@@ -5,9 +5,18 @@ import 'package:konsuldoc/router/auth_router.gr.dart';
 class AuthRouter extends $AuthRouter {
   @override
   List<AutoRoute> get routes => [
-        AutoRoute(
+        CustomRoute(
           page: SignInRoute.page,
+          transitionsBuilder: TransitionsBuilders.noTransition,
+        ),
+        CustomRoute(
+          page: SignUpRoute.page,
+          transitionsBuilder: TransitionsBuilders.noTransition,
+        ),
+        CustomRoute(
           initial: true,
-        )
+          page: OnBoardingRoute.page,
+          transitionsBuilder: TransitionsBuilders.noTransition,
+        ),
       ];
 }
