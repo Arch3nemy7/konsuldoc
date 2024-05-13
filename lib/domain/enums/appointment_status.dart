@@ -1,6 +1,10 @@
 enum AppointmentStatus {
-  pending,
-  approved,
-  rejected,
-  cancelled;
+  pending('Pending'),
+  approved('Disetujui'),
+  rejected('Ditolak'),
+  cancelled('Dibatalkan');
+
+  const AppointmentStatus(this.label);
+
+  final String label;
 }
