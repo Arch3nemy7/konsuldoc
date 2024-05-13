@@ -51,11 +51,11 @@ class AdminController {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal meng-edit admin");
+        BotToast.showText(text: "Gagal mengedit data admin");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil meng-edit admin");
+        BotToast.showText(text: "Berhasil mengedit data admin");
         return true;
       },
     );

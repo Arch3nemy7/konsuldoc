@@ -68,11 +68,11 @@ class MemberController {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal meng-edit member");
+        BotToast.showText(text: "Gagal mengedit data member");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil meng-edit member");
+        BotToast.showText(text: "Berhasil mengedit data member");
         return true;
       },
     );

@@ -18,11 +18,11 @@ class Appointment {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal menambahkan appointment");
+        BotToast.showText(text: "Gagal menambahkan janji temu");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil menambahkan appointment");
+        BotToast.showText(text: "Berhasil menambahkan janji temu");
         return true;
       },
     );
@@ -39,11 +39,11 @@ class Appointment {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal meng-edit status");
+        BotToast.showText(text: "Gagal mengedit status");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil meng-edit status");
+        BotToast.showText(text: "Berhasil mengedit status");
         return true;
       },
     );
@@ -60,11 +60,11 @@ class Appointment {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal mengubah jadwal appointment");
+        BotToast.showText(text: "Gagal mengedit jadwal janji temu");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil mengubah jadwal appointment");
+        BotToast.showText(text: "Berhasil mengedit jadwal janji temu");
         return true;
       },
     );

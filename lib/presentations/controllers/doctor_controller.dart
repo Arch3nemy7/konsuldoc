@@ -68,11 +68,11 @@ class DoctorController {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal meng-edit dokter");
+        BotToast.showText(text: "Gagal mengedit data dokter");
         return false;
       },
       (r) {
-        BotToast.showText(text: "Berhasil meng-edit dokter");
+        BotToast.showText(text: "Berhasil mengedit data dokter");
         return true;
       },
     );
