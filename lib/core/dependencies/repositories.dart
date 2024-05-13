@@ -1,10 +1,12 @@
 import 'package:konsuldoc/core/dependencies/supabase.dart';
 import 'package:konsuldoc/data/repositories/admin_repository_impl.dart';
+import 'package:konsuldoc/data/repositories/appointment_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/auth_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/doctor_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/member_repository_impl.dart';
 import 'package:konsuldoc/data/repositories/storage_repository_impl.dart';
 import 'package:konsuldoc/domain/repositories/admin_repository.dart';
+import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:konsuldoc/domain/repositories/member_repository.dart';
@@ -46,4 +48,9 @@ AdminRepository adminRepository(AdminRepositoryRef ref) {
     supabase: ref.watch(supabaseProvider).client,
     authRepository: ref.watch(authRepositoryProvider),
   );
+}
+
+@riverpod
+AppointmentRepository appointmentRepository(AppointmentRepositoryRef ref) {
+  return AppointmentRepositoryImpl(supabase: ref.watch(supabaseProvider).client);
 }
