@@ -1,12 +1,21 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class Appointment {
+part 'appointment_controller.g.dart';
+
+@riverpod
+AppointmentController appointmentController(AppointmentControllerRef ref) {
+  return AppointmentController(repository: ref.watch(appointmentRepositoryProvider));
+}
+
+class AppointmentController {
   final AppointmentRepository _repository;
 
-  Appointment({
+  AppointmentController({
     required AppointmentRepository repository,
   }) : _repository = repository;
 

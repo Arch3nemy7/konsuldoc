@@ -1,8 +1,17 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/domain/repositories/admin_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'admin_controller.g.dart';
+
+@riverpod
+AdminController adminController(AdminControllerRef ref) {
+  return AdminController(repository: ref.watch(adminRepositoryProvider));
+}
 
 class AdminController {
   final AdminRepository _repository;

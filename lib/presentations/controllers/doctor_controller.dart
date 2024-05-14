@@ -1,9 +1,18 @@
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/domain/entities/schedule.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'doctor_controller.g.dart';
+
+@riverpod
+DoctorController doctorController(DoctorControllerRef ref) {
+  return DoctorController(repository: ref.watch(doctorRepositoryProvider));
+}
 
 class DoctorController {
   final DoctorRepository _repository;

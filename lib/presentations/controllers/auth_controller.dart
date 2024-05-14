@@ -1,6 +1,15 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'auth_controller.g.dart';
+
+@riverpod
+AuthController authControllerProvider(AuthControllerProviderRef ref) {
+  return AuthController(repository: ref.watch(authRepositoryProvider));
+}
 
 class AuthController {
   final AuthRepository _repository;
