@@ -63,4 +63,9 @@ class AuthRepositoryImp implements AuthRepository {
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
+
+  @override
+  Future<void> deleteUser(String id) async {
+    await _supabase.auth.admin.deleteUser(id);
+  }
 }
