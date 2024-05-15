@@ -1,14 +1,16 @@
 name: konsuldoc
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.3.3 <4.0.0'
+  sdk: ">=3.3.3 <4.0.0"
 
 dependencies:
+  expandable_text: ^2.3.0
   flutter:
     sdk: flutter
+  rich_text_widget: ^0.2.7
 
 dev_dependencies:
   flutter_test:
