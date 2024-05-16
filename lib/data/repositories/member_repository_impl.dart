@@ -13,8 +13,40 @@ class MemberRepositoryImpl implements MemberRepository {
       : _supabase = supabase;
 
   @override
-  Future<void> edit({
+  Stream<Member> fetchById(String id) {
+    return _supabase
+        .from(TableConstants.members)
+        .stream(primaryKey: ['id'])
+        .eq('id', id)
+        .map((event) => MemberModel.fromMap(event.first));
+  }
+
+  @override
+  Future<void> add({
     required String id,
+    File? avatar,
+    required String name,
+    required String email,
+    String? phone,
+    String? address,
+    DateTime? dob,
+    Gender? gender,
+  }) async {
+    await _supabase.from(TableConstants.members).insert({
+      'id': id,
+      'avatar': avatar,
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'dob': dob,
+      'gender': gender,
+    });
+  }
+
+  @override
+  Future<void> edit(
+    String id, {
     File? avatar,
     required String name,
     required String email,
@@ -32,33 +64,5 @@ class MemberRepositoryImpl implements MemberRepository {
       'dob': dob,
       'gender': gender,
     }).match({'id': id});
-  }
-
-  @override
-  Future<Member> fetchById(String id) async {
-    return (await _supabase.from(TableConstants.members).select(id))
-        .map((e) => MemberModel.fromMap(e))
-        .first;
-  }
-
-  @override
-  Future<void> add({
-    File? avatar,
-    required String name,
-    required String email,
-    String? phone,
-    String? address,
-    DateTime? dob,
-    Gender? gender,
-  }) async {
-    await _supabase.from(TableConstants.members).insert({
-      'avatar': avatar,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'address': address,
-      'dob': dob,
-      'gender': gender,
-    });
   }
 }
