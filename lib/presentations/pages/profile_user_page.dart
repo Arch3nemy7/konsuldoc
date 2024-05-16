@@ -19,6 +19,16 @@ class ProfileUserPage extends StatelessWidget {
       body: Column(
         children: [
           _profilePict(),
+          Text(
+            'Budi Haryanto',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            '0812636728',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
           SizedBox(
             height: 20,
           ),
@@ -39,35 +49,9 @@ class ProfileUserPage extends StatelessWidget {
             SizedBox(
               height: 200,
               width: 200,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  CircleAvatar(
-                    backgroundImage:
-                        AssetImage("assets/images/3d_avatar_13.png"),
-                  ),
-                  Positioned(
-                    right: -12,
-                    bottom: 0,
-                    child: SizedBox(
-                      height: 50,
-                      width: 105,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          decoration: BoxDecoration(),
-                          child: Center(
-                            child: Image.asset(
-                              "assets/images/message-edit.png",
-                              width: 40,
-                              height: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109.jpg"),
               ),
             ),
           ],
@@ -85,10 +69,9 @@ class ProfileUserPage extends StatelessWidget {
             onPressed: () {},
             child: Row(
               children: [
-                Image.asset(
-                  'assets/images/user-edit.png',
-                  width: 24,
-                  height: 24,
+                Icon(
+                  Icons.edit,
+                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(
@@ -124,10 +107,9 @@ class ProfileUserPage extends StatelessWidget {
             onPressed: () {},
             child: Row(
               children: [
-                Image.asset(
-                  'assets/images/logout.png',
-                  width: 24,
-                  height: 24,
+                Icon(
+                  Icons.logout,
+                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(
@@ -135,11 +117,6 @@ class ProfileUserPage extends StatelessWidget {
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 ),
                 Spacer(),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black,
-                  size: 20,
-                ),
               ],
             ),
           ),
@@ -163,10 +140,9 @@ class ProfileUserPage extends StatelessWidget {
             onPressed: () {},
             child: Row(
               children: [
-                Image.asset(
-                  'assets/images/clock.png',
-                  width: 24,
-                  height: 24,
+                Icon(
+                  Icons.schedule,
+                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(

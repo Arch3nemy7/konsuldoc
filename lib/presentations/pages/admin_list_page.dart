@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konsuldoc/presentations/widgets/doctor_search_bar.dart';
+import 'package:konsuldoc/presentations/widgets/drawer/doctor_filter_drawer.dart';
 
 class AdminListPage extends StatefulWidget {
   const AdminListPage({super.key});
@@ -18,7 +20,7 @@ class _AdminListPageState extends State<AdminListPage> {
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
         title: Center(
           child: Text(
-            'Doctor',
+            'Admin',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -31,34 +33,7 @@ class _AdminListPageState extends State<AdminListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      focusedBorder: InputBorder.none,
-                      fillColor: Color(0xFFE5E8ED),
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Search',
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(Icons.search),
-                      suffixIcon: Icon(Icons.filter_list),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: DoctorSearchBar(),
           ),
           Expanded(
             child: ListView.builder(

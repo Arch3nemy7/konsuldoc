@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:konsuldoc/presentations/widgets/doctor_search_bar.dart';
+import 'package:konsuldoc/presentations/widgets/drawer/doctor_filter_drawer.dart';
 
 class DoctorListPage extends StatefulWidget {
   const DoctorListPage({super.key});
@@ -14,6 +16,11 @@ class _DoctorListPageState extends State<DoctorListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: Drawer(
+        child: DoctorFilterDrawer(
+          onApply: (p0) {},
+        ),
+      ),
       appBar: AppBar(
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.menu))],
         title: Center(
@@ -31,34 +38,7 @@ class _DoctorListPageState extends State<DoctorListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      focusedBorder: InputBorder.none,
-                      fillColor: Color(0xFFE5E8ED),
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Search',
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: Icon(Icons.search),
-                      suffixIcon: Icon(Icons.filter_list),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: DoctorSearchBar(),
           ),
           Expanded(
             child: ListView.builder(
