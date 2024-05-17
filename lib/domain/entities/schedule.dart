@@ -1,12 +1,13 @@
-class Schedule {
-  final String idDoctor;
-  final String days;
-  final DateTime timeStart;
-  final DateTime timeEnd;
+import 'package:flutter/material.dart';
 
-  Schedule(
-      {required this.idDoctor,
-      required this.days,
-      required this.timeStart,
-      required this.timeEnd});
+class Schedule {
+  final List<int> days;
+  final TimeOfDay timeStart;
+  final TimeOfDay timeEnd;
+
+  Schedule({
+    required this.days,
+    required this.timeStart,
+    required this.timeEnd,
+  });
 }

@@ -3,13 +3,8 @@ import 'dart:io';
 import 'package:konsuldoc/domain/entities/admin.dart';
 
 abstract interface class AdminRepository {
-  Future<List<Admin>> fetch(
-    int page,
-    int perPage,
-  );
-
-  Future<Admin> fetchById(String id);
-
+  Future<List<Admin>> fetch(int page, int perPage);
+  Stream<Admin> fetchById(String id);
   Future<void> add({
     File? avatar,
     required String email,
@@ -17,10 +12,9 @@ abstract interface class AdminRepository {
     required String name,
     String? phone,
   });
-
-  Future<void> edit({
-    required String id,
-    String? avatar,
+  Future<void> edit(
+    String id, {
+    File? avatar,
     required String email,
     required String name,
     String? phone,
