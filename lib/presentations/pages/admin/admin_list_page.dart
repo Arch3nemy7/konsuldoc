@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:konsuldoc/presentations/widgets/doctor_search_bar.dart';
-import 'package:konsuldoc/presentations/widgets/drawer/doctor_filter_drawer.dart';
 
 class AdminListPage extends StatefulWidget {
   const AdminListPage({super.key});
