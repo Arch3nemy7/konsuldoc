@@ -1,8 +1,8 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
-class DetailDokterPage extends StatelessWidget {
-  const DetailDokterPage({super.key});
+class DoctorDetailPage extends StatelessWidget {
+  const DoctorDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +163,7 @@ class DetailDokterPage extends StatelessWidget {
               ),
               const SizedBox(
                   height:
-                      44), // Memberikan jarak antara "Jadwal Praktik" dan tombol
+                      24), // Memberikan jarak antara "Jadwal Praktik" dan tombol
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -193,8 +193,7 @@ class DetailDokterPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                        width: 10), // Memberikan jarak antara kedua tombol
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -221,6 +220,31 @@ class DetailDokterPage extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Aksi ketika tombol Buat Janji ditekan
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF004C69), // Warna biru
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    minimumSize: const Size(
+                        double.infinity, 45), // Lebar tombol memenuhi layar
+                  ),
+                  child: const Text(
+                    'Buat Janji',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
             ],

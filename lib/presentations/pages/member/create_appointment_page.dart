@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateAppointment extends StatefulWidget {
-  const CreateAppointment({Key? key}) : super(key: key);
+class CreateAppointmentPage extends StatefulWidget {
+  const CreateAppointmentPage({super.key});
 
   @override
-  State<CreateAppointment> createState() => _CreateAppointmentState();
+  State<CreateAppointmentPage> createState() => _CreateAppointmentPageState();
 }
 
-class _CreateAppointmentState extends State<CreateAppointment> {
-  late int _selectedDayIndex; 
-  late DateTime _currentDate; 
-  int _selectedTimeIndex = -1; 
+class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
+  late int _selectedDayIndex;
+  late DateTime _currentDate;
+  int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1; 
+  int _lastSelectedDayIndex = -1;
 
   @override
   void initState() {
     super.initState();
-    _selectedDayIndex = -1; 
-    _currentDate = DateTime.now(); 
+    _selectedDayIndex = -1;
+    _currentDate = DateTime.now();
     _dateScrollController = ScrollController();
   }
 
-  
   List<DateTime> getDatesInMonth() {
     final int daysInMonth =
         DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
@@ -33,30 +32,24 @@ class _CreateAppointmentState extends State<CreateAppointment> {
     );
   }
 
-  
   void changeDay(int index) {
     if (_lastSelectedDayIndex == index) {
-     
       setState(() {
         _selectedDayIndex = -1;
-        _selectedTimeIndex = -1; 
+        _selectedTimeIndex = -1;
       });
       _lastSelectedDayIndex = -1;
     } else {
       setState(() {
         _selectedDayIndex = index;
         _selectedTimeIndex = -1;
-        _lastSelectedDayIndex =
-            index; 
+        _lastSelectedDayIndex = index;
       });
     }
   }
 
-
-
   void changeTime(int index) {
     if (_selectedTimeIndex == index) {
-     
       setState(() {
         _selectedTimeIndex = -1;
       });
@@ -81,7 +74,6 @@ class _CreateAppointmentState extends State<CreateAppointment> {
           ),
         ),
         centerTitle: true,
-        
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -97,7 +89,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     color: Colors.grey.withOpacity(1),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), 
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),

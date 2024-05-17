@@ -183,7 +183,7 @@ class _MemberFormPageState extends State<MemberFormPage> {
                       value: Gender.male,
                       dense: true,
                       groupValue: _gender,
-                      title: Text(Gender.male.toString().split('.').last),
+                      title: Text(Gender.male.name),
                       onChanged: (val) {
                         setState(() {
                           _gender = val;
@@ -197,7 +197,7 @@ class _MemberFormPageState extends State<MemberFormPage> {
                       value: Gender.female,
                       dense: true,
                       groupValue: _gender,
-                      title: Text(Gender.female.toString().split('.').last),
+                      title: Text(Gender.female.name),
                       onChanged: (val) {
                         setState(() {
                           _gender = val;
