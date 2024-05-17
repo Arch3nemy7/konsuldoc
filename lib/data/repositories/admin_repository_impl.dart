@@ -1,21 +1,26 @@
 import 'dart:io';
 
+import 'package:konsuldoc/core/constants/bucket_constants.dart';
 import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/admin_model.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/domain/repositories/admin_repository.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
+import 'package:konsuldoc/domain/repositories/storage_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AdminRepositoryImpl implements AdminRepository {
   final SupabaseClient _supabase;
   final AuthRepository _authRepository;
+  final StorageRepository _storageRepository;
 
   AdminRepositoryImpl({
     required SupabaseClient supabase,
     required AuthRepository authRepository,
+    required StorageRepository storageRepository,
   })  : _supabase = supabase,
-        _authRepository = authRepository;
+        _authRepository = authRepository,
+        _storageRepository = storageRepository;
 
   @override
   Future<List<AdminModel>> fetch(int page, int perPage) async {
@@ -48,6 +53,13 @@ class AdminRepositoryImpl implements AdminRepository {
     );
     await _supabase.from(TableConstants.admins).insert({
       'id': id,
+      'avatar': avatar == null
+          ? null
+          : await _storageRepository.uploadFile(
+              file: avatar,
+              bucket: BucketConstants.avatars,
+              id: id,
+            ),
       'email': email,
       'name': name,
       'phone': phone,
@@ -57,15 +69,25 @@ class AdminRepositoryImpl implements AdminRepository {
   @override
   Future<void> edit(
     String id, {
-    String? avatar,
+    File? avatar,
     required String email,
     required String name,
     String? phone,
   }) async {
-    await _supabase.from(TableConstants.admins).update({
+    final data = {
       'email': email,
       'name': name,
       'phone': phone,
-    }).eq('id', id);
+    };
+
+    if (avatar != null) {
+      data['avatar'] = await _storageRepository.uploadFile(
+        file: avatar,
+        bucket: BucketConstants.avatars,
+        id: id,
+      );
+    }
+
+    await _supabase.from(TableConstants.admins).update(data).eq('id', id);
   }
 }
