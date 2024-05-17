@@ -28,6 +28,7 @@ class AdminController {
     String? phone,
   }) async {
     final res = await handleError(_repository.add(
+      avatar: avatar,
       email: email,
       password: password,
       name: name,
@@ -47,13 +48,14 @@ class AdminController {
 
   Future<bool> edit(
     String id, {
-    String? avatar,
+    File? avatar,
     required String email,
     required String name,
     String? phone,
   }) async {
     final res = await handleError(_repository.edit(
       id,
+      avatar: avatar,
       email: email,
       name: name,
     ));

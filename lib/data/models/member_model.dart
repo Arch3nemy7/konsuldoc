@@ -1,4 +1,5 @@
 import 'package:konsuldoc/domain/entities/member.dart';
+import 'package:konsuldoc/domain/enums/gender.dart';
 
 class MemberModel extends Member {
   MemberModel({
@@ -10,19 +11,18 @@ class MemberModel extends Member {
     required super.address,
     required super.dob,
     required super.gender,
-    required super.createdAt,
   });
 
   factory MemberModel.fromMap(Map<String, dynamic> map) {
     return MemberModel(
-        id: map['id'],
-        avatar: map['avatar'],
-        email: map['email'],
-        name: map['name'],
-        phone: map['phone'],
-        address: map['address'],
-        dob: map['dob'],
-        gender: map['map'],
-        createdAt: map['createdAt']);
+      id: map['id'],
+      avatar: map['avatar'],
+      email: map['email'],
+      name: map['name'],
+      phone: map['phone'],
+      address: map['address'],
+      dob: map['dob'],
+      gender: Gender.values.byName(map['gender']),
+    );
   }
 }

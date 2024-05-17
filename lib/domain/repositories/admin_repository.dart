@@ -14,7 +14,7 @@ abstract interface class AdminRepository {
   });
   Future<void> edit(
     String id, {
-    String? avatar,
+    File? avatar,
     required String email,
     required String name,
     String? phone,
