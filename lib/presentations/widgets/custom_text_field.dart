@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final Color fillColor;
   final TextStyle hintStyle;
   final BorderSide borderSide;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -16,12 +17,14 @@ class CustomTextField extends StatelessWidget {
     required this.fillColor,
     required this.hintStyle,
     required this.borderSide,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      obscureText: obscureText,
       decoration: InputDecoration(
         filled: true,
         fillColor: fillColor,
