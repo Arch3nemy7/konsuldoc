@@ -1,29 +1,30 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateAppointment extends StatefulWidget {
-  const CreateAppointment({Key? key}) : super(key: key);
+@RoutePage()
+class CreateAppointmentPage extends StatefulWidget {
+  const CreateAppointmentPage({super.key});
 
   @override
-  State<CreateAppointment> createState() => _CreateAppointmentState();
+  State<CreateAppointmentPage> createState() => _CreateAppointmentPageState();
 }
 
-class _CreateAppointmentState extends State<CreateAppointment> {
-  late int _selectedDayIndex; // Indeks hari yang dipilih
-  late DateTime _currentDate; // Tanggal saat ini
-  int _selectedTimeIndex = -1; // Indeks jam yang dipilih
+class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
+  late int _selectedDayIndex;
+  late DateTime _currentDate;
+  int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1; // Indeks hari yang terakhir kali dipilih
+  int _lastSelectedDayIndex = -1;
 
   @override
   void initState() {
     super.initState();
-    _selectedDayIndex = -1; // Set default ke -1 (tidak ada yang dipilih)
-    _currentDate = DateTime.now(); // Set tanggal saat ini
+    _selectedDayIndex = -1;
+    _currentDate = DateTime.now();
     _dateScrollController = ScrollController();
   }
 
-  // Mendapatkan daftar tanggal dalam satu bulan ini
   List<DateTime> getDatesInMonth() {
     final int daysInMonth =
         DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
@@ -33,30 +34,24 @@ class _CreateAppointmentState extends State<CreateAppointment> {
     );
   }
 
-  // Mengganti hari berdasarkan indeks yang dipilih
   void changeDay(int index) {
     if (_lastSelectedDayIndex == index) {
-      // Jika diklik dua kali pada hari yang sama, maka reset pilihan hari
       setState(() {
         _selectedDayIndex = -1;
-        _selectedTimeIndex = -1; // Reset indeks jam yang dipilih
+        _selectedTimeIndex = -1;
       });
       _lastSelectedDayIndex = -1;
     } else {
       setState(() {
         _selectedDayIndex = index;
-        _selectedTimeIndex = -1; // Reset indeks jam yang dipilih
-        _lastSelectedDayIndex =
-            index; // Simpan indeks hari yang terakhir kali dipilih
+        _selectedTimeIndex = -1;
+        _lastSelectedDayIndex = index;
       });
     }
   }
 
-  // Mengganti jam berdasarkan indeks yang dipilih
-
   void changeTime(int index) {
     if (_selectedTimeIndex == index) {
-      // Jika diklik dua kali pada jam yang sama, maka reset pilihan jam
       setState(() {
         _selectedTimeIndex = -1;
       });
@@ -81,14 +76,6 @@ class _CreateAppointmentState extends State<CreateAppointment> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Tambahkan fungsi untuk tombol titik tiga di sini
-            },
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -104,7 +91,7 @@ class _CreateAppointmentState extends State<CreateAppointment> {
                     color: Colors.grey.withOpacity(1),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),

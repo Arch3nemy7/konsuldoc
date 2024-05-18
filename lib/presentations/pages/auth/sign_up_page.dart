@@ -1,22 +1,24 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/router/auth_router.gr.dart';
+import 'package:konsuldoc/core/theme/styles.dart';
+import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
 import 'package:konsuldoc/presentations/widgets/custom_divider.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_outlined_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_text_field.dart';
-import 'package:konsuldoc/core/theme/styles.dart';
-import 'package:konsuldoc/core/router/auth_router.gr.dart';
 
 @RoutePage()
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  ConsumerState<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageState extends ConsumerState<SignUpPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -67,6 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 20),
                 CustomTextField(
                   controller: passwordController,
+                  obscureText: true,
                   icon: Icons.lock_outline,
                   hintText: 'Password',
                   fillColor: inputFieldFillColor,
@@ -75,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 39),
                 CustomElevatedButton(
-                  onPressed: () {},
+                  onPressed: signUp,
                   text: 'Buat Akun',
                   width: double.infinity,
                   height: 40,
@@ -96,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Text.rich(
                   TextSpan(
                     children: [
-                      const TextSpan(text: 'Sudah memiliki akun? '),
+                      const TextSpan(text: 'Sudah punya akun? '),
                       TextSpan(
                         text: 'Masuk',
                         style: linkTextStyle,
@@ -114,5 +117,13 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  void signUp() {
+    ref.read(authControllerProvider).signUp(
+          name: nameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+        );
   }
 }

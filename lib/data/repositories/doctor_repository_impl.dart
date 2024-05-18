@@ -1,23 +1,30 @@
 import 'dart:io';
 
+import 'package:konsuldoc/core/constants/bucket_constants.dart';
 import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/doctor_model.dart';
+import 'package:konsuldoc/data/models/schedule_model.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/schedule.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
+import 'package:konsuldoc/domain/repositories/storage_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DoctorRepositoryImpl implements DoctorRepository {
   final SupabaseClient _supabase;
   final AuthRepository _authRepository;
+  final StorageRepository _storageRepository;
 
   DoctorRepositoryImpl({
     required SupabaseClient supabase,
     required AuthRepository authRepository,
+    required StorageRepository storageRepository,
   })  : _supabase = supabase,
-        _authRepository = authRepository;
+        _authRepository = authRepository,
+        _storageRepository = storageRepository;
 
   @override
   Future<List<Doctor>> fetch(int page, int perPage) async {
@@ -37,11 +44,11 @@ class DoctorRepositoryImpl implements DoctorRepository {
 
   @override
   Future<void> add({
-    File? avatar,
+    required File avatar,
     required String name,
     required String email,
     required String password,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,
@@ -53,12 +60,17 @@ class DoctorRepositoryImpl implements DoctorRepository {
     );
     await _supabase.from(TableConstants.doctors).insert({
       'id': id,
-      "name": name,
-      "email": email,
-      "specialist": specialist,
-      "phone": phone,
-      "about": about,
-      "schedules": schedules,
+      'avatar': await _storageRepository.uploadFile(
+        file: avatar,
+        bucket: BucketConstants.avatars,
+        id: id,
+      ),
+      'name': name,
+      'email': email,
+      'specialist': specialist.name,
+      'phone': phone,
+      'about': about,
+      'schedules': List<ScheduleModel>.from(schedules).map((e) => e.toMap()),
     });
   }
 
@@ -68,18 +80,27 @@ class DoctorRepositoryImpl implements DoctorRepository {
     File? avatar,
     required String name,
     required String email,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,
   }) async {
-    await _supabase.from(TableConstants.doctors).update({
-      "name": name,
-      "email": email,
-      "specialist": specialist,
-      "phone": phone,
-      "about": about,
-      "schedules": schedules,
-    }).eq('id', id);
+    final data = {
+      'name': name,
+      'email': email,
+      'specialist': specialist.name,
+      'phone': phone,
+      'about': about,
+      'schedules': List<ScheduleModel>.from(schedules).map((e) => e.toMap()),
+    };
+
+    if (avatar != null) {
+      data['avatar'] = await _storageRepository.uploadFile(
+        file: avatar,
+        bucket: BucketConstants.avatars,
+        id: id,
+      );
+    }
+    await _supabase.from(TableConstants.doctors).update(data).eq('id', id);
   }
 }

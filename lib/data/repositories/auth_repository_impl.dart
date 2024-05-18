@@ -5,12 +5,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImp implements AuthRepository {
   final SupabaseClient _supabase;
+  final SupabaseClient _supabaseAdmin;
   final MemberRepository _memberRepository;
 
   AuthRepositoryImp({
     required SupabaseClient supabase,
+    required SupabaseClient supabaseAdmin,
     required MemberRepository memberRepository,
   })  : _supabase = supabase,
+  _supabaseAdmin = supabaseAdmin,
         _memberRepository = memberRepository;
 
   @override
@@ -19,7 +22,7 @@ class AuthRepositoryImp implements AuthRepository {
     required String password,
     required Role role,
   }) async {
-    final res = await _supabase.auth.admin.createUser(
+    final res = await _supabaseAdmin.auth.admin.createUser(
       AdminUserAttributes(
         email: email,
         password: password,

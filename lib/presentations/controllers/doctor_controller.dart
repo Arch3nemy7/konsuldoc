@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,6 +16,11 @@ DoctorController doctorController(DoctorControllerRef ref) {
   return DoctorController(repository: ref.watch(doctorRepositoryProvider));
 }
 
+@riverpod
+Stream<Doctor> fetchDoctorById(FetchDoctorByIdRef ref, String id) {
+  return ref.watch(doctorRepositoryProvider).fetchById(id);
+}
+
 class DoctorController {
   final DoctorRepository _repository;
 
@@ -22,15 +29,18 @@ class DoctorController {
   }) : _repository = repository;
 
   Future<bool> add({
-    File? avatar,
+    required File avatar,
     required String name,
     required String email,
     required String password,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,
   }) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.add(
       avatar: avatar,
       name: name,
@@ -41,6 +51,7 @@ class DoctorController {
       about: about,
       schedules: schedules,
     ));
+    cancel();
 
     return res.fold(
       (l) {
@@ -59,11 +70,14 @@ class DoctorController {
     File? avatar,
     required String name,
     required String email,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,
   }) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.edit(
       id,
       avatar: avatar,
@@ -74,6 +88,7 @@ class DoctorController {
       about: about,
       schedules: schedules,
     ));
+    cancel();
 
     return res.fold(
       (l) {

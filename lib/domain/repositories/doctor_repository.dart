@@ -2,16 +2,17 @@ import 'dart:io';
 
 import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 
 abstract interface class DoctorRepository {
   Future<List<Doctor>> fetch(int page, int perPage);
   Stream<Doctor> fetchById(String id);
   Future<void> add({
-    File? avatar,
+    required File avatar,
     required String name,
     required String email,
     required String password,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,
@@ -21,7 +22,7 @@ abstract interface class DoctorRepository {
     File? avatar,
     required String name,
     required String email,
-    required String specialist,
+    required Specialist specialist,
     required String phone,
     required String about,
     required List<Schedule> schedules,

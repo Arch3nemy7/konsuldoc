@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:konsuldoc/domain/enums/gender.dart';
 
-enum Gender { Pria, Wanita }
-
+@RoutePage()
 class MemberFormPage extends StatefulWidget {
-  const MemberFormPage({Key? key}) : super(key: key);
+  const MemberFormPage({super.key});
 
   @override
   State<MemberFormPage> createState() => _MemberFormPageState();
@@ -181,10 +182,10 @@ class _MemberFormPageState extends State<MemberFormPage> {
                   Expanded(
                     child: RadioListTile<Gender>(
                       contentPadding: EdgeInsets.all(0.0),
-                      value: Gender.Pria,
+                      value: Gender.male,
                       dense: true,
                       groupValue: _gender,
-                      title: Text(Gender.Pria.toString().split('.').last),
+                      title: Text(Gender.male.name),
                       onChanged: (val) {
                         setState(() {
                           _gender = val;
@@ -195,10 +196,10 @@ class _MemberFormPageState extends State<MemberFormPage> {
                   Expanded(
                     child: RadioListTile<Gender>(
                       contentPadding: EdgeInsets.all(0.0),
-                      value: Gender.Wanita,
+                      value: Gender.female,
                       dense: true,
                       groupValue: _gender,
-                      title: Text(Gender.Wanita.toString().split('.').last),
+                      title: Text(Gender.female.name),
                       onChanged: (val) {
                         setState(() {
                           _gender = val;

@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class AdminFormPage extends StatefulWidget {
-  const AdminFormPage({Key? key}) : super(key: key);
+  const AdminFormPage({super.key});
 
   @override
   State<AdminFormPage> createState() => _AdminFormPageState();

@@ -16,7 +16,7 @@ RouterConfig<Object> router(RouterRef ref) {
   final role = user == null
       ? null
       : Role.values.byName(
-          user.appMetadata['role'],
+          user.appMetadata['role'] ?? 'member',
         );
   final router = switch (role) {
     Role.admin => AdminRouter(),

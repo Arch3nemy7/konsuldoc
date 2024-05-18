@@ -23,13 +23,17 @@ StorageRepository storageRepository(StorageRepositoryRef ref) {
 
 @riverpod
 MemberRepository memberRepository(MemberRepositoryRef ref) {
-  return MemberRepositoryImpl(supabase: ref.watch(supabaseProvider).client);
+  return MemberRepositoryImpl(
+    supabase: ref.watch(supabaseProvider).client,
+    storageRepository: ref.watch(storageRepositoryProvider),
+  );
 }
 
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepositoryImp(
-    supabase: ref.watch(supabaseAdminProvider),
+    supabase: ref.watch(supabaseProvider).client,
+    supabaseAdmin: ref.watch(supabaseAdminProvider),
     memberRepository: ref.watch(memberRepositoryProvider),
   );
 }
@@ -39,6 +43,7 @@ DoctorRepository doctorRepository(DoctorRepositoryRef ref) {
   return DoctorRepositoryImpl(
     supabase: ref.watch(supabaseProvider).client,
     authRepository: ref.watch(authRepositoryProvider),
+    storageRepository: ref.watch(storageRepositoryProvider),
   );
 }
 
@@ -47,10 +52,12 @@ AdminRepository adminRepository(AdminRepositoryRef ref) {
   return AdminRepositoryImpl(
     supabase: ref.watch(supabaseProvider).client,
     authRepository: ref.watch(authRepositoryProvider),
+    storageRepository: ref.watch(storageRepositoryProvider),
   );
 }
 
 @riverpod
 AppointmentRepository appointmentRepository(AppointmentRepositoryRef ref) {
-  return AppointmentRepositoryImpl(supabase: ref.watch(supabaseProvider).client);
+  return AppointmentRepositoryImpl(
+      supabase: ref.watch(supabaseProvider).client);
 }
