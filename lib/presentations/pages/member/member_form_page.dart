@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:konsuldoc/domain/enums/gender.dart';
 
+@RoutePage()
 class MemberFormPage extends StatefulWidget {
-  const MemberFormPage({Key? key}) : super(key: key);
+  const MemberFormPage({super.key});
 
   @override
   State<MemberFormPage> createState() => _MemberFormPageState();

@@ -1,13 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-class DetailAppointment extends StatefulWidget {
-  const DetailAppointment({super.key});
+@RoutePage()
+class AppointmentDetailPage extends StatefulWidget {
+  const AppointmentDetailPage({super.key});
 
   @override
-  State<DetailAppointment> createState() => _DetailAppointmentState();
+  State<AppointmentDetailPage> createState() => _AppointmentDetailPageState();
 }
 
-class _DetailAppointmentState extends State<DetailAppointment> {
+class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   @override
   Widget build(BuildContext context) {
     {

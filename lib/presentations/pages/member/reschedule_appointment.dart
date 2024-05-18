@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
+@RoutePage()
 class RescheduleAppointmentPage extends StatefulWidget {
   const RescheduleAppointmentPage({super.key});
 
