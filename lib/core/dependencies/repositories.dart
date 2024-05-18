@@ -32,7 +32,8 @@ MemberRepository memberRepository(MemberRepositoryRef ref) {
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepositoryImp(
-    supabase: ref.watch(supabaseAdminProvider),
+    supabase: ref.watch(supabaseProvider).client,
+    supabaseAdmin: ref.watch(supabaseAdminProvider),
     memberRepository: ref.watch(memberRepositoryProvider),
   );
 }
