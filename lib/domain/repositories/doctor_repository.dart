@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:konsuldoc/domain/entities/doctor.dart';
-import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 
 abstract interface class DoctorRepository {
@@ -15,7 +15,7 @@ abstract interface class DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   });
   Future<void> edit(
     String id, {
@@ -25,6 +25,8 @@ abstract interface class DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   });
 }
+
+class Schedule {}

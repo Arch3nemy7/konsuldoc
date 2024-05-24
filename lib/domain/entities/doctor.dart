@@ -1,4 +1,4 @@
-import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/entities/user.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
@@ -10,7 +10,7 @@ class Doctor extends User {
   final Specialist specialist;
   final String phone;
   final String about;
-  final List<Schedule> schedules;
+  final List<List<DoctorSession>> schedules;
 
   Doctor({
     required super.id,

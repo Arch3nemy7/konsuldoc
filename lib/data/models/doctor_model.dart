@@ -1,4 +1,4 @@
-import 'package:konsuldoc/data/models/schedule_model.dart';
+import 'package:konsuldoc/data/models/doctor_session_model.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 
@@ -24,7 +24,8 @@ class DoctorModel extends Doctor {
       specialist: Specialist.values.byName(map['specialist']),
       about: map['about'],
       schedules: (map['schedules'] as List)
-          .map((e) => ScheduleModel.fromMap(e))
+          .map((e) =>
+              (e as List).map((s) => DoctorSessionModel.fromMap(s)).toList())
           .toList(),
     );
   }

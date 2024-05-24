@@ -1,7 +1,6 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 
-// TODO: Isi daftar spesialis / poli
 enum Specialist {
   dental(
     label: 'Poli Gigi',
