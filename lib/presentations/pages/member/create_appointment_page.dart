@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateAppointment extends StatefulWidget {
-  const CreateAppointment({Key? key}) : super(key: key);
+class CreateAppointmentPage extends StatefulWidget {
+  const CreateAppointmentPage({Key? key}) : super(key: key);
 
   @override
-  State<CreateAppointment> createState() => _CreateAppointmentState();
+  State<CreateAppointmentPage> createState() => _CreateAppointmentPageState();
 }
 
-class _CreateAppointmentState extends State<CreateAppointment> {
+class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
   late int _selectedDayIndex; 
   late DateTime _currentDate; 
   int _selectedTimeIndex = -1; 

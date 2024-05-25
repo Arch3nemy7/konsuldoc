@@ -9,11 +9,11 @@ class BottomsheetReschedule extends StatefulWidget {
 }
 
 class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
-  late int _selectedDayIndex; // Indeks hari yang dipilih
-  late DateTime _currentDate; // Tanggal saat ini
-  int _selectedTimeIndex = -1; // Indeks jam yang dipilih
+  late int _selectedDayIndex; 
+  late DateTime _currentDate; 
+  int _selectedTimeIndex = -1; 
   late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1; // Indeks hari yang terakhir kali dipilih
+  int _lastSelectedDayIndex = -1; 
 
   @override
   void initState() {
