@@ -37,7 +37,7 @@ final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
 );
 
 typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
-String _$authRepositoryHash() => r'4fb758fe88fa77f4c32b8d11d1ac19a2346fdee1';
+String _$authRepositoryHash() => r'd7ef543fb2a01aae6bce209a59c1c15ec1b20538';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)

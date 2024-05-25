@@ -11,6 +11,7 @@ import 'package:konsuldoc/domain/repositories/auth_repository.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:konsuldoc/domain/repositories/member_repository.dart';
 import 'package:konsuldoc/domain/repositories/storage_repository.dart';
+import 'package:konsuldoc/presentations/providers/notification_service_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repositories.g.dart';
@@ -35,6 +36,7 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
     supabase: ref.watch(supabaseProvider).client,
     supabaseAdmin: ref.watch(supabaseAdminProvider),
     memberRepository: ref.watch(memberRepositoryProvider),
+    notificationService: ref.watch(notificationServiceProvider.notifier),
   );
 }
 

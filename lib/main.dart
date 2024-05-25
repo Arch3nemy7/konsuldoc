@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:konsuldoc/core/constants/hive_constants.dart';
 import 'package:konsuldoc/core/constants/supabase_constants.dart';
 import 'package:konsuldoc/core/theme/theme.dart';
+import 'package:konsuldoc/presentations/providers/notification_service_provider.dart';
 import 'package:konsuldoc/presentations/providers/router_provider.dart';
 import 'package:konsuldoc/presentations/providers/theme_state_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,12 +36,24 @@ void main() async {
   runApp(const ProviderScope(child: MainApp()));
 }
 
-class MainApp extends ConsumerWidget {
+class MainApp extends ConsumerStatefulWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends ConsumerState<MainApp> {
+  @override
+  void initState() {
+    ref.read(notificationServiceProvider.notifier).init();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     const theme = MaterialTheme();
+    print(ref.read(notificationServiceProvider));
 
     return MaterialApp.router(
       title: 'KonsulDoc',
@@ -49,7 +62,11 @@ class MainApp extends ConsumerWidget {
       darkTheme: theme.dark(),
       builder: BotToastInit(),
       debugShowCheckedModeBanner: false,
-      routerConfig: ref.watch(routerProvider),
+      routerConfig: ref.watch(routerProvider).config(
+            navigatorObservers: () => [
+              BotToastNavigatorObserver(),
+            ],
+          ),
     );
   }
 }

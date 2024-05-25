@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class AppointmentDetailPage extends StatefulWidget {
-  const AppointmentDetailPage({super.key});
+  final String id;
+  const AppointmentDetailPage({
+    super.key,
+    required this.id,
+  });
 
   @override
   State<AppointmentDetailPage> createState() => _AppointmentDetailPageState();
