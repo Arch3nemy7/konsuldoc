@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_controller.g.dart';
 
 @riverpod
-AuthController authControllerProvider(AuthControllerProviderRef ref) {
+AuthController authController(AuthControllerRef ref) {
   return AuthController(repository: ref.watch(authRepositoryProvider));
 }
 
@@ -21,10 +21,14 @@ class AuthController {
     required String email,
     required String password,
   }) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.signIn(
       email: email,
       password: password,
     ));
+    cancel();
 
     res.mapLeft((error) => BotToast.showText(text: error.message));
   }
@@ -34,17 +38,25 @@ class AuthController {
     required String email,
     required String password,
   }) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.signUp(
       name: name,
       email: email,
       password: password,
     ));
+    cancel();
 
     res.mapLeft((error) => BotToast.showText(text: error.message));
   }
 
   void signOut() async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.signOut());
+    cancel();
 
     res.mapLeft((error) => BotToast.showText(text: error.message));
   }

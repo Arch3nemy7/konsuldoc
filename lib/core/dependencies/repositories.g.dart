@@ -22,7 +22,7 @@ final storageRepositoryProvider =
 );
 
 typedef StorageRepositoryRef = AutoDisposeProviderRef<StorageRepository>;
-String _$memberRepositoryHash() => r'6ed7ad69223cc9faddcb7106a4cb9d786e890190';
+String _$memberRepositoryHash() => r'bdec38e535e753be8bb38916aee0973ab174a9c4';
 
 /// See also [memberRepository].
 @ProviderFor(memberRepository)
@@ -37,7 +37,7 @@ final memberRepositoryProvider = AutoDisposeProvider<MemberRepository>.internal(
 );
 
 typedef MemberRepositoryRef = AutoDisposeProviderRef<MemberRepository>;
-String _$authRepositoryHash() => r'b99b118fb3101eede05613f226be69290dfc2cf7';
+String _$authRepositoryHash() => r'd7ef543fb2a01aae6bce209a59c1c15ec1b20538';
 
 /// See also [authRepository].
 @ProviderFor(authRepository)
@@ -52,7 +52,7 @@ final authRepositoryProvider = AutoDisposeProvider<AuthRepository>.internal(
 );
 
 typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepository>;
-String _$doctorRepositoryHash() => r'9f5337d24515ab10353375f4b3e98c3bedc2783f';
+String _$doctorRepositoryHash() => r'caa68dd75a9afcd500bf203445bf3098a3792240';
 
 /// See also [doctorRepository].
 @ProviderFor(doctorRepository)
@@ -67,7 +67,7 @@ final doctorRepositoryProvider = AutoDisposeProvider<DoctorRepository>.internal(
 );
 
 typedef DoctorRepositoryRef = AutoDisposeProviderRef<DoctorRepository>;
-String _$adminRepositoryHash() => r'2a06f8166bed811cab43028aef9a03b25ab137a2';
+String _$adminRepositoryHash() => r'653d2bd5d9afd4c98661af5b116d7d78b39736a3';
 
 /// See also [adminRepository].
 @ProviderFor(adminRepository)

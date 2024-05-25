@@ -1,26 +1,23 @@
-import 'package:flutter/cupertino.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-import 'package:konsuldoc/presentations/pages/reschedule_bottomsheet.dart';
+import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
-class RescheduleAppointment extends StatefulWidget {
-  const RescheduleAppointment({Key? key}) : super(key: key);
+@RoutePage()
+class RescheduleAppointmentPage extends StatefulWidget {
+  const RescheduleAppointmentPage({super.key});
 
   @override
-  State<RescheduleAppointment> createState() => _RescheduleAppointmentState();
+  State<RescheduleAppointmentPage> createState() =>
+      _RescheduleAppointmentPageState();
 }
 
-class _RescheduleAppointmentState extends State<RescheduleAppointment> {
-
-
-
+class _RescheduleAppointmentPageState extends State<RescheduleAppointmentPage> {
   void _showRescheduleBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        
         return BottomsheetReschedule();
       },
     );
@@ -38,7 +35,6 @@ class _RescheduleAppointmentState extends State<RescheduleAppointment> {
           ),
         ),
         centerTitle: true,
-        
       ),
       body: Container(
         padding: const EdgeInsets.all(12),

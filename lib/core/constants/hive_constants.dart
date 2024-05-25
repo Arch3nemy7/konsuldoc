@@ -3,4 +3,6 @@ class HiveConstants {
 
   static const onboarding = 'onboarding';
   static const isDarkMode = 'isDarkMode';
+
+  static const token = 'token';
 }

@@ -4,4 +4,5 @@ class TableConstants {
   static const doctors = 'doctors';
 
   static const appointments = 'appointments';
+  static const token = 'push_tokens';
 }
