@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+@RoutePage()
 class CreateAppointmentPage extends StatefulWidget {
   const CreateAppointmentPage({Key? key}) : super(key: key);
 
@@ -9,21 +11,20 @@ class CreateAppointmentPage extends StatefulWidget {
 }
 
 class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
-  late int _selectedDayIndex; 
-  late DateTime _currentDate; 
-  int _selectedTimeIndex = -1; 
+  late int _selectedDayIndex;
+  late DateTime _currentDate;
+  int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1; 
+  int _lastSelectedDayIndex = -1;
 
   @override
   void initState() {
     super.initState();
-    _selectedDayIndex = -1; 
-    _currentDate = DateTime.now(); 
+    _selectedDayIndex = -1;
+    _currentDate = DateTime.now();
     _dateScrollController = ScrollController();
   }
 
-  
   List<DateTime> getDatesInMonth() {
     final int daysInMonth =
         DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
@@ -33,30 +34,24 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
     );
   }
 
-  
   void changeDay(int index) {
     if (_lastSelectedDayIndex == index) {
-     
       setState(() {
         _selectedDayIndex = -1;
-        _selectedTimeIndex = -1; 
+        _selectedTimeIndex = -1;
       });
       _lastSelectedDayIndex = -1;
     } else {
       setState(() {
         _selectedDayIndex = index;
         _selectedTimeIndex = -1;
-        _lastSelectedDayIndex =
-            index; 
+        _lastSelectedDayIndex = index;
       });
     }
   }
 
-
-
   void changeTime(int index) {
     if (_selectedTimeIndex == index) {
-     
       setState(() {
         _selectedTimeIndex = -1;
       });
@@ -81,7 +76,6 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
           ),
         ),
         centerTitle: true,
-        
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -97,7 +91,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                     color: Colors.grey.withOpacity(1),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3), 
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),
