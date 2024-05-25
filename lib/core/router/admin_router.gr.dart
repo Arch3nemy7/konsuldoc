@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:flutter/material.dart' as _i12;
 import 'package:konsuldoc/presentations/pages/admin/admin_form_page.dart'
     as _i1;
 import 'package:konsuldoc/presentations/pages/admin/admin_home_page.dart'
@@ -60,9 +61,13 @@ abstract class $AdminRouter extends _i11.RootStackRouter {
       );
     },
     AppointmentDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<AppointmentDetailRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i5.AppointmentDetailPage(),
+        child: _i5.AppointmentDetailPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     AppointmentListRoute.name: (routeData) {
@@ -156,16 +161,41 @@ class AdminRootRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.AppointmentDetailPage]
-class AppointmentDetailRoute extends _i11.PageRouteInfo<void> {
-  const AppointmentDetailRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class AppointmentDetailRoute
+    extends _i11.PageRouteInfo<AppointmentDetailRouteArgs> {
+  AppointmentDetailRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           AppointmentDetailRoute.name,
+          args: AppointmentDetailRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'AppointmentDetailRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<AppointmentDetailRouteArgs> page =
+      _i11.PageInfo<AppointmentDetailRouteArgs>(name);
+}
+
+class AppointmentDetailRouteArgs {
+  const AppointmentDetailRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'AppointmentDetailRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for

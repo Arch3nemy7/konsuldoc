@@ -1,4 +1,4 @@
-package com.example.konsuldoc
+package com.kelompok2.konsuldoc
 
 import io.flutter.embedding.android.FlutterActivity
 

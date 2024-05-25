@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i7;
+import 'package:flutter/material.dart' as _i8;
 import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
     as _i1;
 import 'package:konsuldoc/presentations/pages/common/appointment_list_page.dart'
@@ -28,9 +29,13 @@ abstract class $DoctorRouter extends _i7.RootStackRouter {
   @override
   final Map<String, _i7.PageFactory> pagesMap = {
     AppointmentDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<AppointmentDetailRouteArgs>();
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i1.AppointmentDetailPage(),
+        child: _i1.AppointmentDetailPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     AppointmentListRoute.name: (routeData) {
@@ -68,16 +73,41 @@ abstract class $DoctorRouter extends _i7.RootStackRouter {
 
 /// generated route for
 /// [_i1.AppointmentDetailPage]
-class AppointmentDetailRoute extends _i7.PageRouteInfo<void> {
-  const AppointmentDetailRoute({List<_i7.PageRouteInfo>? children})
-      : super(
+class AppointmentDetailRoute
+    extends _i7.PageRouteInfo<AppointmentDetailRouteArgs> {
+  AppointmentDetailRoute({
+    _i8.Key? key,
+    required String id,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
           AppointmentDetailRoute.name,
+          args: AppointmentDetailRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'AppointmentDetailRoute';
 
-  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+  static const _i7.PageInfo<AppointmentDetailRouteArgs> page =
+      _i7.PageInfo<AppointmentDetailRouteArgs>(name);
+}
+
+class AppointmentDetailRouteArgs {
+  const AppointmentDetailRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i8.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'AppointmentDetailRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for
