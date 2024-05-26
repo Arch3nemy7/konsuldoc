@@ -71,9 +71,13 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
       );
     },
     MemberFormRoute.name: (routeData) {
+      final args = routeData.argsAs<MemberFormRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i6.MemberFormPage(),
+        child: _i6.MemberFormPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     MemberHomeRoute.name: (routeData) {
@@ -200,16 +204,40 @@ class MemberDetailRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.MemberFormPage]
-class MemberFormRoute extends _i11.PageRouteInfo<void> {
-  const MemberFormRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class MemberFormRoute extends _i11.PageRouteInfo<MemberFormRouteArgs> {
+  MemberFormRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           MemberFormRoute.name,
+          args: MemberFormRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'MemberFormRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<MemberFormRouteArgs> page =
+      _i11.PageInfo<MemberFormRouteArgs>(name);
+}
+
+class MemberFormRouteArgs {
+  const MemberFormRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'MemberFormRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for

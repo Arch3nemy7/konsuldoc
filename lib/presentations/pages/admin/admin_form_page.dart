@@ -1,20 +1,38 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/utils/pick_image.dart';
+import 'package:konsuldoc/presentations/controllers/admin_controller.dart';
 
 @RoutePage()
-class AdminFormPage extends StatefulWidget {
-  const AdminFormPage({super.key});
+class AdminFormPage extends ConsumerStatefulWidget {
+  final String id;
+  const AdminFormPage({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<AdminFormPage> createState() => _AdminFormPageState();
+  ConsumerState<AdminFormPage> createState() => _AdminFormPageState();
 }
 
-class _AdminFormPageState extends State<AdminFormPage> {
+class _AdminFormPageState extends ConsumerState<AdminFormPage> {
+  File? avatarFile;
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
+
+  void selectBannerImage() async {
+    final res = await pickImage();
+
+    if (res != null) {
+      setState(() {
+        avatarFile = File(res.files.first.path!);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -54,24 +72,31 @@ class _AdminFormPageState extends State<AdminFormPage> {
               Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.1),
-                          )
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
-                          ),
+                    GestureDetector(
+                      onTap: selectBannerImage,
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 4, color: Colors.white),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.1),
+                            )
+                          ],
+                          shape: BoxShape.circle,
+                          image: avatarFile != null
+                              ? DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(avatarFile!))
+                              : DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -203,5 +228,25 @@ class _AdminFormPageState extends State<AdminFormPage> {
         ),
       ),
     );
+  }
+
+  void insertAdmin() {
+    ref.read(adminControllerProvider).add(
+          name: _nameController.text,
+          email: _emailController.text,
+          phone: _phoneController.text,
+          password: _passwordController.text,
+          avatar: avatarFile,
+        );
+  }
+
+  void editAdmin() {
+    ref.read(adminControllerProvider).edit(
+          widget.id,
+          name: _nameController.text,
+          email: _emailController.text,
+          phone: _phoneController.text,
+          avatar: avatarFile,
+        );
   }
 }

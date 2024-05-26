@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:konsuldoc/core/constants/bucket_constants.dart';
 import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/doctor_model.dart';
-import 'package:konsuldoc/data/models/schedule_model.dart';
+import 'package:konsuldoc/data/models/doctor_session_model.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
-import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/domain/repositories/auth_repository.dart';
@@ -51,7 +51,7 @@ class DoctorRepositoryImpl implements DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   }) async {
     final id = await _authRepository.addUser(
       email: email,
@@ -70,7 +70,8 @@ class DoctorRepositoryImpl implements DoctorRepository {
       'specialist': specialist.name,
       'phone': phone,
       'about': about,
-      'schedules': List<ScheduleModel>.from(schedules).map((e) => e.toMap()),
+      'schedules': List<List<DoctorSessionModel>>.from(schedules)
+          .map((e) => e.map((s) => s.toMap())),
     });
   }
 
@@ -83,7 +84,7 @@ class DoctorRepositoryImpl implements DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   }) async {
     final data = {
       'name': name,
@@ -91,7 +92,8 @@ class DoctorRepositoryImpl implements DoctorRepository {
       'specialist': specialist.name,
       'phone': phone,
       'about': about,
-      'schedules': List<ScheduleModel>.from(schedules).map((e) => e.toMap()),
+      'schedules': List<List<DoctorSessionModel>>.from(schedules)
+          .map((e) => e.map((s) => s.toMap())),
     };
 
     if (avatar != null) {

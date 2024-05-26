@@ -1,22 +1,39 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/utils/pick_image.dart';
 import 'package:konsuldoc/domain/enums/gender.dart';
+import 'package:konsuldoc/presentations/controllers/member_controller.dart';
 
 @RoutePage()
-class MemberFormPage extends StatefulWidget {
-  const MemberFormPage({super.key});
+class MemberFormPage extends ConsumerStatefulWidget {
+  final String id;
+  const MemberFormPage({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<MemberFormPage> createState() => _MemberFormPageState();
+  ConsumerState<MemberFormPage> createState() => _MemberFormPageState();
 }
 
-class _MemberFormPageState extends State<MemberFormPage> {
+class _MemberFormPageState extends ConsumerState<MemberFormPage> {
+  File? avatarFile;
   Gender? _gender;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
+
+  void selectBannerImage() async {
+    final res = await pickImage();
+
+    if (res != null) {
+      setState(() {
+        avatarFile = File(res.files.first.path!);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -54,24 +71,31 @@ class _MemberFormPageState extends State<MemberFormPage> {
               Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.1),
-                          )
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
-                          ),
+                    GestureDetector(
+                      onTap: selectBannerImage,
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 4, color: Colors.white),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.1),
+                            )
+                          ],
+                          shape: BoxShape.circle,
+                          image: avatarFile != null
+                              ? DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(avatarFile!))
+                              : DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -226,5 +250,16 @@ class _MemberFormPageState extends State<MemberFormPage> {
         ),
       ),
     );
+  }
+
+  void updateProfile() {
+    ref.read(memberControllerProvider).edit(widget.id,
+        name: _nameController.text,
+        email: _emailController.text,
+        address: _addressController.text,
+        phone: _phoneController.text,
+        gender: _gender,
+        dob: DateTime.parse(_dobController.text),
+        avatar: avatarFile);
   }
 }

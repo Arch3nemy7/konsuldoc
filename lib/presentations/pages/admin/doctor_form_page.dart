@@ -1,28 +1,62 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart' as fp;
+import 'package:konsuldoc/core/utils/pick_image.dart';
+import 'package:konsuldoc/domain/entities/doctor_session.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
+import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
+import 'package:konsuldoc/presentations/widgets/pilih_sesi.dart';
 
 @RoutePage()
-class DoctorFormPage extends StatefulWidget {
-  const DoctorFormPage({super.key});
+class DoctorFormPage extends ConsumerStatefulWidget {
+  final String id;
+  const DoctorFormPage(this.id, {Key? key}) : super(key: key);
 
   @override
-  State<DoctorFormPage> createState() => _DoctorFormPageState();
+  ConsumerState<DoctorFormPage> createState() => _DoctorFormPageState();
 }
 
-class _DoctorFormPageState extends State<DoctorFormPage> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _specialistController = TextEditingController();
-  TextEditingController _datetimeinput = TextEditingController();
+class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
+  File? avatarFile;
+  Specialist? selectedSpecialist;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _aboutController = TextEditingController();
+  final TextEditingController _specialistController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
+  bool _showExpansion = false;
+  bool obscurePassword = true;
 
   @override
   void dispose() {
     _nameController.dispose();
-    _descriptionController.dispose();
+    _aboutController.dispose();
     _specialistController.dispose();
-    _datetimeinput.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
+
+  void selectBannerImage() async {
+    final res = await pickImage();
+
+    if (res != null) {
+      setState(() {
+        avatarFile = File(res.files.first.path!);
+      });
+    }
+  }
+
+  int? selectedDay;
+  final List<String> weekdays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+  late final List<List<DoctorSession>> schedules =
+      List.generate(weekdays.length, (index) => []);
 
   @override
   Widget build(BuildContext context) {
@@ -50,24 +84,31 @@ class _DoctorFormPageState extends State<DoctorFormPage> {
               Center(
                 child: Stack(
                   children: [
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 4, color: Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.1),
-                          )
-                        ],
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                            'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
-                          ),
+                    GestureDetector(
+                      onTap: selectBannerImage,
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 4, color: Colors.white),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              color: Colors.black.withOpacity(0.1),
+                            )
+                          ],
+                          shape: BoxShape.circle,
+                          image: avatarFile != null
+                              ? DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(avatarFile!))
+                              : DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
+                                  ),
+                                ),
                         ),
                       ),
                     ),
@@ -111,31 +152,93 @@ class _DoctorFormPageState extends State<DoctorFormPage> {
               ),
               SizedBox(height: 15),
               TextFormField(
-                controller: _descriptionController,
-                keyboardType: TextInputType.text,
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                  labelText: "Deskripsi",
+                  labelText: "Email",
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.description),
+                  prefixIcon: Icon(Icons.email),
                 ),
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Masukkan deskripsi";
+                  if (value!.isEmpty ||
+                      !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(value)) {
+                    return "Masukkan email yang valid";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 15),
               TextFormField(
-                controller: _specialistController,
+                controller: _passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                obscureText: obscurePassword,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.lock),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty || value.length < 6) {
+                    return "Password harus memiliki setidaknya 6 karakter";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15),
+              TextFormField(
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  labelText: "No Telepon",
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.add_call),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty ||
+                      !RegExp(r'^\+?62[0-9]+$').hasMatch(value)) {
+                    return "Masukkan nomor telepon yang valid";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15),
+              TextFormField(
+                controller: _aboutController,
                 keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                  labelText: "About",
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.description),
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Masukkan About";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15),
+              DropdownButtonFormField<Specialist>(
                 decoration: const InputDecoration(
                   labelText: "Spesialis",
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.medical_services),
                 ),
+                value: selectedSpecialist,
+                items: Specialist.values.map((Specialist specialist) {
+                  return DropdownMenuItem<Specialist>(
+                    value: specialist,
+                    child: Text(specialist.label),
+                  );
+                }).toList(),
+                onChanged: (Specialist? newValue) {
+                  setState(() {
+                    selectedSpecialist = newValue;
+                  });
+                },
                 validator: (value) {
-                  if (value!.isEmpty) {
+                  if (value == null) {
                     return "Masukkan spesialis";
                   }
                   return null;
@@ -150,36 +253,38 @@ class _DoctorFormPageState extends State<DoctorFormPage> {
                 ),
               ),
               SizedBox(height: 5),
-              SizedBox(
-                height: 80,
+              Container(
+                height: 70,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 5,
+                  itemCount: weekdays.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 1.4,
-                        child: Column(
-                          children: [
-                            ListTile(
-                              title: Text('Senin'),
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 20),
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedDay = index;
+                        });
+                      },
+                      child: Container(
+                        width: 85,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        decoration: BoxDecoration(
+                          color:
+                              selectedDay == index ? Colors.blue : Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            weekdays[index],
+                            style: TextStyle(
+                              color: selectedDay == index
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     );
@@ -187,72 +292,30 @@ class _DoctorFormPageState extends State<DoctorFormPage> {
                 ),
               ),
               SizedBox(height: 15),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0), // Atur jarak di sini
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: "Dari",
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.access_time),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8.0), // Atur jarak di sini
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0), // Atur jarak di sini
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: "Sampai",
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.access_time),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              ElevatedButton(
+                onPressed: selectedDay == null
+                    ? null
+                    : () {
+                        setState(() {
+                          schedules[selectedDay!].add(DoctorSession(
+                              quota: 0,
+                              timeStart: TimeOfDay(hour: 0, minute: 0),
+                              timeEnd: TimeOfDay(hour: 23, minute: 59)));
+                        });
+                      },
+                child: Text('Tambah Sesi Dokter'),
               ),
+              ...(selectedDay == null
+                  ? []
+                  : schedules[selectedDay!].mapWithIndex(
+                      (session, index) => PilihSesi(
+                        title: "Sesi ${index + 1}",
+                        onUpdate: refresh,
+                        session: schedules[selectedDay!][index],
+                        onDelete: () => deleteSession(selectedDay!, index),
+                      ),
+                    )),
               SizedBox(height: 15),
-              TextFormField(
-                controller: _datetimeinput,
-                keyboardType: TextInputType.text,
-                decoration: const InputDecoration(
-                  labelText: "Tanggal",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.edit_calendar_rounded),
-                ),
-                onTap: () async {
-                  final DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2101),
-                    builder: (BuildContext context, Widget? child) {
-                      return Theme(
-                        data: ThemeData.light().copyWith(
-                          colorScheme: ColorScheme.light(
-                            primary:
-                                Colors.blue, // Atur warna pilih tanggal di sini
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (picked != null && picked != _datetimeinput.text) {
-                    setState(() {
-                      _datetimeinput.text = picked.toString().split(" ")[0];
-                    });
-                  }
-                },
-              ),
-              SizedBox(height: 5),
               Padding(
                 padding: EdgeInsets.all(10),
                 child: ElevatedButton(
@@ -269,5 +332,38 @@ class _DoctorFormPageState extends State<DoctorFormPage> {
         ),
       ),
     );
+  }
+
+  void deleteSession(int day, int index) {
+    setState(() {
+      schedules[day].removeAt(index);
+    });
+  }
+
+  void refresh() {
+    setState(() {});
+  }
+
+  void insertDoctor() {
+    ref.read(doctorControllerProvider).add(
+          name: _nameController.text,
+          email: _emailController.text,
+          phone: _phoneController.text,
+          password: _passwordController.text,
+          about: _aboutController.text,
+          avatar: avatarFile,
+          schedules: schedules,
+          specialist: selectedSpecialist!,
+        );
+  }
+
+  void updateDoctor() {
+    ref.read(doctorControllerProvider).edit(widget.id,
+        name: _nameController.text,
+        email: _emailController.text,
+        specialist: selectedSpecialist!,
+        phone: _phoneController.text,
+        about: _aboutController.text,
+        schedules: schedules);
   }
 }

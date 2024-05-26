@@ -37,9 +37,13 @@ abstract class $AdminRouter extends _i11.RootStackRouter {
   @override
   final Map<String, _i11.PageFactory> pagesMap = {
     AdminFormRoute.name: (routeData) {
+      final args = routeData.argsAs<AdminFormRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i1.AdminFormPage(),
+        child: _i1.AdminFormPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     AdminHomeRoute.name: (routeData) {
@@ -83,9 +87,13 @@ abstract class $AdminRouter extends _i11.RootStackRouter {
       );
     },
     DoctorFormRoute.name: (routeData) {
+      final args = routeData.argsAs<DoctorFormRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.DoctorFormPage(),
+        child: _i8.DoctorFormPage(
+          args.id,
+          key: args.key,
+        ),
       );
     },
     DoctorListRoute.name: (routeData) {
@@ -105,16 +113,40 @@ abstract class $AdminRouter extends _i11.RootStackRouter {
 
 /// generated route for
 /// [_i1.AdminFormPage]
-class AdminFormRoute extends _i11.PageRouteInfo<void> {
-  const AdminFormRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class AdminFormRoute extends _i11.PageRouteInfo<AdminFormRouteArgs> {
+  AdminFormRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           AdminFormRoute.name,
+          args: AdminFormRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'AdminFormRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<AdminFormRouteArgs> page =
+      _i11.PageInfo<AdminFormRouteArgs>(name);
+}
+
+class AdminFormRouteArgs {
+  const AdminFormRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'AdminFormRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for
@@ -228,16 +260,40 @@ class DoctorDetailRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.DoctorFormPage]
-class DoctorFormRoute extends _i11.PageRouteInfo<void> {
-  const DoctorFormRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class DoctorFormRoute extends _i11.PageRouteInfo<DoctorFormRouteArgs> {
+  DoctorFormRoute({
+    required String id,
+    _i12.Key? key,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           DoctorFormRoute.name,
+          args: DoctorFormRouteArgs(
+            id: id,
+            key: key,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'DoctorFormRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<DoctorFormRouteArgs> page =
+      _i11.PageInfo<DoctorFormRouteArgs>(name);
+}
+
+class DoctorFormRouteArgs {
+  const DoctorFormRouteArgs({
+    required this.id,
+    this.key,
+  });
+
+  final String id;
+
+  final _i12.Key? key;
+
+  @override
+  String toString() {
+    return 'DoctorFormRouteArgs{id: $id, key: $key}';
+  }
 }
 
 /// generated route for

@@ -4,7 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
-import 'package:konsuldoc/domain/entities/schedule.dart';
+import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -29,15 +29,20 @@ class DoctorController {
   }) : _repository = repository;
 
   Future<bool> add({
-    required File avatar,
+    required File? avatar,
     required String name,
     required String email,
     required String password,
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   }) async {
+    if (avatar == null) {
+      BotToast.showText(text: "Foto profil wajib diisi");
+      return false;
+    }
+
     final cancel = BotToast.showLoading(
       backButtonBehavior: BackButtonBehavior.ignore,
     );
@@ -73,7 +78,7 @@ class DoctorController {
     required Specialist specialist,
     required String phone,
     required String about,
-    required List<Schedule> schedules,
+    required List<List<DoctorSession>> schedules,
   }) async {
     final cancel = BotToast.showLoading(
       backButtonBehavior: BackButtonBehavior.ignore,
