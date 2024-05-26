@@ -53,9 +53,13 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
       );
     },
     CreateAppointmentRoute.name: (routeData) {
+      final args = routeData.argsAs<CreateAppointmentRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.CreateAppointmentPage(),
+        child: _i3.CreateAppointmentPage(
+          key: args.key,
+          idDoctor: args.idDoctor,
+        ),
       );
     },
     DoctorDetailRoute.name: (routeData) {
@@ -99,9 +103,13 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
       );
     },
     RescheduleAppointmentRoute.name: (routeData) {
+      final args = routeData.argsAs<RescheduleAppointmentRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i10.RescheduleAppointmentPage(),
+        child: _i10.RescheduleAppointmentPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
   };
@@ -162,16 +170,41 @@ class AppointmentListRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CreateAppointmentPage]
-class CreateAppointmentRoute extends _i11.PageRouteInfo<void> {
-  const CreateAppointmentRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class CreateAppointmentRoute
+    extends _i11.PageRouteInfo<CreateAppointmentRouteArgs> {
+  CreateAppointmentRoute({
+    _i12.Key? key,
+    required String idDoctor,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           CreateAppointmentRoute.name,
+          args: CreateAppointmentRouteArgs(
+            key: key,
+            idDoctor: idDoctor,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CreateAppointmentRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<CreateAppointmentRouteArgs> page =
+      _i11.PageInfo<CreateAppointmentRouteArgs>(name);
+}
+
+class CreateAppointmentRouteArgs {
+  const CreateAppointmentRouteArgs({
+    this.key,
+    required this.idDoctor,
+  });
+
+  final _i12.Key? key;
+
+  final String idDoctor;
+
+  @override
+  String toString() {
+    return 'CreateAppointmentRouteArgs{key: $key, idDoctor: $idDoctor}';
+  }
 }
 
 /// generated route for
@@ -284,14 +317,39 @@ class ProfileUserRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.RescheduleAppointmentPage]
-class RescheduleAppointmentRoute extends _i11.PageRouteInfo<void> {
-  const RescheduleAppointmentRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class RescheduleAppointmentRoute
+    extends _i11.PageRouteInfo<RescheduleAppointmentRouteArgs> {
+  RescheduleAppointmentRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           RescheduleAppointmentRoute.name,
+          args: RescheduleAppointmentRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'RescheduleAppointmentRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<RescheduleAppointmentRouteArgs> page =
+      _i11.PageInfo<RescheduleAppointmentRouteArgs>(name);
+}
+
+class RescheduleAppointmentRouteArgs {
+  const RescheduleAppointmentRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'RescheduleAppointmentRouteArgs{key: $key, id: $id}';
+  }
 }

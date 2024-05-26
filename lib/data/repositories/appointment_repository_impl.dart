@@ -98,11 +98,13 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }
 
   @override
-  Future<void> add(String idDoctor, DateTime date) async {
+  Future<void> add(String idDoctor, DateTime date, int session, String? complaints)async {
     await _supabase.from(TableConstants.appointments).insert({
       'id_member': _supabase.auth.currentUser!.id,
       'id_doctor': idDoctor,
       'date': date.toIso8601String(),
+      'complaints': complaints,
+      'session': session,
     });
   }
 
@@ -114,10 +116,11 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }
 
   @override
-  Future<void> reschedule(String id, DateTime date) async {
+  Future<void> reschedule(String id, DateTime date, int session) async {
     await _supabase.from(TableConstants.appointments).update({
       'date': date.toIso8601String(),
       'status': AppointmentStatus.pending.index,
+      'session': session
     }).eq('id', id);
   }
 }

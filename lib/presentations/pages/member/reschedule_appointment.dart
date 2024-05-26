@@ -4,21 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
 @RoutePage()
-class RescheduleAppointmentPage extends StatefulWidget {
-  const RescheduleAppointmentPage({super.key});
+class RescheduleAppointmentPage extends StatelessWidget {
+  final String id;
+  const RescheduleAppointmentPage({super.key, required this.id});
 
-  @override
-  State<RescheduleAppointmentPage> createState() =>
-      _RescheduleAppointmentPageState();
-}
-
-class _RescheduleAppointmentPageState extends State<RescheduleAppointmentPage> {
-  void _showRescheduleBottomSheet() {
+  void _showRescheduleBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return BottomsheetReschedule();
+        return BottomsheetReschedule(id: id);
       },
     );
   }
@@ -184,66 +179,55 @@ class _RescheduleAppointmentPageState extends State<RescheduleAppointmentPage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Container(
-                        width: 140,
-                       
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color:                          
-                              Colors.grey,
-                          
-                        ),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                'Sesi 1', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      Colors.white ,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          width: 140,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Sesi 1', // Ubah sesuai rentang jam praktiknya
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                       Colors.white ,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
+                                Text(
+                                  '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                        
-                      ),
                       Container(
                         width: 180,
-                       
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color:                          
-                              Colors.grey,
-                          
+                          color: Colors.grey,
                         ),
                         child: Center(
                           child: Column(
                             children: [
-                        
                               Text(
                                 '24 April 2024', // Ubah sesuai rentang jam praktiknya
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color:
-                                       Colors.white ,
+                                  color: Colors.white,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -298,7 +282,7 @@ class _RescheduleAppointmentPageState extends State<RescheduleAppointmentPage> {
                   child: SizedBox(
                     width: 170,
                     child: ElevatedButton(
-                      onPressed: _showRescheduleBottomSheet,
+                      onPressed: () => _showRescheduleBottomSheet(context),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                             const Color.fromRGBO(34, 100, 136, 1)),

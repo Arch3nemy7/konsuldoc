@@ -9,6 +9,8 @@ class AppointmentModel extends Appointment {
     required super.member,
     required super.doctor,
     required super.date,
+    required super.session,
+    required super.complaints,
     required super.status,
   });
 
@@ -18,6 +20,8 @@ class AppointmentModel extends Appointment {
       member: MemberBasicModel.fromMap(map['member']),
       doctor: DoctorBasicModel.fromMap(map['doctor']),
       date: DateTime.parse(map['date']),
+      session: map['session'],
+      complaints: map['complaints'],
       status: AppointmentStatus.values[map['status']],
     );
   }

@@ -32,6 +32,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
         specialist: 'Spesialis $index',
       ),
       date: DateTime.now(),
+      session: 0,
       status: AppointmentStatus.pending,
     ),
   );

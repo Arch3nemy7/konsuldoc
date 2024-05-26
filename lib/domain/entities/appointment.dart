@@ -7,6 +7,8 @@ class Appointment {
   final MemberBasic member;
   final DoctorBasic doctor;
   final DateTime date;
+  final int session;
+  final String? complaints;
   final AppointmentStatus status;
 
   Appointment({
@@ -14,6 +16,8 @@ class Appointment {
     required this.member,
     required this.doctor,
     required this.date,
+    required this.session,
+    this.complaints,
     required this.status,
   });
 }

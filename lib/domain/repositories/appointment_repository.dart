@@ -16,7 +16,7 @@ abstract interface class AppointmentRepository {
     bool upcomingOnly = false,
   });
   Stream<Appointment> fetchById(String id);
-  Future<void> add(String idDoctor, DateTime date);
+  Future<void> add(String idDoctor, DateTime date, int session,String? complaints);
   Future<void> editStatus(String id, AppointmentStatus status);
-  Future<void> reschedule(String id, DateTime date);
+  Future<void> reschedule(String id, DateTime date, int session);
 }

@@ -33,6 +33,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
               specialist: 'Spesialis $index',
             ),
             date: DateTime.now(),
+            session: 0,
             status: AppointmentStatus.pending,
           ));
   bool upcoming = true;

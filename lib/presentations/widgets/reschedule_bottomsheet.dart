@@ -1,25 +1,30 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
 
-class BottomsheetReschedule extends StatefulWidget {
-  const BottomsheetReschedule({super.key});
+class BottomsheetReschedule extends ConsumerStatefulWidget {
+  final String id;
+  const BottomsheetReschedule({super.key, required this.id});
 
   @override
-  State<BottomsheetReschedule> createState() => _BottomsheetRescheduleState();
+  ConsumerState<BottomsheetReschedule> createState() =>
+      _BottomsheetRescheduleState();
 }
 
-class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
-  late int _selectedDayIndex; 
-  late DateTime _currentDate; 
-  int _selectedTimeIndex = -1; 
+class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
+  late int _selectedDayIndex;
+  late DateTime _currentDate;
+  int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1; 
+  int _lastSelectedDayIndex = -1;
 
   @override
   void initState() {
     super.initState();
-    _selectedDayIndex = -1; // Set default ke -1 (tidak ada yang dipilih)
-    _currentDate = DateTime.now(); // Set tanggal saat ini
+    _selectedDayIndex = -1;
+    _currentDate = DateTime.now();
     _dateScrollController = ScrollController();
   }
 
@@ -63,6 +68,15 @@ class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
         _selectedTimeIndex = index;
       });
     }
+  }
+
+  void rescheduleAppointment() {
+    ref
+        .read(appointmentControllerProvider)
+        .reschedule(widget.id, _currentDate, _selectedTimeIndex)
+        .then((value) {
+      if (value) context.maybePop();
+    });
   }
 
   @override
@@ -131,66 +145,55 @@ class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
                         child: Container(
-                        width: 140,
-                       
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color:                          
-                              Colors.grey,
-                          
-                        ),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                'Sesi 1', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      Colors.white ,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          width: 140,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Sesi 1', // Ubah sesuai rentang jam praktiknya
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                       Colors.white ,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
+                                Text(
+                                  '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                        
-                      ),
                       Container(
                         width: 180,
-                       
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color:                          
-                              Colors.grey,
-                          
+                          color: Colors.grey,
                         ),
                         child: Center(
                           child: Column(
                             children: [
-                        
                               Text(
                                 '24 April 2024', // Ubah sesuai rentang jam praktiknya
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color:
-                                       Colors.white ,
+                                  color: Colors.white,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -228,7 +231,6 @@ class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
                           },
                           child: Container(
                             width: 110,
-                            
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 5),
                             padding: const EdgeInsets.all(8),
@@ -248,29 +250,31 @@ class _BottomsheetRescheduleState extends State<BottomsheetReschedule> {
                             ),
                             child: Center(
                               child: Column(
-                            children: [
-                              Text(
-                                'Sesi ${index + 1}', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                children: [
+                                  Text(
+                                    'Sesi ${index + 1}', // Ubah sesuai rentang jam praktiknya
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: isSelected
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      isSelected ? Colors.white : Colors.black,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
                             ),
                           ),
                         );

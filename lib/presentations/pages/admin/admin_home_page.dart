@@ -34,6 +34,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         specialist: 'Spesialis $index',
       ),
       date: DateTime.now(),
+      session: 0,
       status: AppointmentStatus.pending,
     ),
   );

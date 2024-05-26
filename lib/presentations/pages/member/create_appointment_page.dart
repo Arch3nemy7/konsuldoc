@@ -1,21 +1,27 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
 
 @RoutePage()
-class CreateAppointmentPage extends StatefulWidget {
-  const CreateAppointmentPage({Key? key}) : super(key: key);
+class CreateAppointmentPage extends ConsumerStatefulWidget {
+  final String idDoctor;
+  const CreateAppointmentPage({Key? key, required this.idDoctor})
+      : super(key: key);
 
   @override
-  State<CreateAppointmentPage> createState() => _CreateAppointmentPageState();
+  ConsumerState<CreateAppointmentPage> createState() =>
+      _CreateAppointmentPageState();
 }
 
-class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
+class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
   late int _selectedDayIndex;
   late DateTime _currentDate;
   int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
   int _lastSelectedDayIndex = -1;
+   
 
   @override
   void initState() {
@@ -62,9 +68,18 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
     }
   }
 
+  void createAppointment() {
+    ref
+        .read(appointmentControllerProvider)
+        .add(widget.idDoctor, _currentDate, _selectedTimeIndex, 'complaints')
+        .then((value) {
+      if (value) context.maybePop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<DateTime> _datesInMonth = getDatesInMonth();
+    final List<DateTime> datesInMonth = getDatesInMonth();
 
     return Scaffold(
       appBar: AppBar(
@@ -91,11 +106,11 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                     color: Colors.grey.withOpacity(1),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
-              child: Row(
+              child: const Row(
                 children: [
                   SizedBox(
                     width: 9,
@@ -152,13 +167,13 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             const Text(
               'Jam Praktik',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
-            Container(
+            const SizedBox(height: 10),
+            SizedBox(
               height: 55,
               child: ListView.builder(
                 controller: _dateScrollController,
@@ -184,14 +199,15 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: isSelected
-                            ? Color.fromRGBO(34, 100, 136, 1)
+                            ? const Color.fromRGBO(34, 100, 136, 1)
                             : Colors.white,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 4), // changes position of shadow
+                            offset: const Offset(
+                                0, 4), // changes position of shadow
                           ),
                         ],
                       ),
@@ -210,7 +226,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                 },
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 const Text(
@@ -229,7 +245,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                       if (newDate != null) {
                         setState(() {
                           _currentDate = newDate;
-                          _selectedDayIndex = _datesInMonth.indexWhere((date) =>
+                          _selectedDayIndex = datesInMonth.indexWhere((date) =>
                               date.year == newDate.year &&
                               date.month == newDate.month &&
                               date.day ==
@@ -241,17 +257,17 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                       }
                     });
                   },
-                  icon: Icon(Icons.arrow_drop_down),
+                  icon: const Icon(Icons.arrow_drop_down),
                 ),
               ],
             ),
-            Container(
+            SizedBox(
               height: 70,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _datesInMonth.length,
+                itemCount: datesInMonth.length,
                 itemBuilder: (context, index) {
-                  final date = _datesInMonth[index];
+                  final date = datesInMonth[index];
                   final formattedDay =
                       DateFormat.E().format(date).substring(0, 3);
                   final formattedDate = DateFormat('dd').format(date);
@@ -271,14 +287,15 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: isSelected
-                            ? Color.fromRGBO(34, 100, 136, 1)
+                            ? const Color.fromRGBO(34, 100, 136, 1)
                             : (isPastDay ? Colors.grey : Colors.white),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 4), // changes position of shadow
+                            offset: const Offset(
+                                0, 4), // changes position of shadow
                           ),
                         ],
                       ),
@@ -310,7 +327,31 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                 },
               ),
             ),
-            SizedBox(height: 20),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText:
+                    'Masukkan keluhan sakit', 
+                hintText: 'Masukkan keluhan sakit...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+                labelStyle: TextStyle(
+                  color: Colors.black, 
+                  fontSize: 22, 
+                  fontWeight:
+                      FontWeight.w500, 
+                ),
+                floatingLabelBehavior:
+                    FloatingLabelBehavior.always, 
+              ),
+              maxLines:
+                  null, 
+              keyboardType: TextInputType
+                  .multiline, 
+            ),
+            const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -318,7 +359,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      Color.fromRGBO(34, 100, 136, 1)),
+                      const Color.fromRGBO(34, 100, 136, 1)),
                   shadowColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                       return Colors.grey.withOpacity(0.8);
@@ -333,7 +374,7 @@ class _CreateAppointmentPageState extends State<CreateAppointmentPage> {
                     },
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Buat Appointment',
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
