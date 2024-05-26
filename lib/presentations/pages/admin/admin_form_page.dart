@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/utils/pick_image.dart';
 import 'package:konsuldoc/presentations/controllers/admin_controller.dart';
 
+@RoutePage()
 class AdminFormPage extends ConsumerStatefulWidget {
   final String id;
   const AdminFormPage({Key? key, required this.id}) : super(key: key);

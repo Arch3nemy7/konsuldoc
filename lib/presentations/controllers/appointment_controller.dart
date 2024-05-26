@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -9,7 +10,17 @@ part 'appointment_controller.g.dart';
 
 @riverpod
 AppointmentController appointmentController(AppointmentControllerRef ref) {
-  return AppointmentController(repository: ref.watch(appointmentRepositoryProvider));
+  return AppointmentController(
+    repository: ref.watch(appointmentRepositoryProvider),
+  );
+}
+
+@riverpod
+Stream<Appointment> fetchAppointmentById(
+  FetchAppointmentByIdRef ref,
+  String id,
+) {
+  return ref.watch(appointmentRepositoryProvider).fetchById(id);
 }
 
 class AppointmentController {
@@ -20,10 +31,14 @@ class AppointmentController {
   }) : _repository = repository;
 
   Future<bool> add(String idDoctor, DateTime date) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.add(
       idDoctor,
       date,
     ));
+    cancel();
 
     return res.fold(
       (l) {
@@ -41,10 +56,14 @@ class AppointmentController {
     String id,
     AppointmentStatus status,
   ) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.editStatus(
       id,
       status,
     ));
+    cancel();
 
     return res.fold(
       (l) {
@@ -62,10 +81,14 @@ class AppointmentController {
     String id,
     DateTime date,
   ) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.reschedule(
       id,
       date,
     ));
+    cancel();
 
     return res.fold(
       (l) {

@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
+@RoutePage()
 class RescheduleAppointmentPage extends StatefulWidget {
   const RescheduleAppointmentPage({super.key});
 
@@ -181,59 +183,72 @@ class _RescheduleAppointmentPageState extends State<RescheduleAppointmentPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 20),
-                        child: SizedBox(
-                          width: 120,
-                          child: TextButton(
-                            onPressed: () {
-                              // Tambahkan fungsi untuk tombol jam praktik di sini
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  return Colors.grey; // Warna latar abu-abu
-                                },
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // Border radius 10
+                        child: Container(
+                        width: 140,
+                       
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color:                          
+                              Colors.grey,
+                          
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Sesi 1', // Ubah sesuai rentang jam praktiknya
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color:
+                                      Colors.white ,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                            child: const Text(
-                              '08:00 WIB',
-                              style: TextStyle(
-                                  color: Colors.white), // Warna teks putih
-                            ),
+                              Text(
+                                '09:00 - 10:00', // Ubah sesuai rentang jam praktiknya
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color:
+                                       Colors.white ,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 200,
-                        child: TextButton(
-                          onPressed: () {
-                            // Tambahkan fungsi untuk tombol hari yang dipilih di sini
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return Colors.grey; // Warna latar abu-abu
-                              },
-                            ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Border radius 10
+                        
+                      ),
+                      Container(
+                        width: 180,
+                       
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color:                          
+                              Colors.grey,
+                          
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                        
+                              Text(
+                                '24 April 2024', // Ubah sesuai rentang jam praktiknya
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color:
+                                       Colors.white ,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                          ),
-                          child: const Text(
-                            'Senin, 15 Mei 2024',
-                            style: TextStyle(color: Colors.white),
+                            ],
                           ),
                         ),
                       ),

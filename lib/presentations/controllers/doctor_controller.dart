@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/domain/repositories/doctor_repository.dart';
@@ -13,6 +14,11 @@ part 'doctor_controller.g.dart';
 @riverpod
 DoctorController doctorController(DoctorControllerRef ref) {
   return DoctorController(repository: ref.watch(doctorRepositoryProvider));
+}
+
+@riverpod
+Stream<Doctor> fetchDoctorById(FetchDoctorByIdRef ref, String id) {
+  return ref.watch(doctorRepositoryProvider).fetchById(id);
 }
 
 class DoctorController {
@@ -37,6 +43,9 @@ class DoctorController {
       return false;
     }
 
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.add(
       avatar: avatar,
       name: name,
@@ -47,6 +56,7 @@ class DoctorController {
       about: about,
       schedules: schedules,
     ));
+    cancel();
 
     return res.fold(
       (l) {
@@ -70,6 +80,9 @@ class DoctorController {
     required String about,
     required List<List<DoctorSession>> schedules,
   }) async {
+    final cancel = BotToast.showLoading(
+      backButtonBehavior: BackButtonBehavior.ignore,
+    );
     final res = await handleError(_repository.edit(
       id,
       avatar: avatar,
@@ -80,6 +93,7 @@ class DoctorController {
       about: about,
       schedules: schedules,
     ));
+    cancel();
 
     return res.fold(
       (l) {

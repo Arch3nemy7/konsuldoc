@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage()
 class DoctorDetailPage extends StatelessWidget {
   const DoctorDetailPage({super.key});
 

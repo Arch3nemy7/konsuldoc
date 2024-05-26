@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart' as fp;
@@ -9,6 +10,7 @@ import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 import 'package:konsuldoc/presentations/widgets/pilih_sesi.dart';
 
+@RoutePage()
 class DoctorFormPage extends ConsumerStatefulWidget {
   final String id;
   const DoctorFormPage(this.id, {Key? key}) : super(key: key);

@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+@RoutePage()
 class CreateAppointmentPage extends StatefulWidget {
-  const CreateAppointmentPage({super.key});
+  const CreateAppointmentPage({Key? key}) : super(key: key);
 
   @override
   State<CreateAppointmentPage> createState() => _CreateAppointmentPageState();
