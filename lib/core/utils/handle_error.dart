@@ -5,6 +5,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<Either<Failure, T>> handleError<T>(Future<T> func) async {
   try {
     return right(await func);
+  } on PostgrestException catch (e) {
+    return left(Failure(e.message));
   } on AuthException catch (e) {
     return left(Failure(e.message));
   } catch (e) {

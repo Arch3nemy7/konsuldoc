@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
+import 'package:konsuldoc/presentations/widgets/button/primary_button.dart';
 
 @RoutePage()
 class DoctorDetailPage extends StatelessWidget {
-  const DoctorDetailPage({super.key});
+  final String id;
+  const DoctorDetailPage({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +75,7 @@ class DoctorDetailPage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(width: 10.0),
                   ],
                 ),
               ),
@@ -226,27 +230,11 @@ class DoctorDetailPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ElevatedButton(
+                child: PrimaryButton(
                   onPressed: () {
-                    // Aksi ketika tombol Buat Janji ditekan
+                    context.pushRoute(CreateAppointmentRoute(idDoctor: id));
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF004C69), // Warna biru
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: const Size(
-                        double.infinity, 45), // Lebar tombol memenuhi layar
-                  ),
-                  child: const Text(
-                    'Buat Janji',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  label: 'Buat Janji',
                 ),
               ),
             ],

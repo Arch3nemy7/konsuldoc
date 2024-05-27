@@ -3,6 +3,7 @@ import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/core/utils/show_loading.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
+import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,6 +15,14 @@ AppointmentController appointmentController(AppointmentControllerRef ref) {
   return AppointmentController(
     repository: ref.watch(appointmentRepositoryProvider),
   );
+}
+
+@riverpod
+Future<List<AppointmentSession>> fetchBookedSessions(
+  FetchBookedSessionsRef ref,
+  String idDoctor,
+) {
+  return ref.watch(appointmentRepositoryProvider).fetchBookedSession(idDoctor);
 }
 
 @riverpod
@@ -37,16 +46,14 @@ class AppointmentController {
       BotToast.showText(text: 'Harap memilih sesi terlelbih dahulu');
       return false;
     }
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    final cancel = showLoading();
     final res =
         await handleError(_repository.add(idDoctor, date, session, complaints));
     cancel();
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal menambahkan janji temu");
+        BotToast.showText(text: l.message);
         return false;
       },
       (r) {
@@ -86,9 +93,7 @@ class AppointmentController {
     DateTime date,
     int session,
   ) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    final cancel = showLoading();
     final res = await handleError(_repository.reschedule(id, date, session));
     cancel();
 

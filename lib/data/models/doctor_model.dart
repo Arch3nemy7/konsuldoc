@@ -24,8 +24,9 @@ class DoctorModel extends Doctor {
       specialist: Specialist.values.byName(map['specialist']),
       about: map['about'],
       schedules: (map['schedules'] as List)
-          .map((e) =>
-              (e as List).map((s) => DoctorSessionModel.fromMap(s)).toList())
+          .map((e) => (e as List)
+              .map((s) => DoctorSessionModel.fromMap(s).toEntity())
+              .toList())
           .toList(),
     );
   }

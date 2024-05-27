@@ -24,8 +24,8 @@ final appointmentControllerProvider =
 
 typedef AppointmentControllerRef
     = AutoDisposeProviderRef<AppointmentController>;
-String _$fetchAppointmentByIdHash() =>
-    r'c0885530533ad1cc4271a2d703df0518f1c7efa1';
+String _$fetchBookedSessionsHash() =>
+    r'35c21d375e6a9f8138269ad6d8d508c9b34aec04';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -47,6 +47,140 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [fetchBookedSessions].
+@ProviderFor(fetchBookedSessions)
+const fetchBookedSessionsProvider = FetchBookedSessionsFamily();
+
+/// See also [fetchBookedSessions].
+class FetchBookedSessionsFamily
+    extends Family<AsyncValue<List<AppointmentSession>>> {
+  /// See also [fetchBookedSessions].
+  const FetchBookedSessionsFamily();
+
+  /// See also [fetchBookedSessions].
+  FetchBookedSessionsProvider call(
+    String idDoctor,
+  ) {
+    return FetchBookedSessionsProvider(
+      idDoctor,
+    );
+  }
+
+  @override
+  FetchBookedSessionsProvider getProviderOverride(
+    covariant FetchBookedSessionsProvider provider,
+  ) {
+    return call(
+      provider.idDoctor,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchBookedSessionsProvider';
+}
+
+/// See also [fetchBookedSessions].
+class FetchBookedSessionsProvider
+    extends AutoDisposeFutureProvider<List<AppointmentSession>> {
+  /// See also [fetchBookedSessions].
+  FetchBookedSessionsProvider(
+    String idDoctor,
+  ) : this._internal(
+          (ref) => fetchBookedSessions(
+            ref as FetchBookedSessionsRef,
+            idDoctor,
+          ),
+          from: fetchBookedSessionsProvider,
+          name: r'fetchBookedSessionsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchBookedSessionsHash,
+          dependencies: FetchBookedSessionsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchBookedSessionsFamily._allTransitiveDependencies,
+          idDoctor: idDoctor,
+        );
+
+  FetchBookedSessionsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.idDoctor,
+  }) : super.internal();
+
+  final String idDoctor;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<AppointmentSession>> Function(FetchBookedSessionsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchBookedSessionsProvider._internal(
+        (ref) => create(ref as FetchBookedSessionsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        idDoctor: idDoctor,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<AppointmentSession>> createElement() {
+    return _FetchBookedSessionsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchBookedSessionsProvider && other.idDoctor == idDoctor;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, idDoctor.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchBookedSessionsRef
+    on AutoDisposeFutureProviderRef<List<AppointmentSession>> {
+  /// The parameter `idDoctor` of this provider.
+  String get idDoctor;
+}
+
+class _FetchBookedSessionsProviderElement
+    extends AutoDisposeFutureProviderElement<List<AppointmentSession>>
+    with FetchBookedSessionsRef {
+  _FetchBookedSessionsProviderElement(super.provider);
+
+  @override
+  String get idDoctor => (origin as FetchBookedSessionsProvider).idDoctor;
+}
+
+String _$fetchAppointmentByIdHash() =>
+    r'c0885530533ad1cc4271a2d703df0518f1c7efa1';
 
 /// See also [fetchAppointmentById].
 @ProviderFor(fetchAppointmentById)

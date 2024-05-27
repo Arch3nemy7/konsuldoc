@@ -1,9 +1,16 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:konsuldoc/core/utils/formatter.dart';
+import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
+import 'package:konsuldoc/presentations/widgets/button/primary_button.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 
 @RoutePage()
 class CreateAppointmentPage extends ConsumerStatefulWidget {
@@ -17,66 +24,66 @@ class CreateAppointmentPage extends ConsumerStatefulWidget {
 }
 
 class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
-  late int _selectedDayIndex;
-  late DateTime _currentDate;
-  int _selectedTimeIndex = -1;
-  late ScrollController _dateScrollController;
-  int _lastSelectedDayIndex = -1;
   final TextEditingController _complaintsController = TextEditingController();
 
+  int? session;
+  DateTime? date;
+  late final dates = getNext10Weekdays();
+
   @override
-  void initState() {
-    super.initState();
-    _selectedDayIndex = -1;
-    _currentDate = DateTime.now();
-    _dateScrollController = ScrollController();
+  void dispose() {
+    _complaintsController.dispose();
+    super.dispose();
   }
 
-  List<DateTime> getDatesInMonth() {
-    final int daysInMonth =
-        DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
-    return List.generate(
-      daysInMonth,
-      (index) => DateTime(_currentDate.year, _currentDate.month, index + 1),
-    );
+  bool isWeekend(DateTime date) {
+    return date.weekday == DateTime.saturday || date.weekday == DateTime.sunday;
   }
 
-  void changeDay(int index) {
-    if (_lastSelectedDayIndex == index) {
-      setState(() {
-        _selectedDayIndex = -1;
-        _selectedTimeIndex = -1;
-      });
-      _lastSelectedDayIndex = -1;
-    } else {
-      setState(() {
-        _selectedDayIndex = index;
-        _selectedTimeIndex = -1;
-        _lastSelectedDayIndex = index;
-      });
+  List<DateTime> getNext10Weekdays() {
+    List<DateTime> weekdays = [];
+    DateTime currentDate = DateTime.now().add(const Duration(days: 1));
+
+    while (weekdays.length < 10) {
+      if (!isWeekend(currentDate)) {
+        weekdays.add(currentDate);
+      }
+      currentDate = currentDate.add(const Duration(days: 1));
     }
+
+    return weekdays;
   }
 
-  void changeTime(int index) {
-    if (_selectedTimeIndex == index) {
-      setState(() {
-        _selectedTimeIndex = -1;
-      });
-    } else {
-      setState(() {
-        _selectedTimeIndex = index;
-      });
-    }
+  void changeDate(DateTime value) {
+    if (date == value) return;
+
+    setState(() {
+      date = value;
+      session = null;
+    });
+  }
+
+  void changeSession(int value) {
+    setState(() {
+      session = value;
+    });
   }
 
   void createAppointment() {
     final complaints = _complaintsController.text;
-    final DateTime selectedDate = _currentDate.add(Duration(days: _selectedDayIndex));
-    final int selectedTime = _selectedTimeIndex;
+
+    if (date == null) {
+      BotToast.showText(text: 'Harap memilih tanggal');
+      return;
+    }
+    if (session == null) {
+      BotToast.showText(text: 'Harap memilih sesi');
+      return;
+    }
 
     ref
         .read(appointmentControllerProvider)
-        .add(widget.idDoctor, selectedDate, selectedTime, complaints)
+        .add(widget.idDoctor, date!, session!, complaints)
         .then((value) {
       if (value) context.maybePop();
     });
@@ -84,7 +91,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<DateTime> datesInMonth = getDatesInMonth();
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -97,255 +104,251 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
         ),
         centerTitle: true,
       ),
-      body: ref.watch(fetchDoctorByIdProvider(widget.idDoctor)).when(data: (appointment) {
-        return Container(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(1),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Row(
-                children: [
-                  SizedBox(
-                    width: 9,
-                  ),
-                  Icon(
-                    Icons.account_circle,
-                    size: 130,
-                    color: Colors.black,
-                  ),
-                  SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Profile Doctor',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold)),
-                      Divider(
-                        color: Colors.black,
-                        thickness: 10.0,
-                        height: 10,
-                      ),
-                      Text('specialist',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 16,
-                          )),
-                      Text('lokasi',
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 16,
-                          )),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 15),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Tentang Saya',
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'sd jswqnbvdyweghubsbdbsadks\nskscs ckcskcksckcs\nedednaiddibs',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Jam Praktik',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 55,
-              child: ListView.builder(
-                controller: _dateScrollController,
-                scrollDirection: Axis.horizontal,
-                itemCount: 8,
-                itemBuilder: (context, index) {
-                  final isSelected = index == _selectedTimeIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      if (_selectedTimeIndex == index) {
-                        changeTime(-1);
-                      } else {
-                        changeTime(index);
-                      }
-                    },
-                    child: Container(
-                      width: 85,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 5),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: isSelected
-                            ? const Color.fromRGBO(34, 100, 136, 1)
-                            : Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Jam ke-${index + 1}',
-                          style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Text(
-                  'Tanggal',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  onPressed: () {
-                    showDatePicker(
-                      context: context,
-                      initialDate: _currentDate,
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    ).then((newDate) {
-                      if (newDate != null) {
-                        setState(() {
-                          _currentDate = newDate;
-                          _selectedDayIndex = getDatesInMonth().indexWhere((date) =>
-                              date.year == newDate.year &&
-                              date.month == newDate.month &&
-                              date.day == newDate.day);
-                          _selectedTimeIndex = -1;
-                        });
-                      }
-                    });
-                  },
-                  icon: const Icon(Icons.arrow_drop_down),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 70,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: datesInMonth.length,
-                itemBuilder: (context, index) {
-                  final date = datesInMonth[index];
-                  final formattedDay =
-                      DateFormat.E().format(date).substring(0, 3);
-                  final formattedDate = DateFormat('dd').format(date);
-                  final isPastDay = date.isBefore(DateTime.now());
-                  final isSelected = index == _selectedDayIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      if (!isPastDay) {
-                        changeDay(index);
-                      }
-                    },
-                    child: Container(
-                      width: 60,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 5),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: isSelected
-                            ? const Color.fromRGBO(34, 100, 136, 1)
-                            : (isPastDay ? Colors.grey : Colors.white),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Center(
+      body: ref.watch(fetchDoctorByIdProvider(widget.idDoctor)).when(
+            data: (doctor) => ref
+                .watch(fetchBookedSessionsProvider(widget.idDoctor))
+                .when(
+                    data: (bookedSession) {
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.all(12),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              formattedDay,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              height: 124.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
+                                boxShadow: kElevationToShadow[4],
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: CircleAvatar(
+                                      radius: 50.0,
+                                      backgroundImage:
+                                          NetworkImage(doctor.avatar!),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          doctor.name,
+                                          style: const TextStyle(
+                                            color: Color(0xFF1F2A37),
+                                            fontSize: 20.0,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w700,
+                                            height: 1,
+                                          ),
+                                        ),
+                                        const Divider(),
+                                        Text(
+                                          doctor.specialist.label,
+                                          style: const TextStyle(
+                                            color: Color(0xFF4B5563),
+                                            fontSize: 14.0,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.8,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                ],
                               ),
                             ),
-                            Text(
-                              formattedDate,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
+                            const SizedBox(height: 15),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Tentang Dokter',
+                                style: GoogleFonts.inter().copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ExpandableText(
+                                doctor.about,
+                                maxLines: 2,
+                                animationDuration:
+                                    const Duration(milliseconds: 500),
+                                expandText: 'lihat selengkapnya',
+                                collapseText: 'lihat lebih sedikit',
+                                style: GoogleFonts.inter().copyWith(
+                                  color: theme.colorScheme.onSecondaryContainer,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Tanggal',
+                                style: GoogleFonts.inter().copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 60,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: dates.length,
+                                itemBuilder: (context, index) {
+                                  final item = dates[index];
+                                  final selected = item == date;
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        changeDate(item);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: selected
+                                            ? theme.colorScheme.primary
+                                            : theme.colorScheme.background,
+                                        foregroundColor: selected
+                                            ? theme.colorScheme.onPrimary
+                                            : theme.colorScheme.onBackground,
+                                        padding: EdgeInsets.zero,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item.toDayString(),
+                                            style: GoogleFonts.inter().copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(item.day
+                                              .toString()
+                                              .padLeft(2, '0'))
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Sesi',
+                                style: GoogleFonts.inter().copyWith(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 60,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: date == null
+                                    ? 0
+                                    : doctor
+                                        .schedules[date!.weekday - 1].length,
+                                itemBuilder: (context, index) {
+                                  final item = doctor
+                                      .schedules[date!.weekday - 1][index];
+                                  final selected = index == session;
+                                  final booked =
+                                      bookedSession.contains(AppointmentSession(
+                                    date: date!,
+                                    session: index,
+                                  ));
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    child: ElevatedButton(
+                                      onPressed: booked
+                                          ? null
+                                          : () {
+                                              changeSession(index);
+                                            },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: selected
+                                              ? theme.colorScheme.primary
+                                              : theme.colorScheme.background,
+                                          foregroundColor: selected
+                                              ? theme.colorScheme.onPrimary
+                                              : theme.colorScheme.onBackground,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10))),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Sesi ${index + 1}",
+                                            style: GoogleFonts.inter().copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${item.timeStart.toTimeString()} - ${item.timeEnd.toTimeString()}",
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            TextFormField(
+                              controller: _complaintsController,
+                              decoration: const InputDecoration(
+                                labelText: 'Keluhan / Gejala',
+                                hintText: 'Masukkan keluhan sakit...',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            PrimaryButton(
+                              onPressed: createAppointment,
+                              label: 'Buat Janji',
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            TextFormField(
-              controller: _complaintsController,
-              decoration: InputDecoration(
-                labelText: 'Masukkan keluhan sakit',
-                hintText: 'Masukkan keluhan sakit...',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: createAppointment,
-                child: const Text('Buat Janji'),
-              ),
-            ),
-          ],
-        ),
-      );
-      }
-       , error:  (error, stackTrace) => Text(error.toString()), loading: () => CircularProgressIndicator(),)
-      ,
+                      );
+                    },
+                    error: (error, stackTrace) =>
+                        ErrorView(message: error.toString()),
+                    loading: () => const Loader()),
+            error: (error, stackTrace) => ErrorView(message: error.toString()),
+            loading: () => const Loader(),
+          ),
     );
   }
 }

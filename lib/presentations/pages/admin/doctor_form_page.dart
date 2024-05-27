@@ -56,8 +56,8 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
 
   int? selectedDay;
   final List<String> weekdays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
-  late final List<List<DoctorSession>> schedules =
-      doctor?.schedules ?? List.generate(weekdays.length, (index) => []);
+  late final schedules = List<List<DoctorSession>>.from(
+      doctor?.schedules ?? List.generate(weekdays.length, (index) => []));
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +317,6 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
           Padding(
             padding: const EdgeInsets.all(10),
             child: ElevatedButton(
-              child: const Text('Tambah'),
               onPressed: () {
                 if (widget.doctor == null) {
                   insertDoctor();
@@ -329,6 +328,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
                 backgroundColor: const Color.fromRGBO(58, 115, 149, 1),
                 foregroundColor: Colors.white,
               ),
+              child: Text(widget.doctor == null ? 'Tambah' : 'Simpan'),
             ),
           ),
         ],

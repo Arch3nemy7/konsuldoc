@@ -1,5 +1,7 @@
 import 'package:konsuldoc/core/constants/table_constants.dart';
 import 'package:konsuldoc/data/models/appointment_model.dart';
+import 'package:konsuldoc/data/models/appointment_session_model.dart';
+import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/domain/enums/appointment_filter.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
@@ -79,5 +81,17 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       'status': AppointmentStatus.waiting.index,
       'session': session
     }).eq('id', id);
+  }
+
+  @override
+  Future<List<AppointmentSession>> fetchBookedSession(String idDoctor) async {
+    final List<Map<String, dynamic>> res = await _supabase.rpc(
+      'get_fully_booked_appointments',
+      params: {
+        'p_id_doctor': idDoctor,
+        'after_date': DateTime.now().toIso8601String()
+      },
+    );
+    return res.map((e) => AppointmentSessionModel.fromMap(e)).toList();
   }
 }
