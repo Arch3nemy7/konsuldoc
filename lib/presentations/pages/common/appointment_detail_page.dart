@@ -72,7 +72,7 @@ class AppointmentDetailPage extends ConsumerWidget {
                               thickness: 10.0,
                               height: 10,
                             ),
-                            Text(appointment.doctor.specialist,
+                            Text(appointment.doctor.specialist.label,
                                 style: TextStyle(
                                   color: Colors.black87,
                                   fontSize: 14,

@@ -31,7 +31,8 @@ class AppointmentController {
     required AppointmentRepository repository,
   }) : _repository = repository;
 
-  Future<bool> add(String idDoctor, DateTime date, int session, String complaints) async {
+  Future<bool> add(
+      String idDoctor, DateTime date, int session, String complaints) async {
     if (session < 0) {
       BotToast.showText(text: 'Harap memilih sesi terlelbih dahulu');
       return false;
@@ -39,7 +40,8 @@ class AppointmentController {
     final cancel = BotToast.showLoading(
       backButtonBehavior: BackButtonBehavior.ignore,
     );
-    final res = await handleError(_repository.add(idDoctor, date, session,complaints));
+    final res =
+        await handleError(_repository.add(idDoctor, date, session, complaints));
     cancel();
 
     return res.fold(

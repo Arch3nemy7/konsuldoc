@@ -34,7 +34,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
       ),
       date: DateTime.now(),
       session: 0,
-      status: AppointmentStatus.pending,
+      status: AppointmentStatus.waiting,
     ),
   );
 

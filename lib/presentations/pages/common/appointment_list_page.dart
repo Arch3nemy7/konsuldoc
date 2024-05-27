@@ -35,7 +35,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
             ),
             date: DateTime.now(),
             session: 0,
-            status: AppointmentStatus.pending,
+            status: AppointmentStatus.waiting,
           ));
   bool upcoming = true;
   AppointmentStatus? status;

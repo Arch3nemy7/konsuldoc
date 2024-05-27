@@ -10,7 +10,12 @@ abstract interface class AppointmentRepository {
     required int perPage,
   });
   Stream<Appointment> fetchById(String id);
-  Future<void> add(String idDoctor, DateTime date, int session,String? complaints);
-  Future<void> editStatus(String id, AppointmentStatus status);
+  Future<void> add(
+    String idDoctor,
+    DateTime date,
+    int session,
+    String? complaints,
+  );
+  Future<void> editStatus(String id, {AppointmentStatus? status, String? note});
   Future<void> reschedule(String id, DateTime date, int session);
 }
