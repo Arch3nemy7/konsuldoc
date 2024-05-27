@@ -4,26 +4,30 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/utils/pick_image.dart';
+import 'package:konsuldoc/domain/entities/member.dart';
 import 'package:konsuldoc/domain/enums/gender.dart';
 import 'package:konsuldoc/presentations/controllers/member_controller.dart';
 
 @RoutePage()
 class MemberFormPage extends ConsumerStatefulWidget {
-  final String id;
-  const MemberFormPage({Key? key, required this.id}) : super(key: key);
+  final Member member;
+  const MemberFormPage({super.key, required this.member});
 
   @override
   ConsumerState<MemberFormPage> createState() => _MemberFormPageState();
 }
 
 class _MemberFormPageState extends ConsumerState<MemberFormPage> {
+  Member get member => widget.member;
+
   File? avatarFile;
   Gender? _gender;
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _dobController = TextEditingController();
+
+  late final _nameController = TextEditingController(text: member.name);
+  late final _emailController = TextEditingController(text: member.email);
+  late final _phoneController = TextEditingController(text: member.phone);
+  late final _addressController = TextEditingController(text: member.address);
+  late DateTime? dob = member.dob;
 
   void selectBannerImage() async {
     final res = await pickImage();
@@ -41,8 +45,21 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
     _emailController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
-    _dobController.dispose();
     super.dispose();
+  }
+
+  void _pickDoB() async {
+    final value = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1970),
+      lastDate: DateTime.now(),
+    );
+
+    if (value != null) {
+      setState(() {
+        dob = value;
+      });
+    }
   }
 
   @override
@@ -54,14 +71,14 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
         foregroundColor: Colors.black,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -90,7 +107,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                               ? DecorationImage(
                                   fit: BoxFit.cover,
                                   image: FileImage(avatarFile!))
-                              : DecorationImage(
+                              : const DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
                                     'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
@@ -109,9 +126,9 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(width: 4, color: Colors.white),
-                          color: Color.fromRGBO(28, 42, 58, 1),
+                          color: const Color.fromRGBO(28, 42, 58, 1),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           color: Colors.white,
                         ),
@@ -120,7 +137,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               TextFormField(
                 controller: _nameController,
                 keyboardType: TextInputType.name,
@@ -137,7 +154,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -155,7 +172,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
@@ -172,7 +189,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _addressController,
                 keyboardType: TextInputType.streetAddress,
@@ -182,30 +199,25 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   prefixIcon: Icon(Icons.home),
                 ),
               ),
-              SizedBox(height: 15),
-              TextFormField(
-                controller: _dobController,
-                keyboardType: TextInputType.datetime,
-                decoration: const InputDecoration(
-                  labelText: "Tanggal Lahir",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.calendar_today_sharp),
-                ),
+              const SizedBox(height: 15),
+              OutlinedButton(
+                onPressed: _pickDoB,
+                child: const Text('Date of Birth'),
               ),
-              SizedBox(height: 15),
-              Text(
+              const SizedBox(height: 15),
+              const Text(
                 'Jenis Kelamin',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Row(
                 children: [
                   Expanded(
                     child: RadioListTile<Gender>(
-                      contentPadding: EdgeInsets.all(0.0),
+                      contentPadding: const EdgeInsets.all(0.0),
                       value: Gender.male,
                       dense: true,
                       groupValue: _gender,
@@ -219,7 +231,7 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   ),
                   Expanded(
                     child: RadioListTile<Gender>(
-                      contentPadding: EdgeInsets.all(0.0),
+                      contentPadding: const EdgeInsets.all(0.0),
                       value: Gender.female,
                       dense: true,
                       groupValue: _gender,
@@ -233,16 +245,16 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: ElevatedButton(
-                  child: Text('Simpan'),
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(58, 115, 149, 1),
+                    backgroundColor: const Color.fromRGBO(58, 115, 149, 1),
                     foregroundColor: Colors.white,
                   ),
+                  child: const Text('Simpan'),
                 ),
               ),
             ],
@@ -253,13 +265,20 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
   }
 
   void updateProfile() {
-    ref.read(memberControllerProvider).edit(widget.id,
-        name: _nameController.text,
-        email: _emailController.text,
-        address: _addressController.text,
-        phone: _phoneController.text,
-        gender: _gender,
-        dob: DateTime.parse(_dobController.text),
-        avatar: avatarFile);
+    ref
+        .read(memberControllerProvider)
+        .edit(
+          member.id,
+          name: _nameController.text,
+          email: _emailController.text,
+          address: _addressController.text,
+          phone: _phoneController.text,
+          gender: _gender,
+          dob: dob,
+          avatar: avatarFile,
+        )
+        .then((value) {
+      if (value) context.maybePop();
+    });
   }
 }

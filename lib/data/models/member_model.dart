@@ -21,8 +21,8 @@ class MemberModel extends Member {
       name: map['name'],
       phone: map['phone'],
       address: map['address'],
-      dob: map['dob'],
-      gender: Gender.values.byName(map['gender']),
+      dob: map['dob'] == null ? null : DateTime.parse(map['dob']),
+      gender: map['gender'] == null ? null : Gender.values.byName(map['gender']),
     );
   }
 }

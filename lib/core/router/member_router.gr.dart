@@ -10,6 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i11;
 import 'package:flutter/material.dart' as _i12;
+import 'package:konsuldoc/domain/entities/member.dart' as _i13;
 import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
     as _i1;
 import 'package:konsuldoc/presentations/pages/common/appointment_list_page.dart'
@@ -24,9 +25,9 @@ import 'package:konsuldoc/presentations/pages/member/member_form_page.dart'
     as _i6;
 import 'package:konsuldoc/presentations/pages/member/member_home_page.dart'
     as _i7;
-import 'package:konsuldoc/presentations/pages/member/member_root_page.dart'
+import 'package:konsuldoc/presentations/pages/member/member_profile_page.dart'
     as _i8;
-import 'package:konsuldoc/presentations/pages/member/profile_user_page.dart'
+import 'package:konsuldoc/presentations/pages/member/member_root_page.dart'
     as _i9;
 import 'package:konsuldoc/presentations/pages/member/reschedule_appointment.dart'
     as _i10;
@@ -76,7 +77,7 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
         routeData: routeData,
         child: _i6.MemberFormPage(
           key: args.key,
-          id: args.id,
+          member: args.member,
         ),
       );
     },
@@ -86,16 +87,16 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
         child: const _i7.MemberHomePage(),
       );
     },
+    MemberProfileRoute.name: (routeData) {
+      return _i11.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i8.MemberProfilePage(),
+      );
+    },
     MemberRootRoute.name: (routeData) {
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.MemberRootPage(),
-      );
-    },
-    ProfileUserRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i9.ProfileUserPage(),
+        child: const _i9.MemberRootPage(),
       );
     },
     RescheduleAppointmentRoute.name: (routeData) {
@@ -207,13 +208,13 @@ class MemberDetailRoute extends _i11.PageRouteInfo<void> {
 class MemberFormRoute extends _i11.PageRouteInfo<MemberFormRouteArgs> {
   MemberFormRoute({
     _i12.Key? key,
-    required String id,
+    required _i13.Member member,
     List<_i11.PageRouteInfo>? children,
   }) : super(
           MemberFormRoute.name,
           args: MemberFormRouteArgs(
             key: key,
-            id: id,
+            member: member,
           ),
           initialChildren: children,
         );
@@ -227,16 +228,16 @@ class MemberFormRoute extends _i11.PageRouteInfo<MemberFormRouteArgs> {
 class MemberFormRouteArgs {
   const MemberFormRouteArgs({
     this.key,
-    required this.id,
+    required this.member,
   });
 
   final _i12.Key? key;
 
-  final String id;
+  final _i13.Member member;
 
   @override
   String toString() {
-    return 'MemberFormRouteArgs{key: $key, id: $id}';
+    return 'MemberFormRouteArgs{key: $key, member: $member}';
   }
 }
 
@@ -255,7 +256,21 @@ class MemberHomeRoute extends _i11.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.MemberRootPage]
+/// [_i8.MemberProfilePage]
+class MemberProfileRoute extends _i11.PageRouteInfo<void> {
+  const MemberProfileRoute({List<_i11.PageRouteInfo>? children})
+      : super(
+          MemberProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MemberProfileRoute';
+
+  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i9.MemberRootPage]
 class MemberRootRoute extends _i11.PageRouteInfo<void> {
   const MemberRootRoute({List<_i11.PageRouteInfo>? children})
       : super(
@@ -264,20 +279,6 @@ class MemberRootRoute extends _i11.PageRouteInfo<void> {
         );
 
   static const String name = 'MemberRootRoute';
-
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i9.ProfileUserPage]
-class ProfileUserRoute extends _i11.PageRouteInfo<void> {
-  const ProfileUserRoute({List<_i11.PageRouteInfo>? children})
-      : super(
-          ProfileUserRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ProfileUserRoute';
 
   static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
 }
