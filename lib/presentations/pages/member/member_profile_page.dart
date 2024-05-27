@@ -1,48 +1,66 @@
+import 'dart:js';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
+import 'package:konsuldoc/domain/entities/member.dart';
+import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
+import 'package:konsuldoc/presentations/providers/user_state_provider.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 
 @RoutePage()
-class ProfileUserPage extends StatelessWidget {
-  const ProfileUserPage({Key? key}) : super(key: key);
+class MemberProfilePage extends ConsumerWidget {
+  const MemberProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      body: Column(
-        children: [
-          _profilePict(),
-          Text(
-            'Budi Haryanto',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      body: ref.watch(userStateProvider).when(
+            data: (data) {
+              final member = data as Member;
+
+              return Column(
+                children: [
+                  _profilePict(member.avatar),
+                  Text(
+                    member.name,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    member.phone ?? 'Tidak ada',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  _editProfile(context, member),
+                  _history(),
+                  _signOut(ref),
+                ],
+              );
+            },
+            error: (error, stackTrace) {
+              return ErrorView(
+                message: error.toString(),
+              );
+            },
+            loading: () => const Loader(),
           ),
-          Text(
-            '0812636728',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          _EditProfile(),
-          _History(),
-          _Logout(),
-        ],
-      ),
     );
   }
 
-  _profilePict() {
-    return Padding(
+  _profilePict(String? avatar) {
+    return  Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Center(
         child: Column(
@@ -50,9 +68,9 @@ class ProfileUserPage extends StatelessWidget {
             SizedBox(
               height: 200,
               width: 200,
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109.jpg"),
+              child:avatar == null ? null : CircleAvatar(
+                backgroundImage:  NetworkImage(
+                    avatar),
               ),
             ),
           ],
@@ -61,14 +79,16 @@ class ProfileUserPage extends StatelessWidget {
     );
   }
 
-  _EditProfile() {
+  _editProfile(BuildContext context, Member member) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: () {},
-            child: Row(
+            onPressed: () {
+              context.pushRoute(MemberFormRoute(member: member));
+            },
+            child: const Row(
               children: [
                 Icon(
                   Icons.edit,
@@ -89,7 +109,7 @@ class ProfileUserPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           indent: 20,
           endIndent: 20,
           height: 1,
@@ -99,14 +119,16 @@ class ProfileUserPage extends StatelessWidget {
     );
   }
 
-  _Logout() {
+  _signOut(WidgetRef ref) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: () {},
-            child: Row(
+            onPressed: () {
+              ref.read(authControllerProvider).signOut();
+            },
+            child: const Row(
               children: [
                 Icon(
                   Icons.logout,
@@ -122,7 +144,7 @@ class ProfileUserPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           indent: 20,
           endIndent: 20,
           height: 1,
@@ -132,14 +154,14 @@ class ProfileUserPage extends StatelessWidget {
     );
   }
 
-  _History() {
+  _history() {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextButton(
             onPressed: () {},
-            child: Row(
+            child: const Row(
               children: [
                 Icon(
                   Icons.schedule,
@@ -163,7 +185,7 @@ class ProfileUserPage extends StatelessWidget {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           indent: 20,
           endIndent: 20,
           height: 1,

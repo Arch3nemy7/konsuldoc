@@ -13,7 +13,7 @@ Stream<User?> userState(UserStateRef ref) {
   final role = user == null
       ? null
       : Role.values.byName(
-          user.appMetadata['role'],
+          user.appMetadata['role'] ?? 'member',
         );
 
   return switch (role) {
