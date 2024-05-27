@@ -2,11 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
 
 class BottomsheetReschedule extends ConsumerStatefulWidget {
-  final String id;
-  const BottomsheetReschedule({super.key, required this.id});
+  final Appointment appointment;
+  const BottomsheetReschedule({super.key, required this.appointment});
 
   @override
   ConsumerState<BottomsheetReschedule> createState() =>
@@ -15,8 +16,8 @@ class BottomsheetReschedule extends ConsumerStatefulWidget {
 
 class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
   late int _selectedDayIndex;
-  late DateTime _currentDate;
-  int _selectedTimeIndex = -1;
+  late DateTime _currentDate = widget.appointment.date;
+  late int _selectedTimeIndex = widget.appointment.session;
   late ScrollController _dateScrollController;
   int _lastSelectedDayIndex = -1;
 
@@ -28,7 +29,7 @@ class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
     _dateScrollController = ScrollController();
   }
 
-  // Mendapatkan daftar tanggal dalam satu bulan ini
+  
   List<DateTime> getDatesInMonth() {
     final int daysInMonth =
         DateTime(_currentDate.year, _currentDate.month + 1, 0).day;
@@ -41,25 +42,25 @@ class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
   // Mengganti hari berdasarkan indeks yang dipilih
   void changeDay(int index) {
     if (_lastSelectedDayIndex == index) {
-      // Jika diklik dua kali pada hari yang sama, maka reset pilihan hari
+     
       setState(() {
         _selectedDayIndex = -1;
-        _selectedTimeIndex = -1; // Reset indeks jam yang dipilih
+        _selectedTimeIndex = -1; 
       });
       _lastSelectedDayIndex = -1;
     } else {
       setState(() {
         _selectedDayIndex = index;
-        _selectedTimeIndex = -1; // Reset indeks jam yang dipilih
+        _selectedTimeIndex = -1; 
         _lastSelectedDayIndex =
-            index; // Simpan indeks hari yang terakhir kali dipilih
+            index; 
       });
     }
   }
 
   void changeTime(int index) {
     if (_selectedTimeIndex == index) {
-      // Jika diklik dua kali pada jam yang sama, maka reset pilihan jam
+      
       setState(() {
         _selectedTimeIndex = -1;
       });
@@ -73,7 +74,7 @@ class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
   void rescheduleAppointment() {
     ref
         .read(appointmentControllerProvider)
-        .reschedule(widget.id, _currentDate, _selectedTimeIndex)
+        .reschedule(widget.appointment.id, _currentDate, _selectedTimeIndex)
         .then((value) {
       if (value) context.maybePop();
     });
@@ -156,7 +157,7 @@ class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Sesi 1', // Ubah sesuai rentang jam praktiknya
+                                  widget.appointment.session.toString(), // Ubah sesuai rentang jam praktiknya
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white,

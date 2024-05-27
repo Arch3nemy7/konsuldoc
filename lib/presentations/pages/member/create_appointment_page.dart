@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
+import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 
 @RoutePage()
 class CreateAppointmentPage extends ConsumerStatefulWidget {
@@ -21,7 +22,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
   int _selectedTimeIndex = -1;
   late ScrollController _dateScrollController;
   int _lastSelectedDayIndex = -1;
-   
+  final TextEditingController _complaintsController = TextEditingController();
 
   @override
   void initState() {
@@ -69,9 +70,13 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
   }
 
   void createAppointment() {
+    final complaints = _complaintsController.text;
+    final DateTime selectedDate = _currentDate.add(Duration(days: _selectedDayIndex));
+    final int selectedTime = _selectedTimeIndex;
+
     ref
         .read(appointmentControllerProvider)
-        .add(widget.idDoctor, _currentDate, _selectedTimeIndex, 'complaints')
+        .add(widget.idDoctor, selectedDate, selectedTime, complaints)
         .then((value) {
       if (value) context.maybePop();
     });
@@ -92,7 +97,8 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
         ),
         centerTitle: true,
       ),
-      body: Container(
+      body: ref.watch(fetchDoctorByIdProvider(widget.idDoctor)).when(data: (appointment) {
+        return Container(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,10 +190,8 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                   return GestureDetector(
                     onTap: () {
                       if (_selectedTimeIndex == index) {
-                        // Jika diklik dua kali, maka reset pilihan jam
                         changeTime(-1);
                       } else {
-                        // Jika tidak, maka ganti pilihan jam
                         changeTime(index);
                       }
                     },
@@ -206,8 +210,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                             color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: const Offset(
-                                0, 4), // changes position of shadow
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -235,7 +238,6 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                 ),
                 IconButton(
                   onPressed: () {
-                    // Tampilkan dialog atau tampilan lain untuk memilih bulan
                     showDatePicker(
                       context: context,
                       initialDate: _currentDate,
@@ -245,14 +247,11 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                       if (newDate != null) {
                         setState(() {
                           _currentDate = newDate;
-                          _selectedDayIndex = datesInMonth.indexWhere((date) =>
+                          _selectedDayIndex = getDatesInMonth().indexWhere((date) =>
                               date.year == newDate.year &&
                               date.month == newDate.month &&
-                              date.day ==
-                                  newDate
-                                      .day); // Menemukan indeks tanggal yang dipilih
-                          _selectedTimeIndex =
-                              -1; // Reset indeks jam yang dipilih
+                              date.day == newDate.day);
+                          _selectedTimeIndex = -1;
                         });
                       }
                     });
@@ -294,8 +293,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                             color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: const Offset(
-                                0, 4), // changes position of shadow
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -328,61 +326,26 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
               ),
             ),
             TextFormField(
+              controller: _complaintsController,
               decoration: InputDecoration(
-                labelText:
-                    'Masukkan keluhan sakit', 
+                labelText: 'Masukkan keluhan sakit',
                 hintText: 'Masukkan keluhan sakit...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                labelStyle: TextStyle(
-                  color: Colors.black, 
-                  fontSize: 22, 
-                  fontWeight:
-                      FontWeight.w500, 
-                ),
-                floatingLabelBehavior:
-                    FloatingLabelBehavior.always, 
+                border: OutlineInputBorder(),
               ),
-              maxLines:
-                  null, 
-              keyboardType: TextInputType
-                  .multiline, 
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Tambahkan fungsi untuk melakukan appointment di sini
-                },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromRGBO(34, 100, 136, 1)),
-                  shadowColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      return Colors.grey.withOpacity(0.8);
-                    },
-                  ),
-                  elevation: MaterialStateProperty.resolveWith<double>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return 0;
-                      }
-                      return 5;
-                    },
-                  ),
-                ),
-                child: const Text(
-                  'Buat Appointment',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
+                onPressed: createAppointment,
+                child: const Text('Buat Janji'),
               ),
             ),
           ],
         ),
-      ),
+      );
+      }
+       , error:  (error, stackTrace) => Text(error.toString()), loading: () => CircularProgressIndicator(),)
+      ,
     );
   }
 }
