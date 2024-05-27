@@ -1,8 +1,9 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
-class DetailDokterPage extends StatelessWidget {
-  const DetailDokterPage({super.key});
+class DoctorDetailPage extends StatelessWidget {
+  final bool isAdmin;
+  const DoctorDetailPage({super.key, required this.isAdmin});
 
   @override
   Widget build(BuildContext context) {
@@ -161,44 +162,72 @@ class DetailDokterPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                  height:
-                      44), // Memberikan jarak antara "Jadwal Praktik" dan tombol
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Aksi ketika tombol Hapus ditekan
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color(0xFFBA1A1A), // Warna merah
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
+              const SizedBox(height: 24),
+              isAdmin
+                  ? // Memberikan jarak antara "Jadwal Praktik" dan tombol
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Aksi ketika tombol Hapus ditekan
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xFFBA1A1A), // Warna merah
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                minimumSize: const Size(
+                                    150, 45), // Lebar dan tinggi tombol
+                              ),
+                              child: const Text(
+                                'Hapus',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                          minimumSize:
-                              const Size(150, 45), // Lebar dan tinggi tombol
-                        ),
-                        child: const Text(
-                          'Hapus',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Aksi ketika tombol Edit ditekan
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xFF004C69), // Warna biru
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                minimumSize: const Size(
+                                    150, 45), // Lebar dan tinggi tombol
+                              ),
+                              child: const Text(
+                                'Edit',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                        width: 10), // Memberikan jarak antara kedua tombol
-                    Expanded(
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Aksi ketika tombol Edit ditekan
+                          // Aksi ketika tombol Buat Janji ditekan
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
@@ -206,11 +235,11 @@ class DetailDokterPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
                           ),
-                          minimumSize:
-                              const Size(150, 45), // Lebar dan tinggi tombol
+                          minimumSize: const Size(double.infinity,
+                              45), // Lebar tombol memenuhi layar
                         ),
                         child: const Text(
-                          'Edit',
+                          'Buat Janji',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16.0,
@@ -220,9 +249,6 @@ class DetailDokterPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
