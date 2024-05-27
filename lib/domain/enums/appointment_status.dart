@@ -1,0 +1,1 @@
+enum AppointmentStatus { waiting, done }
