@@ -1,33 +1,40 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:konsuldoc/domain/entities/doctor_basic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
+import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 import 'package:konsuldoc/presentations/widgets/doctor_search_bar.dart';
 import 'package:konsuldoc/presentations/widgets/drawer/doctor_filter_drawer.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
 import 'package:konsuldoc/presentations/widgets/item/list_item.dart';
 import 'package:konsuldoc/presentations/widgets/item/option_item.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 import 'package:konsuldoc/presentations/widgets/theme_mode_switch.dart';
 
 @RoutePage()
-class MemberHomePage extends StatefulWidget {
+class MemberHomePage extends ConsumerStatefulWidget {
   const MemberHomePage({super.key});
 
   @override
-  State<MemberHomePage> createState() => _MemberHomePageState();
+  ConsumerState<MemberHomePage> createState() => _MemberHomePageState();
 }
 
-class _MemberHomePageState extends State<MemberHomePage> {
-  final doctors = List.generate(
-    50,
-    (index) => DoctorBasic(
-      id: index.toString(),
-      avatar:
-          'https://img.freepik.com/premium-vector/avatar-bearded-doctor-doctor-with-stethoscope-vector-illustrationxa_276184-31.jpg',
-      name: 'Dokter $index',
-      specialist: 'Spesialis $index',
-    ),
-  );
+class _MemberHomePageState extends ConsumerState<MemberHomePage> {
+  String? query;
   Specialist? specialist;
+
+  void search(String value) {
+    setState(() {
+      query = value;
+    });
+  }
+
+  void selectSpecialist(Specialist? value) {
+    setState(() {
+      specialist = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +44,7 @@ class _MemberHomePageState extends State<MemberHomePage> {
       endDrawer: Drawer(
         child: DoctorFilterDrawer(
           value: specialist,
-          onApply: (value) {
-            setState(() {
-              specialist = value;
-            });
-          },
+          onApply: selectSpecialist,
         ),
       ),
       body: SafeArea(
@@ -72,9 +75,11 @@ class _MemberHomePageState extends State<MemberHomePage> {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: DoctorSearchBar(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: DoctorSearchBar(
+                onSubmitted: search,
+              ),
             ),
             SizedBox(
               height: 61,
@@ -89,9 +94,7 @@ class _MemberHomePageState extends State<MemberHomePage> {
                   return OptionItem(
                     selected: selected,
                     onPressed: () {
-                      setState(() {
-                        specialist = selected ? null : data;
-                      });
+                      selectSpecialist(selected ? null : data);
                     },
                     icon: data.icon,
                     activeIcon: data.activeIcon,
@@ -102,20 +105,38 @@ class _MemberHomePageState extends State<MemberHomePage> {
             ),
             const Divider(height: 1),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(7),
-                itemCount: doctors.length,
-                itemBuilder: (context, index) {
-                  final doctor = doctors[index];
+              child: ref.watch(fetchAllDoctorProvider).when(
+                    data: (data) {
+                      final filtered = data.filter((t) {
+                        if (query != null && !t.name.contains(query!)) {
+                          return false;
+                        }
+                        if (specialist != null && t.specialist != specialist) {
+                          return false;
+                        }
 
-                  return ListItem(
-                    avatar: doctor.avatar,
-                    title: doctor.name,
-                    subtitle: doctor.specialist,
-                  );
-                },
-              ),
-            )
+                        return true;
+                      }).toList();
+
+                      return ListView.builder(
+                        itemBuilder: (context, index) {
+                          final doctor = filtered[index];
+
+                          return ListItem(
+                            avatar: doctor.avatar,
+                            title: doctor.name,
+                            subtitle: doctor.specialist.label,
+                          );
+                        },
+                        itemCount: filtered.length,
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      return ErrorView(message: error.toString());
+                    },
+                    loading: () => const Loader(),
+                  ),
+            ),
           ],
         ),
       ),

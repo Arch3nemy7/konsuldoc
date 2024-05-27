@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/core/utils/show_loading.dart';
 import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
@@ -14,6 +15,11 @@ part 'doctor_controller.g.dart';
 @riverpod
 DoctorController doctorController(DoctorControllerRef ref) {
   return DoctorController(repository: ref.watch(doctorRepositoryProvider));
+}
+
+@riverpod
+Stream<List<Doctor>> fetchAllDoctor(FetchAllDoctorRef ref) {
+  return ref.watch(doctorRepositoryProvider).fetch();
 }
 
 @riverpod
@@ -43,9 +49,7 @@ class DoctorController {
       return false;
     }
 
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    final cancel = showLoading();
     final res = await handleError(_repository.add(
       avatar: avatar,
       name: name,
@@ -80,9 +84,7 @@ class DoctorController {
     required String about,
     required List<List<DoctorSession>> schedules,
   }) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    final cancel = showLoading();
     final res = await handleError(_repository.edit(
       id,
       avatar: avatar,

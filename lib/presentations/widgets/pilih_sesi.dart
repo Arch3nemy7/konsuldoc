@@ -69,18 +69,20 @@ class PilihSesi extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black54,
                           alignment: Alignment.centerLeft,
-                          minimumSize: Size.fromHeight(64),
+                          minimumSize: const Size.fromHeight(64),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(3))),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 keyboardType: TextInputType.number,
+                initialValue: session.quota.toString(),
                 onChanged: (value) {
                   session.quota = int.tryParse(value) ?? 0;
+                  onUpdate();
                 },
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(

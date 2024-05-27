@@ -15,7 +15,7 @@ class MemberRouter extends $MemberRouter {
           children: [
             AutoRoute(page: MemberHomeRoute.page),
             AutoRoute(page: AppointmentListRoute.page),
-            AutoRoute(page: ProfileUserRoute.page),
+            AutoRoute(page: MemberProfileRoute.page),
           ],
         ),
         CustomRoute(page: DoctorDetailRoute.page),

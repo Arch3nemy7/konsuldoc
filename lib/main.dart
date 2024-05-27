@@ -53,7 +53,6 @@ class _MainAppState extends ConsumerState<MainApp> {
   @override
   Widget build(BuildContext context) {
     const theme = MaterialTheme();
-    print(ref.read(notificationServiceProvider));
 
     return MaterialApp.router(
       title: 'KonsulDoc',

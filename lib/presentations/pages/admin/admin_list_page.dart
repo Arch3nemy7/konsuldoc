@@ -1,32 +1,50 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:konsuldoc/core/router/admin_router.gr.dart';
+import 'package:konsuldoc/domain/entities/admin.dart';
+import 'package:konsuldoc/presentations/controllers/admin_controller.dart';
+import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 
 @RoutePage()
-class AdminListPage extends StatefulWidget {
+class AdminListPage extends ConsumerStatefulWidget {
   const AdminListPage({super.key});
 
   @override
-  State<AdminListPage> createState() => _AdminListPageState();
+  ConsumerState<AdminListPage> createState() => _AdminListPageState();
 }
 
-class _AdminListPageState extends State<AdminListPage> {
-  String dropdownValue = 'Filter';
-  List<String> adminNames = ['Dr. Mariya Khan'];
+class _AdminListPageState extends ConsumerState<AdminListPage> {
+  String? query;
+
+  void search(String value) {
+    setState(() {
+      query = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Admin',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+        centerTitle: true,
+        title: const Text(
+          'Admin',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFFF6FAFE),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ref.read(authControllerProvider).signOut();
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       body: Column(
         children: [
@@ -36,24 +54,25 @@ class _AdminListPageState extends State<AdminListPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    onSubmitted: search,
                     decoration: InputDecoration(
                       focusedBorder: InputBorder.none,
-                      fillColor: Color(0xFFE5E8ED),
+                      fillColor: const Color(0xFFE5E8ED),
                       filled: true,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
                       ),
                       hintText: 'Search',
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         vertical: 10,
                         horizontal: 15,
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.grey),
+                        borderSide: const BorderSide(color: Colors.grey),
                       ),
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                     ),
                   ),
                 ),
@@ -61,88 +80,69 @@ class _AdminListPageState extends State<AdminListPage> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: adminNames.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 10, top: 10),
-                      child: ListTile(
-                        onTap: () {
-                          _showDetailAdmin();
-                        },
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              AssetImage("assets/images/3d_avatar_13.png"),
-                          radius: 25,
-                        ),
-                        title: Text(
-                          adminNames[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+            child: ref.watch(fetchAllAdminProvider).when(
+                  data: (data) {
+                    final filtered = query == null
+                        ? data
+                        : data
+                            .filter((t) => t.name
+                                .toLowerCase()
+                                .contains(query!.toLowerCase()))
+                            .toList();
+
+                    if (filtered.isEmpty) {
+                      return const ErrorView(message: 'Data tidak ditemukan');
+                    }
+
+                    return ListView.separated(
+                      itemBuilder: (context, index) {
+                        final admin = filtered[index];
+
+                        return ListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 40),
+                          onTap: () {
+                            _showDetailAdmin(admin);
+                          },
+                          leading: CircleAvatar(
+                            backgroundImage: admin.avatar == null
+                                ? null
+                                : NetworkImage(admin.avatar!),
+                            radius: 25,
                           ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      thickness: 1,
-                      color: Colors.grey,
-                      height: 0,
-                      endIndent: 15,
-                      indent: 15,
-                    ),
-                  ],
-                );
-              },
-            ),
+                          title: Text(
+                            admin.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemCount: filtered.length,
+                    );
+                  },
+                  error: (error, stackTrace) {
+                    return ErrorView(message: error.toString());
+                  },
+                  loading: () => const Loader(),
+                ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'admin-list',
         onPressed: () {
-          setState(() {
-            adminNames.add('Dr. New Doctor');
-          });
+          context.pushRoute(AdminFormRoute());
         },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFFF9E287),
+        backgroundColor: const Color(0xFFF9E287),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
-  _detailAdmin() {
-    return Column(
-      children: [
-        Text(
-          'Admin',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Divider(
-          indent: 10,
-          endIndent: 10,
-        ),
-        Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 120,
-                width: 120,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109.jpg"),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _showDetailAdmin() {
+  void _showDetailAdmin(Admin admin) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -166,7 +166,7 @@ class _AdminListPageState extends State<AdminListPage> {
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         )),
-                    Divider(
+                    const Divider(
                       color: Colors.black38,
                       thickness: 1,
                     ),
@@ -179,9 +179,9 @@ class _AdminListPageState extends State<AdminListPage> {
                               height: 120,
                               width: 120,
                               child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    "https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109.jpg"),
-                              ),
+                                  backgroundImage: admin.avatar == null
+                                      ? null
+                                      : NetworkImage(admin.avatar!)),
                             ),
                           ],
                         ),
@@ -190,12 +190,14 @@ class _AdminListPageState extends State<AdminListPage> {
                     Column(
                       children: [
                         Text(
-                          'Budi Harianto',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                          admin.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                        Text('admin123@gmail.com'),
-                        Text('0812345678'),
+                        Text(admin.email),
+                        Text(admin.phone ?? 'Tidak ada'),
                       ],
                     ),
                     Padding(
@@ -207,7 +209,12 @@ class _AdminListPageState extends State<AdminListPage> {
                             width: 140,
                             child: ElevatedButton(
                               onPressed: () {
-                                // Tambahkan fungsi untuk melakukan appointment di sini
+                                ref
+                                    .read(authControllerProvider)
+                                    .deleteUser(admin.id)
+                                    .then((value) {
+                                  if (value) context.maybePop();
+                                });
                               },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
@@ -240,7 +247,11 @@ class _AdminListPageState extends State<AdminListPage> {
                           SizedBox(
                             width: 140,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                context
+                                    .pushRoute(AdminFormRoute(admin: admin))
+                                    .then((value) => context.maybePop());
+                              },
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     const Color.fromRGBO(34, 100, 136, 1)),

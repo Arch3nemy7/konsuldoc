@@ -12,7 +12,7 @@ class MemberRootPage extends StatelessWidget {
       routes: const [
         MemberHomeRoute(),
         AppointmentListRoute(),
-        ProfileUserRoute(),
+        MemberProfileRoute(),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => NavigationBar(
         selectedIndex: tabsRouter.activeIndex,

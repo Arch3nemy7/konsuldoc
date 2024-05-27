@@ -5,6 +5,7 @@ import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/entities/doctor_basic.dart';
 import 'package:konsuldoc/domain/entities/member_basic.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/presentations/widgets/item/list_item.dart';
 import 'package:konsuldoc/presentations/widgets/item/option_item.dart';
 
@@ -30,7 +31,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
               id: index.toString(),
               avatar: 'https://i.pravatar.cc/300?u=d$index',
               name: 'Doctor $index',
-              specialist: 'Spesialis $index',
+              specialist: Specialist.cardiology,
             ),
             date: DateTime.now(),
             session: 0,
@@ -81,7 +82,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                           if (upcoming) upcoming = false;
                           status = e;
                         }),
-                        label: e.label,
+                        label: e.name,
                       ),
                     ))
                   ],
@@ -99,7 +100,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                   return ListItem(
                     avatar: appointment.doctor.avatar,
                     title: appointment.doctor.name,
-                    subtitle: appointment.doctor.specialist,
+                    subtitle: appointment.doctor.specialist.label,
                     bottom: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

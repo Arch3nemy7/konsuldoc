@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/core/utils/show_loading.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
@@ -54,15 +55,15 @@ class AppointmentController {
   }
 
   Future<bool> editStatus(
-    String id,
-    AppointmentStatus status,
-  ) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    String id, {
+    AppointmentStatus? status,
+    String? note,
+  }) async {
+    final cancel = showLoading();
     final res = await handleError(_repository.editStatus(
       id,
-      status,
+      status: status,
+      note: note,
     ));
     cancel();
 

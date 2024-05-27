@@ -30,7 +30,8 @@ class AuthRepositoryImp implements AuthRepository {
       AdminUserAttributes(
         email: email,
         password: password,
-        userMetadata: {'role': role.name},
+        appMetadata: {'role': role.name},
+        emailConfirm: true,
       ),
     );
     return res.user!.id;
@@ -76,6 +77,6 @@ class AuthRepositoryImp implements AuthRepository {
 
   @override
   Future<void> deleteUser(String id) async {
-    await _supabase.auth.admin.deleteUser(id);
+    await _supabaseAdmin.auth.admin.deleteUser(id);
   }
 }

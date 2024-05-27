@@ -8,7 +8,7 @@ class Member extends User {
   final String email;
   final String? phone;
   final String? address;
-  final DateTime dob;
+  final DateTime? dob;
   final Gender? gender;
 
   Member({
