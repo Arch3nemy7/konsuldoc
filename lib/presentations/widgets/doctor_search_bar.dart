@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class DoctorSearchBar extends StatelessWidget {
-  const DoctorSearchBar({super.key});
+  final void Function(String)? onSubmitted;
+  const DoctorSearchBar({super.key, this.onSubmitted});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return SearchBar(
+      onSubmitted: onSubmitted,
       leading: const Icon(Icons.search),
       elevation: const MaterialStatePropertyAll(0),
       backgroundColor: MaterialStatePropertyAll(

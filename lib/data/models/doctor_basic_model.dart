@@ -1,4 +1,5 @@
 import 'package:konsuldoc/domain/entities/doctor_basic.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 
 class DoctorBasicModel extends DoctorBasic {
   DoctorBasicModel({
@@ -13,7 +14,7 @@ class DoctorBasicModel extends DoctorBasic {
       id: map['id'],
       avatar: map['avatar'],
       name: map['name'],
-      specialist: map['specialist'],
+      specialist: Specialist.values.byName(map['specialist']),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
+import 'package:konsuldoc/core/utils/show_loading.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
@@ -31,13 +32,8 @@ class AppointmentController {
   }) : _repository = repository;
 
   Future<bool> add(String idDoctor, DateTime date) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
-    final res = await handleError(_repository.add(
-      idDoctor,
-      date,
-    ));
+    final cancel = showLoading();
+    final res = await handleError(_repository.add(idDoctor, date));
     cancel();
 
     return res.fold(
@@ -53,15 +49,15 @@ class AppointmentController {
   }
 
   Future<bool> editStatus(
-    String id,
-    AppointmentStatus status,
-  ) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
+    String id, {
+    AppointmentStatus? status,
+    String? note,
+  }) async {
+    final cancel = showLoading();
     final res = await handleError(_repository.editStatus(
       id,
-      status,
+      status: status,
+      note: note,
     ));
     cancel();
 
@@ -81,13 +77,8 @@ class AppointmentController {
     String id,
     DateTime date,
   ) async {
-    final cancel = BotToast.showLoading(
-      backButtonBehavior: BackButtonBehavior.ignore,
-    );
-    final res = await handleError(_repository.reschedule(
-      id,
-      date,
-    ));
+    final cancel = showLoading();
+    final res = await handleError(_repository.reschedule(id, date));
     cancel();
 
     return res.fold(

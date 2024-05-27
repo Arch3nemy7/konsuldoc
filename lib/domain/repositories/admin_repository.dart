@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:konsuldoc/domain/entities/admin.dart';
 
 abstract interface class AdminRepository {
-  Future<List<Admin>> fetch(int page, int perPage);
+  Stream<List<Admin>> fetch();
   Stream<Admin> fetchById(String id);
   Future<void> add({
     File? avatar,

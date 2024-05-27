@@ -27,10 +27,12 @@ class DoctorRepositoryImpl implements DoctorRepository {
         _storageRepository = storageRepository;
 
   @override
-  Future<List<Doctor>> fetch(int page, int perPage) async {
-    return (await _supabase.from(TableConstants.doctors).select())
-        .map((e) => DoctorModel.fromMap(e))
-        .toList();
+  Stream<List<Doctor>> fetch() {
+    return _supabase
+        .from(TableConstants.doctors)
+        .stream(primaryKey: ['id']).map(
+      (event) => event.map(DoctorModel.fromMap).toList(),
+    );
   }
 
   @override
@@ -70,8 +72,10 @@ class DoctorRepositoryImpl implements DoctorRepository {
       'specialist': specialist.name,
       'phone': phone,
       'about': about,
-      'schedules': List<List<DoctorSessionModel>>.from(schedules)
-          .map((e) => e.map((s) => s.toMap())),
+      'schedules': schedules
+          .map((e) =>
+              e.map((s) => DoctorSessionModel.fromEntity(s).toMap()).toList())
+          .toList(),
     });
   }
 

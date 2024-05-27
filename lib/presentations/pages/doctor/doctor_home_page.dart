@@ -4,6 +4,7 @@ import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/entities/doctor_basic.dart';
 import 'package:konsuldoc/domain/entities/member_basic.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
+import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/presentations/widgets/section/doctor_feed_item.dart';
 import 'package:konsuldoc/presentations/widgets/theme_mode_switch.dart';
 
@@ -29,10 +30,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
         id: index.toString(),
         avatar: 'https://i.pravatar.cc/300?u=d$index',
         name: 'Doctor $index',
-        specialist: 'Spesialis $index',
+        specialist: Specialist.cardiology,
       ),
       date: DateTime.now(),
-      status: AppointmentStatus.pending,
+      status: AppointmentStatus.waiting,
     ),
   );
 

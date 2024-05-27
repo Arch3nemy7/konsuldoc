@@ -10,7 +10,6 @@ class AdminRootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
       routes: const [
-        AdminHomeRoute(),
         DoctorListRoute(),
         AdminListRoute(),
       ],
@@ -18,11 +17,6 @@ class AdminRootPage extends StatelessWidget {
         selectedIndex: tabsRouter.activeIndex,
         onDestinationSelected: tabsRouter.setActiveIndex,
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Beranda',
-          ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),

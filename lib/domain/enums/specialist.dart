@@ -12,62 +12,62 @@ enum Specialist {
     icon: FluentIcons.teddy_24_regular,
     activeIcon: FluentIcons.teddy_24_filled,
   ),
-  General(
+  general(
     label: 'Poli Umum',
     icon: FluentIcons.briefcase_48_regular,
     activeIcon: FluentIcons.briefcase_48_filled,
   ),
-  Obstetrics(
+  obstetrics(
     label: 'Poli Kandungan dan Kebidanan ',
     icon: Icons.pregnant_woman,
     activeIcon: Icons.pregnant_woman,
   ),
-  Internal_Medicine(
+  internalMedicine(
     label: 'Poli Penyakit Dalam ',
     icon: Icons.medical_services,
     activeIcon: Icons.medical_services,
   ),
-  Surgical(
+  surgical(
     label: 'Poli Bedah',
     icon: FluentIcons.cut_24_regular,
     activeIcon: FluentIcons.cut_24_filled,
   ),
-  Dematology(
+  dematology(
     label: 'Poli Kulit',
     icon: Icons.face,
     activeIcon: Icons.face,
   ),
-  Eye(
+  eye(
     label: 'Poli Mata',
     icon: FluentIcons.people_eye_20_regular,
     activeIcon: FluentIcons.people_eye_20_filled,
   ),
-  Ent(
+  ent(
     label: 'Poli THT',
     icon: Icons.hearing,
     activeIcon: Icons.hearing,
   ),
-  Cardiology(
+  cardiology(
     label: 'Poli Jantung',
     icon: FluentIcons.heart_48_regular,
     activeIcon: FluentIcons.heart_48_filled,
   ),
-  Psychiatry(
+  psychiatry(
     label: 'Poli Psikiatri',
     icon: Icons.psychology,
     activeIcon: Icons.psychology,
   ),
-  Orthopedic(
+  orthopedic(
     label: 'Poli Orthopedic',
     icon: FluentIcons.dumbbell_28_regular,
     activeIcon: FluentIcons.dumbbell_28_filled,
   ),
-  Urology(
+  urology(
     label: 'Poli Urologi',
     icon: FluentIcons.water_24_regular,
     activeIcon: FluentIcons.water_24_filled,
   ),
-  Neurology(
+  neurology(
     label: 'Poli Saraf',
     icon: FluentIcons.brain_circuit_24_regular,
     activeIcon: FluentIcons.brain_circuit_24_filled,

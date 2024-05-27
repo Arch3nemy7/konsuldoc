@@ -5,7 +5,7 @@ import 'package:konsuldoc/domain/entities/doctor_session.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 
 abstract interface class DoctorRepository {
-  Future<List<Doctor>> fetch(int page, int perPage);
+  Stream<List<Doctor>> fetch();
   Stream<Doctor> fetchById(String id);
   Future<void> add({
     required File avatar,

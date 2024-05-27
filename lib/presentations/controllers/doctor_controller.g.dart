@@ -21,6 +21,21 @@ final doctorControllerProvider = AutoDisposeProvider<DoctorController>.internal(
 );
 
 typedef DoctorControllerRef = AutoDisposeProviderRef<DoctorController>;
+String _$fetchAllDoctorHash() => r'b7aedaf83f52e080495ecba06703b6296466d26e';
+
+/// See also [fetchAllDoctor].
+@ProviderFor(fetchAllDoctor)
+final fetchAllDoctorProvider = AutoDisposeStreamProvider<List<Doctor>>.internal(
+  fetchAllDoctor,
+  name: r'fetchAllDoctorProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchAllDoctorHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchAllDoctorRef = AutoDisposeStreamProviderRef<List<Doctor>>;
 String _$fetchDoctorByIdHash() => r'd32a3592b4e1f11f1d3e0a48deb33ce1da08a33e';
 
 /// Copied from Dart SDK

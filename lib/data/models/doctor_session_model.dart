@@ -8,6 +8,14 @@ class DoctorSessionModel extends DoctorSession {
     required super.timeEnd,
   });
 
+  factory DoctorSessionModel.fromEntity(DoctorSession data) {
+    return DoctorSessionModel(
+      quota: data.quota,
+      timeStart: data.timeStart,
+      timeEnd: data.timeEnd,
+    );
+  }
+
   factory DoctorSessionModel.fromMap(Map<String, dynamic> map) {
     final timeStart = map['time_start'];
     final timeEnd = map['time_end'];
