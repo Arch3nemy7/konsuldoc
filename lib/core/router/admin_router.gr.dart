@@ -8,104 +8,100 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i11;
-import 'package:flutter/material.dart' as _i12;
+import 'package:auto_route/auto_route.dart' as _i10;
+import 'package:flutter/material.dart' as _i11;
+import 'package:konsuldoc/domain/entities/admin.dart' as _i12;
+import 'package:konsuldoc/domain/entities/doctor.dart' as _i13;
 import 'package:konsuldoc/presentations/pages/admin/admin_form_page.dart'
     as _i1;
-import 'package:konsuldoc/presentations/pages/admin/admin_home_page.dart'
-    as _i2;
 import 'package:konsuldoc/presentations/pages/admin/admin_list_page.dart'
-    as _i3;
+    as _i2;
 import 'package:konsuldoc/presentations/pages/admin/admin_root_page.dart'
-    as _i4;
+    as _i3;
 import 'package:konsuldoc/presentations/pages/admin/doctor_form_page.dart'
-    as _i8;
-import 'package:konsuldoc/presentations/pages/admin/doctor_list_page.dart'
-    as _i9;
-import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
-    as _i5;
-import 'package:konsuldoc/presentations/pages/common/appointment_list_page.dart'
-    as _i6;
-import 'package:konsuldoc/presentations/pages/common/doctor_detail_page.dart'
     as _i7;
+import 'package:konsuldoc/presentations/pages/admin/doctor_list_page.dart'
+    as _i8;
+import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
+    as _i4;
+import 'package:konsuldoc/presentations/pages/common/appointment_list_page.dart'
+    as _i5;
+import 'package:konsuldoc/presentations/pages/common/doctor_detail_page.dart'
+    as _i6;
 import 'package:konsuldoc/presentations/pages/common/member_detail_page.dart'
-    as _i10;
+    as _i9;
 
-abstract class $AdminRouter extends _i11.RootStackRouter {
+abstract class $AdminRouter extends _i10.RootStackRouter {
   $AdminRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i11.PageFactory> pagesMap = {
+  final Map<String, _i10.PageFactory> pagesMap = {
     AdminFormRoute.name: (routeData) {
-      final args = routeData.argsAs<AdminFormRouteArgs>();
-      return _i11.AutoRoutePage<dynamic>(
+      final args = routeData.argsAs<AdminFormRouteArgs>(
+          orElse: () => const AdminFormRouteArgs());
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i1.AdminFormPage(
           key: args.key,
-          id: args.id,
+          admin: args.admin,
         ),
       );
     },
-    AdminHomeRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i2.AdminHomePage(),
-      );
-    },
     AdminListRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.AdminListPage(),
+        child: const _i2.AdminListPage(),
       );
     },
     AdminRootRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i4.AdminRootPage(),
+        child: const _i3.AdminRootPage(),
       );
     },
     AppointmentDetailRoute.name: (routeData) {
       final args = routeData.argsAs<AppointmentDetailRouteArgs>();
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i5.AppointmentDetailPage(
+        child: _i4.AppointmentDetailPage(
           key: args.key,
           id: args.id,
         ),
       );
     },
     AppointmentListRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i6.AppointmentListPage(),
+        child: const _i5.AppointmentListPage(),
       );
     },
     DoctorDetailRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i7.DoctorDetailPage(),
+        child: const _i6.DoctorDetailPage(),
       );
     },
     DoctorFormRoute.name: (routeData) {
-      final args = routeData.argsAs<DoctorFormRouteArgs>();
-      return _i11.AutoRoutePage<dynamic>(
+      final args = routeData.argsAs<DoctorFormRouteArgs>(
+          orElse: () => const DoctorFormRouteArgs());
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i8.DoctorFormPage(
-          args.id,
+        child: _i7.DoctorFormPage(
           key: args.key,
+          doctor: args.doctor,
         ),
       );
     },
     DoctorListRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i9.DoctorListPage(),
+        child: const _i8.DoctorListPage(),
       );
     },
     MemberDetailRoute.name: (routeData) {
-      return _i11.AutoRoutePage<dynamic>(
+      return _i10.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i10.MemberDetailPage(),
+        child: const _i9.MemberDetailPage(),
       );
     },
   };
@@ -113,60 +109,46 @@ abstract class $AdminRouter extends _i11.RootStackRouter {
 
 /// generated route for
 /// [_i1.AdminFormPage]
-class AdminFormRoute extends _i11.PageRouteInfo<AdminFormRouteArgs> {
+class AdminFormRoute extends _i10.PageRouteInfo<AdminFormRouteArgs> {
   AdminFormRoute({
-    _i12.Key? key,
-    required String id,
-    List<_i11.PageRouteInfo>? children,
+    _i11.Key? key,
+    _i12.Admin? admin,
+    List<_i10.PageRouteInfo>? children,
   }) : super(
           AdminFormRoute.name,
           args: AdminFormRouteArgs(
             key: key,
-            id: id,
+            admin: admin,
           ),
           initialChildren: children,
         );
 
   static const String name = 'AdminFormRoute';
 
-  static const _i11.PageInfo<AdminFormRouteArgs> page =
-      _i11.PageInfo<AdminFormRouteArgs>(name);
+  static const _i10.PageInfo<AdminFormRouteArgs> page =
+      _i10.PageInfo<AdminFormRouteArgs>(name);
 }
 
 class AdminFormRouteArgs {
   const AdminFormRouteArgs({
     this.key,
-    required this.id,
+    this.admin,
   });
 
-  final _i12.Key? key;
+  final _i11.Key? key;
 
-  final String id;
+  final _i12.Admin? admin;
 
   @override
   String toString() {
-    return 'AdminFormRouteArgs{key: $key, id: $id}';
+    return 'AdminFormRouteArgs{key: $key, admin: $admin}';
   }
 }
 
 /// generated route for
-/// [_i2.AdminHomePage]
-class AdminHomeRoute extends _i11.PageRouteInfo<void> {
-  const AdminHomeRoute({List<_i11.PageRouteInfo>? children})
-      : super(
-          AdminHomeRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AdminHomeRoute';
-
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i3.AdminListPage]
-class AdminListRoute extends _i11.PageRouteInfo<void> {
-  const AdminListRoute({List<_i11.PageRouteInfo>? children})
+/// [_i2.AdminListPage]
+class AdminListRoute extends _i10.PageRouteInfo<void> {
+  const AdminListRoute({List<_i10.PageRouteInfo>? children})
       : super(
           AdminListRoute.name,
           initialChildren: children,
@@ -174,13 +156,13 @@ class AdminListRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'AdminListRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i4.AdminRootPage]
-class AdminRootRoute extends _i11.PageRouteInfo<void> {
-  const AdminRootRoute({List<_i11.PageRouteInfo>? children})
+/// [_i3.AdminRootPage]
+class AdminRootRoute extends _i10.PageRouteInfo<void> {
+  const AdminRootRoute({List<_i10.PageRouteInfo>? children})
       : super(
           AdminRootRoute.name,
           initialChildren: children,
@@ -188,17 +170,17 @@ class AdminRootRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'AdminRootRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i5.AppointmentDetailPage]
+/// [_i4.AppointmentDetailPage]
 class AppointmentDetailRoute
-    extends _i11.PageRouteInfo<AppointmentDetailRouteArgs> {
+    extends _i10.PageRouteInfo<AppointmentDetailRouteArgs> {
   AppointmentDetailRoute({
-    _i12.Key? key,
+    _i11.Key? key,
     required String id,
-    List<_i11.PageRouteInfo>? children,
+    List<_i10.PageRouteInfo>? children,
   }) : super(
           AppointmentDetailRoute.name,
           args: AppointmentDetailRouteArgs(
@@ -210,8 +192,8 @@ class AppointmentDetailRoute
 
   static const String name = 'AppointmentDetailRoute';
 
-  static const _i11.PageInfo<AppointmentDetailRouteArgs> page =
-      _i11.PageInfo<AppointmentDetailRouteArgs>(name);
+  static const _i10.PageInfo<AppointmentDetailRouteArgs> page =
+      _i10.PageInfo<AppointmentDetailRouteArgs>(name);
 }
 
 class AppointmentDetailRouteArgs {
@@ -220,7 +202,7 @@ class AppointmentDetailRouteArgs {
     required this.id,
   });
 
-  final _i12.Key? key;
+  final _i11.Key? key;
 
   final String id;
 
@@ -231,9 +213,9 @@ class AppointmentDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i6.AppointmentListPage]
-class AppointmentListRoute extends _i11.PageRouteInfo<void> {
-  const AppointmentListRoute({List<_i11.PageRouteInfo>? children})
+/// [_i5.AppointmentListPage]
+class AppointmentListRoute extends _i10.PageRouteInfo<void> {
+  const AppointmentListRoute({List<_i10.PageRouteInfo>? children})
       : super(
           AppointmentListRoute.name,
           initialChildren: children,
@@ -241,13 +223,13 @@ class AppointmentListRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'AppointmentListRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i7.DoctorDetailPage]
-class DoctorDetailRoute extends _i11.PageRouteInfo<void> {
-  const DoctorDetailRoute({List<_i11.PageRouteInfo>? children})
+/// [_i6.DoctorDetailPage]
+class DoctorDetailRoute extends _i10.PageRouteInfo<void> {
+  const DoctorDetailRoute({List<_i10.PageRouteInfo>? children})
       : super(
           DoctorDetailRoute.name,
           initialChildren: children,
@@ -255,51 +237,51 @@ class DoctorDetailRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'DoctorDetailRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i8.DoctorFormPage]
-class DoctorFormRoute extends _i11.PageRouteInfo<DoctorFormRouteArgs> {
+/// [_i7.DoctorFormPage]
+class DoctorFormRoute extends _i10.PageRouteInfo<DoctorFormRouteArgs> {
   DoctorFormRoute({
-    required String id,
-    _i12.Key? key,
-    List<_i11.PageRouteInfo>? children,
+    _i11.Key? key,
+    _i13.Doctor? doctor,
+    List<_i10.PageRouteInfo>? children,
   }) : super(
           DoctorFormRoute.name,
           args: DoctorFormRouteArgs(
-            id: id,
             key: key,
+            doctor: doctor,
           ),
           initialChildren: children,
         );
 
   static const String name = 'DoctorFormRoute';
 
-  static const _i11.PageInfo<DoctorFormRouteArgs> page =
-      _i11.PageInfo<DoctorFormRouteArgs>(name);
+  static const _i10.PageInfo<DoctorFormRouteArgs> page =
+      _i10.PageInfo<DoctorFormRouteArgs>(name);
 }
 
 class DoctorFormRouteArgs {
   const DoctorFormRouteArgs({
-    required this.id,
     this.key,
+    this.doctor,
   });
 
-  final String id;
+  final _i11.Key? key;
 
-  final _i12.Key? key;
+  final _i13.Doctor? doctor;
 
   @override
   String toString() {
-    return 'DoctorFormRouteArgs{id: $id, key: $key}';
+    return 'DoctorFormRouteArgs{key: $key, doctor: $doctor}';
   }
 }
 
 /// generated route for
-/// [_i9.DoctorListPage]
-class DoctorListRoute extends _i11.PageRouteInfo<void> {
-  const DoctorListRoute({List<_i11.PageRouteInfo>? children})
+/// [_i8.DoctorListPage]
+class DoctorListRoute extends _i10.PageRouteInfo<void> {
+  const DoctorListRoute({List<_i10.PageRouteInfo>? children})
       : super(
           DoctorListRoute.name,
           initialChildren: children,
@@ -307,13 +289,13 @@ class DoctorListRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'DoctorListRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i10.MemberDetailPage]
-class MemberDetailRoute extends _i11.PageRouteInfo<void> {
-  const MemberDetailRoute({List<_i11.PageRouteInfo>? children})
+/// [_i9.MemberDetailPage]
+class MemberDetailRoute extends _i10.PageRouteInfo<void> {
+  const MemberDetailRoute({List<_i10.PageRouteInfo>? children})
       : super(
           MemberDetailRoute.name,
           initialChildren: children,
@@ -321,5 +303,5 @@ class MemberDetailRoute extends _i11.PageRouteInfo<void> {
 
   static const String name = 'MemberDetailRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
 }

@@ -13,7 +13,6 @@ class AdminRouter extends $AdminRouter {
           page: AdminRootRoute.page,
           transitionsBuilder: TransitionsBuilders.noTransition,
           children: [
-            AutoRoute(page: AdminHomeRoute.page),
             AutoRoute(page: DoctorListRoute.page),
             AutoRoute(page: AdminListRoute.page),
           ],

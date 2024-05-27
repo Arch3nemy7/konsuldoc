@@ -21,6 +21,21 @@ final adminControllerProvider = AutoDisposeProvider<AdminController>.internal(
 );
 
 typedef AdminControllerRef = AutoDisposeProviderRef<AdminController>;
+String _$fetchAllAdminHash() => r'35aa3f243c6b3b0c3409d7b610f21323c6096677';
+
+/// See also [fetchAllAdmin].
+@ProviderFor(fetchAllAdmin)
+final fetchAllAdminProvider = AutoDisposeStreamProvider<List<Admin>>.internal(
+  fetchAllAdmin,
+  name: r'fetchAllAdminProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchAllAdminHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchAllAdminRef = AutoDisposeStreamProviderRef<List<Admin>>;
 String _$fetchAdminByIdHash() => r'a2b947ad96a6b5107e8fa81194d951e27c3cd5c6';
 
 /// Copied from Dart SDK

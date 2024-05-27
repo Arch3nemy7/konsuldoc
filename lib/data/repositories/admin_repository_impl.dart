@@ -23,10 +23,10 @@ class AdminRepositoryImpl implements AdminRepository {
         _storageRepository = storageRepository;
 
   @override
-  Future<List<AdminModel>> fetch(int page, int perPage) async {
-    return (await _supabase.from(TableConstants.admins).select())
-        .map((e) => AdminModel.fromMap(e))
-        .toList();
+  Stream<List<AdminModel>> fetch() {
+    return _supabase.from(TableConstants.admins).stream(primaryKey: ['id']).map(
+      (event) => event.map(AdminModel.fromMap).toList(),
+    );
   }
 
   @override

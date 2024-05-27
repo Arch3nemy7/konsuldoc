@@ -1,0 +1,1 @@
+enum AppointmentFilter { upcoming, past }

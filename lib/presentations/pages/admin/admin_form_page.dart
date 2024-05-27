@@ -4,25 +4,28 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/utils/pick_image.dart';
+import 'package:konsuldoc/domain/entities/admin.dart';
 import 'package:konsuldoc/presentations/controllers/admin_controller.dart';
 
 @RoutePage()
 class AdminFormPage extends ConsumerStatefulWidget {
-  final String id;
-  const AdminFormPage({Key? key, required this.id}) : super(key: key);
+  final Admin? admin;
+  const AdminFormPage({super.key, this.admin});
 
   @override
   ConsumerState<AdminFormPage> createState() => _AdminFormPageState();
 }
 
 class _AdminFormPageState extends ConsumerState<AdminFormPage> {
+  Admin? get admin => widget.admin;
+
   File? avatarFile;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  late final _nameController = TextEditingController(text: admin?.name);
+  late final _emailController = TextEditingController(text: admin?.email);
+  late final _phoneController = TextEditingController(text: admin?.phone);
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   void selectBannerImage() async {
     final res = await pickImage();
@@ -55,14 +58,14 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
         foregroundColor: Colors.black,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -90,13 +93,14 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                           image: avatarFile != null
                               ? DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: FileImage(avatarFile!))
-                              : DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    'https://cdn.pixabay.com/photo/2020/12/13/16/37/woman-5828786_1280.jpg',
-                                  ),
-                                ),
+                                  image: FileImage(avatarFile!),
+                                )
+                              : admin?.avatar != null
+                                  ? DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(admin!.avatar!),
+                                    )
+                                  : null,
                         ),
                       ),
                     ),
@@ -110,9 +114,9 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                           shape: BoxShape.rectangle,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(width: 4, color: Colors.white),
-                          color: Color.fromRGBO(28, 42, 58, 1),
+                          color: const Color.fromRGBO(28, 42, 58, 1),
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.edit,
                           color: Colors.white,
                         ),
@@ -121,7 +125,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               TextFormField(
                 controller: _nameController,
                 keyboardType: TextInputType.name,
@@ -138,7 +142,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -156,7 +160,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
@@ -173,7 +177,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _passwordController,
                 keyboardType: TextInputType.visiblePassword,
@@ -181,10 +185,6 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                 decoration: const InputDecoration(
                   labelText: "Password",
                   border: OutlineInputBorder(),
-                  //suffixIcon: IconButton(
-                  //onPressed: () => setState(() => obscurePassword = !obscurePassword),
-                  //icon: Icon(Icons.visibility),
-                  //),
                   prefixIcon: Icon(Icons.lock),
                 ),
                 validator: (value) {
@@ -194,7 +194,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               TextFormField(
                 controller: _confirmPasswordController,
                 keyboardType: TextInputType.visiblePassword,
@@ -211,16 +211,22 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: ElevatedButton(
-                  child: Text('Tambah'),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (admin == null) {
+                      insertAdmin();
+                    } else {
+                      editAdmin();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromRGBO(58, 115, 149, 1),
+                    backgroundColor: const Color.fromRGBO(58, 115, 149, 1),
                     foregroundColor: Colors.white,
                   ),
+                  child: const Text('Simpan'),
                 ),
               ),
             ],
@@ -231,22 +237,32 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
   }
 
   void insertAdmin() {
-    ref.read(adminControllerProvider).add(
+    ref
+        .read(adminControllerProvider)
+        .add(
           name: _nameController.text,
           email: _emailController.text,
           phone: _phoneController.text,
           password: _passwordController.text,
           avatar: avatarFile,
-        );
+        )
+        .then((value) {
+      if (value) context.maybePop();
+    });
   }
 
   void editAdmin() {
-    ref.read(adminControllerProvider).edit(
-          widget.id,
+    ref
+        .read(adminControllerProvider)
+        .edit(
+          widget.admin!.id,
           name: _nameController.text,
           email: _emailController.text,
           phone: _phoneController.text,
           avatar: avatarFile,
-        );
+        )
+        .then((value) {
+      if (value) context.maybePop();
+    });
   }
 }
