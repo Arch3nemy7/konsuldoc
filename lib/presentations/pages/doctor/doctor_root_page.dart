@@ -1,18 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/router/doctor_router.gr.dart';
+import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
 
 @RoutePage()
-class DoctorRootPage extends StatelessWidget {
+class DoctorRootPage extends ConsumerWidget {
   const DoctorRootPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AutoTabsScaffold(
-      routes: const [
-        DoctorHomeRoute(),
-        AppointmentListRoute(),
-        DoctorDetailRoute(),
+      routes: [
+        const DoctorHomeRoute(),
+        const AppointmentListRoute(),
+        DoctorDetailRoute(doctorId: ref.watch(authStateProvider)!.id),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => NavigationBar(
         selectedIndex: tabsRouter.activeIndex,

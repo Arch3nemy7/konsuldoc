@@ -1,12 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/presentations/controllers/member_controller.dart';
 
 @RoutePage()
-class MemberDetailPage extends StatelessWidget {
-  const MemberDetailPage({super.key});
+class MemberDetailPage extends ConsumerStatefulWidget {
+  final String memberId;
+  const MemberDetailPage({super.key, required this.memberId});
 
   @override
+  _MemberDetailPageState createState() => _MemberDetailPageState();
+}
+
+class _MemberDetailPageState extends ConsumerState<MemberDetailPage> {
+  @override
   Widget build(BuildContext context) {
+    final memberStream = ref.watch(fetchMemberByIdProvider(widget.memberId));
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -17,30 +27,38 @@ class MemberDetailPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: const Color(0xFFF6FAFE),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const CircleAvatar(
-              radius: 75,
-              backgroundImage:
-                  NetworkImage('https://via.placeholder.com/120x120'),
+      body: memberStream.when(
+        data: (member) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: NetworkImage(member.avatarUrl ??
+                      'https://via.placeholder.com/120x120'),
+                ),
+                const SizedBox(height: 20),
+                buildDetailRow('Nama', member.name),
+                buildDetailRow('Nomor Ponsel', member.phone ?? ''),
+                buildDetailRow(
+                    'Jenis Kelamin', member.gender?.toString() ?? ''),
+                buildDetailRow('Tanggal Lahir', member.dob?.toString() ?? ''),
+                buildDetailRow('Alamat', member.address ?? '',
+                    isMultiline: true),
+                const SizedBox(height: 20),
+                buildDetailRow('Jadwal', ''),
+                const SizedBox(height: 10),
+                buildScheduleBox('01:00 PM'),
+                const SizedBox(height: 10),
+                buildScheduleBox('Jumat 1 Maret 2024'),
+                const SizedBox(height: 20),
+              ],
             ),
-            const SizedBox(height: 20),
-            buildDetailRow('Nama', 'Budi Hariyanto'),
-            buildDetailRow('Nomor Ponsel', '+1232-12456789'),
-            buildDetailRow('Jenis Kelamin', 'Laki-laki'),
-            buildDetailRow('Tanggal Lahir', '2 Maret 1984'),
-            buildDetailRow('Alamat', 'Jl. Jayanegara No 102, Surabaya',
-                isMultiline: true),
-            const SizedBox(height: 20),
-            buildDetailRow('Jadwal', ''),
-            const SizedBox(height: 10),
-            buildScheduleBox('01:00 PM'),
-            const SizedBox(height: 10),
-            buildScheduleBox('Jumat 1 Maret 2024'),
-          ],
-        ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text(error.toString())),
       ),
     );
   }
@@ -69,14 +87,13 @@ class MemberDetailPage extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Text(
-              ': $value',
+              value,
               style: const TextStyle(
-                color: Color(0xFF757B82),
-                fontSize: 18,
+                color: Colors.black,
+                fontSize: 16,
                 fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
               ),
-              softWrap: true,
+              maxLines: isMultiline ? null : 1,
             ),
           ),
         ],
