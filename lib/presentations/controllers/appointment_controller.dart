@@ -40,11 +40,11 @@ class AppointmentController {
     required AppointmentRepository repository,
   }) : _repository = repository;
 
-  Future<bool> add(
+  Future<String?> add(
       String idDoctor, DateTime date, int session, String complaints) async {
     if (session < 0) {
       BotToast.showText(text: 'Harap memilih sesi terlelbih dahulu');
-      return false;
+      return null;
     }
     final cancel = showLoading();
     final res =
@@ -54,11 +54,11 @@ class AppointmentController {
     return res.fold(
       (l) {
         BotToast.showText(text: l.message);
-        return false;
+        return null;
       },
       (r) {
         BotToast.showText(text: "Berhasil menambahkan janji temu");
-        return true;
+        return r;
       },
     );
   }

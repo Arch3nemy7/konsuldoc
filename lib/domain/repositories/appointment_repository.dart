@@ -12,7 +12,7 @@ abstract interface class AppointmentRepository {
     required int perPage,
   });
   Stream<Appointment> fetchById(String id);
-  Future<void> add(
+  Future<String> add(
     String idDoctor,
     DateTime date,
     int session,

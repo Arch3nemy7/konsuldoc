@@ -4,6 +4,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
 import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
@@ -15,8 +16,7 @@ import 'package:konsuldoc/presentations/widgets/loader.dart';
 @RoutePage()
 class CreateAppointmentPage extends ConsumerStatefulWidget {
   final String idDoctor;
-  const CreateAppointmentPage({Key? key, required this.idDoctor})
-      : super(key: key);
+  const CreateAppointmentPage({super.key, required this.idDoctor});
 
   @override
   ConsumerState<CreateAppointmentPage> createState() =>
@@ -85,7 +85,10 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
         .read(appointmentControllerProvider)
         .add(widget.idDoctor, date!, session!, complaints)
         .then((value) {
-      if (value) context.maybePop();
+      if (value != null) {
+        print(value);
+        context.replaceRoute(AppointmentDetailRoute(id: value));
+      }
     });
   }
 

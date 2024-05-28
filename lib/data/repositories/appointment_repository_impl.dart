@@ -28,11 +28,20 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
         member:id_member ( id, avatar, name ),
         doctor:id_doctor ( id, avatar, name, specialist ),
         date,
-        status
+        status,
+        session,
+        number
       ''',
     );
     if (memberId != null) result = result.eq('id_member', memberId);
     if (after != null) result = result.gt('date', after.toIso8601String());
+
+    if (filter == AppointmentFilter.upcoming) {
+      result = result.gt('date', DateTime.now().toIso8601String());
+    } else if (filter == AppointmentFilter.past) {
+      result = result.lt('date', DateTime.now().toIso8601String());
+    }
+
     return (await result.order('date').limit(perPage))
         .map(AppointmentModel.fromMap)
         .toList();
@@ -44,19 +53,46 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
         .from(TableConstants.appointments)
         .stream(primaryKey: ['id'])
         .eq('id', id)
-        .map((event) => AppointmentModel.fromMap(event.first));
+        .asyncMap((event) async {
+          final data = event.first;
+          if (!membersCache.containsKey(data['id_member'])) {
+            membersCache[data['id_member']] = await _supabase
+                .from(TableConstants.members)
+                .select('id, avatar, name')
+                .eq('id', data['id_member'])
+                .single();
+          }
+          if (!doctorsCache.containsKey(data['id_doctor'])) {
+            doctorsCache[data['id_doctor']] = await _supabase
+                .from(TableConstants.doctors)
+                .select('id, avatar, name, specialist')
+                .eq('id', data['id_doctor'])
+                .single();
+          }
+
+          data['member'] = membersCache[data['id_member']];
+          data['doctor'] = doctorsCache[data['id_doctor']];
+
+          return AppointmentModel.fromMap(event.first);
+        });
   }
 
   @override
-  Future<void> add(
+  Future<String> add(
       String idDoctor, DateTime date, int session, String? complaints) async {
-    await _supabase.from(TableConstants.appointments).insert({
-      'id_member': _supabase.auth.currentUser!.id,
-      'id_doctor': idDoctor,
-      'date': date.toIso8601String(),
-      'complaints': complaints,
-      'session': session,
-    });
+    final res = await _supabase
+        .from(TableConstants.appointments)
+        .insert({
+          'id_member': _supabase.auth.currentUser!.id,
+          'id_doctor': idDoctor,
+          'date': date.toIso8601String(),
+          'complaints': complaints,
+          'session': session,
+        })
+        .select('id')
+        .single();
+
+    return res['id'];
   }
 
   @override
