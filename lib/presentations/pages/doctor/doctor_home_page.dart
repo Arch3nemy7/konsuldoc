@@ -21,6 +21,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     50,
     (index) => Appointment(
       id: index.toString(),
+      number: 0,
       member: MemberBasic(
         id: index.toString(),
         avatar: 'https://i.pravatar.cc/300?u=$index',
@@ -33,6 +34,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
         specialist: Specialist.cardiology,
       ),
       date: DateTime.now(),
+      session: 0,
       status: AppointmentStatus.waiting,
     ),
   );

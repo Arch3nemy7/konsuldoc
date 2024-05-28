@@ -3,6 +3,7 @@ import 'package:konsuldoc/core/dependencies/repositories.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 import 'package:konsuldoc/core/utils/show_loading.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
+import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,6 +15,14 @@ AppointmentController appointmentController(AppointmentControllerRef ref) {
   return AppointmentController(
     repository: ref.watch(appointmentRepositoryProvider),
   );
+}
+
+@riverpod
+Future<List<AppointmentSession>> fetchBookedSessions(
+  FetchBookedSessionsRef ref,
+  String idDoctor,
+) {
+  return ref.watch(appointmentRepositoryProvider).fetchBookedSession(idDoctor);
 }
 
 @riverpod
@@ -31,19 +40,25 @@ class AppointmentController {
     required AppointmentRepository repository,
   }) : _repository = repository;
 
-  Future<bool> add(String idDoctor, DateTime date) async {
+  Future<String?> add(
+      String idDoctor, DateTime date, int session, String complaints) async {
+    if (session < 0) {
+      BotToast.showText(text: 'Harap memilih sesi terlelbih dahulu');
+      return null;
+    }
     final cancel = showLoading();
-    final res = await handleError(_repository.add(idDoctor, date));
+    final res =
+        await handleError(_repository.add(idDoctor, date, session, complaints));
     cancel();
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal menambahkan janji temu");
-        return false;
+        BotToast.showText(text: l.message);
+        return null;
       },
       (r) {
         BotToast.showText(text: "Berhasil menambahkan janji temu");
-        return true;
+        return r;
       },
     );
   }
@@ -76,9 +91,10 @@ class AppointmentController {
   Future<bool> reschedule(
     String id,
     DateTime date,
+    int session,
   ) async {
     final cancel = showLoading();
-    final res = await handleError(_repository.reschedule(id, date));
+    final res = await handleError(_repository.reschedule(id, date, session));
     cancel();
 
     return res.fold(

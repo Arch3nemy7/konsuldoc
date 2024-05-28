@@ -1,327 +1,274 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
+import 'package:konsuldoc/core/utils/formatter.dart';
+import 'package:konsuldoc/domain/entities/appointment.dart';
+import 'package:konsuldoc/domain/enums/appointment_status.dart';
+import 'package:konsuldoc/domain/enums/role.dart';
+import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
+import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
+import 'package:konsuldoc/presentations/providers/user_state_provider.dart';
+import 'package:konsuldoc/presentations/widgets/button/primary_button.dart';
+import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
 @RoutePage()
-class AppointmentDetailPage extends StatefulWidget {
+class AppointmentDetailPage extends ConsumerWidget {
   final String id;
   const AppointmentDetailPage({
     super.key,
     required this.id,
   });
 
-  @override
-  State<AppointmentDetailPage> createState() => _AppointmentDetailPageState();
-}
+  void _showRescheduleBottomSheet(
+    BuildContext context,
+    Appointment appointment,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return BottomsheetReschedule(
+          appointment: appointment,
+        );
+      },
+    );
+  }
 
-class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
   @override
-  Widget build(BuildContext context) {
-    {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Janji Temu',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Janji Temu',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: ref.watch(userStateProvider).when(
+            data: (user) => ref.watch(fetchAppointmentByIdProvider(id)).when(
+                  data: (appointment) => ref
+                      .watch(fetchDoctorByIdProvider(appointment.doctor.id))
+                      .when(
+                        data: (doctor) {
+                          final session =
+                              doctor.schedules[appointment.date.weekday - 1]
+                                  [appointment.session];
+
+                          return Container(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    'Dokter',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    context.pushRoute(
+                                      DoctorDetailRoute(
+                                          id: appointment.doctor.id),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            appointment.doctor.avatar!),
+                                        radius: 50,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(appointment.doctor.name,
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold)),
+                                          const Divider(
+                                            color: Colors.black,
+                                            thickness: 10.0,
+                                            height: 10,
+                                          ),
+                                          Text(
+                                              appointment
+                                                  .doctor.specialist.label,
+                                              style: const TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 14,
+                                              )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    'Pasien',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    context
+                                        .pushRoute(const MemberDetailRoute());
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundImage:
+                                            appointment.member.avatar == null
+                                                ? null
+                                                : NetworkImage(
+                                                    appointment.member.avatar!),
+                                        radius: 50,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            appointment.member.name,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const Divider(
+                                            color: Colors.black,
+                                            thickness: 10.0,
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  child: Text(
+                                    'Waktu',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        disabledForegroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child:
+                                          Text("Sesi ${appointment.session}"),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    ElevatedButton(
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        disabledForegroundColor: Colors.black,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      child: Text(
+                                          "${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}"),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: null,
+                                        style: ElevatedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          disabledForegroundColor: Colors.black,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          appointment.date.toDateString(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                if (user!.role == Role.member &&
+                                    DateTime.now().compareTo(appointment.date) <
+                                        0)
+                                  PrimaryButton(
+                                    onPressed: () {
+                                      _showRescheduleBottomSheet(
+                                        context,
+                                        appointment,
+                                      );
+                                    },
+                                    label: 'Ubah jadwal',
+                                  ),
+                                if (user.role == Role.doctor &&
+                                    appointment.status ==
+                                        AppointmentStatus.waiting)
+                                  PrimaryButton(
+                                    onPressed: () {},
+                                    label: "Konfirmasi",
+                                  )
+                              ],
+                            ),
+                          );
+                        },
+                        error: (error, stackTrace) =>
+                            const Text('Data tidak ditemukan'),
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                  error: (error, stackTrace) =>
+                      const Text('Data tidak ditemukan'),
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+            error: (error, stackTrace) => const Text('Data tidak ditemukan'),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
           ),
-          centerTitle: true,
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Text(
-                      'Doctor',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                child: const Row(
-                  children: [
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(
-                      Icons.account_circle,
-                      size: 100,
-                      color: Colors.black,
-                    ),
-                    SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Profile Doctor',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Divider(
-                          color: Colors.black,
-                          thickness: 10.0,
-                          height: 10,
-                        ),
-                        Text('specialist',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                padding: const EdgeInsets.all(5),
-                child: const Row(
-                  children: [
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tentang Saya',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'sd jswqnbvdyweghubsbdbsadks\nskscs ckcskcksckcs\nedednaiddibs',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Text(
-                      'Pasien',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                child: const Row(
-                  children: [
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(
-                      Icons.account_circle,
-                      size: 100,
-                      color: Colors.black,
-                    ),
-                    SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Profile Pasien',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
-                        Divider(
-                          color: Colors.black,
-                          thickness: 10.0,
-                          height: 10,
-                        ),
-                        Text('Umur',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              // Tambahkan bagian ini untuk menampilkan jam praktik dan hari yang dipilih oleh pasien
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Jadwal',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          child: TextButton(
-                            onPressed: () {
-                              // Tambahkan fungsi untuk tombol jam praktik di sini
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  return Colors.grey; // Warna latar abu-abu
-                                },
-                              ),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // Border radius 10
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              '08:00 WIB',
-                              style: TextStyle(
-                                  color: Colors.white), // Warna teks putih
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // Tambahkan fungsi untuk tombol hari yang dipilih di sini
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return Colors.grey; // Warna latar abu-abu
-                              },
-                            ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Border radius 10
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            'Senin, 15 Mei 2024',
-                            style: TextStyle(
-                                color: Colors.white), // Warna teks putih
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: SizedBox(
-                        width: 130,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Tambahkan fungsi untuk melakukan appointment di sini
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Color.fromARGB(255, 207, 31, 31)),
-                            shadowColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return Colors.grey.withOpacity(0.8);
-                              },
-                            ),
-                            elevation:
-                                MaterialStateProperty.resolveWith<double>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  return 0;
-                                }
-                                return 5;
-                              },
-                            ),
-                          ),
-                          child: const Text(
-                            'Tolak',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: SizedBox(
-                        width: 130,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Tambahkan fungsi untuk melakukan appointment di sini
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromRGBO(34, 100, 136, 1)),
-                            shadowColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                return Colors.grey.withOpacity(0.8);
-                              },
-                            ),
-                            elevation:
-                                MaterialStateProperty.resolveWith<double>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  return 0;
-                                }
-                                return 5;
-                              },
-                            ),
-                          ),
-                          child: const Text(
-                            'Terima',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    );
   }
 }

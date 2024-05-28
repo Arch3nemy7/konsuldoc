@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
 import 'package:konsuldoc/domain/enums/specialist.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 import 'package:konsuldoc/presentations/widgets/doctor_search_bar.dart';
@@ -123,6 +124,8 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                           final doctor = filtered[index];
 
                           return ListItem(
+                            onTap: () => context
+                                .pushRoute(DoctorDetailRoute(id: doctor.id)),
                             avatar: doctor.avatar,
                             title: doctor.name,
                             subtitle: doctor.specialist.label,

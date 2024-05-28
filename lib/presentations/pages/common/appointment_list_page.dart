@@ -77,9 +77,7 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
                     ...(AppointmentFilter.values.map(
                       (e) => OptionItem(
                         selected: filter == e,
-                        onPressed: () => setState(() {
-                          filter = e;
-                        }),
+                        onPressed: () => updateFilter(e),
                         label: e.label,
                       ),
                     ))
