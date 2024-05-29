@@ -28,6 +28,8 @@ class _AdminListPageState extends ConsumerState<AdminListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -50,32 +52,30 @@ class _AdminListPageState extends ConsumerState<AdminListPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onSubmitted: search,
-                    decoration: InputDecoration(
-                      focusedBorder: InputBorder.none,
-                      fillColor: const Color(0xFFE5E8ED),
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Search',
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      prefixIcon: const Icon(Icons.search),
-                    ),
+            child: SearchBar(
+              onSubmitted: search,
+              leading: const Icon(Icons.search),
+              elevation: const MaterialStatePropertyAll(0),
+              backgroundColor: MaterialStatePropertyAll(
+                theme.colorScheme.surfaceVariant,
+              ),
+              padding:
+                  const MaterialStatePropertyAll(EdgeInsets.only(left: 14)),
+              constraints: const BoxConstraints.tightFor(height: 48),
+              hintText: 'Pencarian',
+              trailing: [
+                IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                  color: theme.colorScheme.onSecondaryContainer,
+                  style: IconButton.styleFrom(
+                    backgroundColor: theme.colorScheme.secondaryContainer,
+                    elevation: 4,
+                    shadowColor: theme.colorScheme.shadow,
                   ),
-                ),
+                  icon: const Icon(Icons.tune),
+                )
               ],
             ),
           ),

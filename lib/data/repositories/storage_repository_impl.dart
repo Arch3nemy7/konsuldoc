@@ -19,7 +19,11 @@ class StorageRepositoryImpl implements StorageRepository {
     required String bucket,
     required String id,
   }) async {
-    await _supabase.storage.from(bucket).upload(id, file);
+    await _supabase.storage.from(bucket).upload(
+          id,
+          file,
+          fileOptions: const FileOptions(upsert: true),
+        );
     return _supabase.storage.from(bucket).getPublicUrl(id);
   }
 }

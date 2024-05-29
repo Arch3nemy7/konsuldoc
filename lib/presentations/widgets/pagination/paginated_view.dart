@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:konsuldoc/core/utils/handle_error.dart';
 
-class PaginatedView<K, T> extends StatefulWidget {
-  final PagingController<K, T> pagingController;
+class PaginatedView<T> extends StatefulWidget {
+  final PagingController<int, T> pagingController;
   final int perPage;
-  final Future<List<T>> Function(K pageKey, int perPage) fetchData;
-  final K Function(K? lastPage, List<T> items) getPageKey;
+  final Future<List<T>> Function(int page, int perPage) fetchData;
   final Widget child;
 
   const PaginatedView({
@@ -14,15 +13,14 @@ class PaginatedView<K, T> extends StatefulWidget {
     required this.pagingController,
     required this.perPage,
     required this.fetchData,
-    required this.getPageKey,
     required this.child,
   });
 
   @override
-  State<PaginatedView<K, T>> createState() => _PaginatedViewState<K, T>();
+  State<PaginatedView<T>> createState() => _PaginatedViewState<T>();
 }
 
-class _PaginatedViewState<K, T> extends State<PaginatedView<K, T>> {
+class _PaginatedViewState<T> extends State<PaginatedView<T>> {
   bool refreshable = false;
 
   @override
@@ -46,6 +44,7 @@ class _PaginatedViewState<K, T> extends State<PaginatedView<K, T>> {
       case PagingStatus.completed:
       case PagingStatus.ongoing:
       case PagingStatus.subsequentPageError:
+      case PagingStatus.noItemsFound:
         return true;
 
       default:
@@ -53,7 +52,7 @@ class _PaginatedViewState<K, T> extends State<PaginatedView<K, T>> {
     }
   }
 
-  void _fetch(K page) async {
+  void _fetch(int page) async {
     final result = await handleError(widget.fetchData(page, widget.perPage));
     if (!mounted) return;
 
@@ -63,8 +62,7 @@ class _PaginatedViewState<K, T> extends State<PaginatedView<K, T>> {
         if (data.length < widget.perPage) {
           widget.pagingController.appendLastPage(data);
         } else {
-          widget.pagingController
-              .appendPage(data, widget.getPageKey(page, data));
+          widget.pagingController.appendPage(data, page + 1);
         }
       },
     );

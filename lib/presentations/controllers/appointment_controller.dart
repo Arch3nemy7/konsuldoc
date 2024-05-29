@@ -6,6 +6,7 @@ import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/entities/appointment_session.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 import 'package:konsuldoc/domain/repositories/appointment_repository.dart';
+import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'appointment_controller.g.dart';
@@ -22,7 +23,9 @@ Future<List<AppointmentSession>> fetchBookedSessions(
   FetchBookedSessionsRef ref,
   String idDoctor,
 ) {
-  return ref.watch(appointmentRepositoryProvider).fetchBookedSession(idDoctor);
+  return ref
+      .watch(appointmentRepositoryProvider)
+      .fetchBookedSession(idDoctor, ref.watch(authStateProvider)?.id ?? '');
 }
 
 @riverpod
@@ -41,7 +44,11 @@ class AppointmentController {
   }) : _repository = repository;
 
   Future<String?> add(
-      String idDoctor, DateTime date, int session, String complaints) async {
+    String idDoctor,
+    DateTime date,
+    int session,
+    String? complaints,
+  ) async {
     if (session < 0) {
       BotToast.showText(text: 'Harap memilih sesi terlelbih dahulu');
       return null;

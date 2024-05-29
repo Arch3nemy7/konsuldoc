@@ -243,7 +243,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            item.toDayString(),
+                                            item.toShortDayString(),
                                             style: GoogleFonts.inter().copyWith(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -281,11 +281,11 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                                   final item = doctor
                                       .schedules[date!.weekday - 1][index];
                                   final selected = index == session;
-                                  final booked =
+                                  final booked = item.quota < 1 ||
                                       bookedSession.contains(AppointmentSession(
-                                    date: date!,
-                                    session: index,
-                                  ));
+                                        date: date!,
+                                        session: index,
+                                      ));
 
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(

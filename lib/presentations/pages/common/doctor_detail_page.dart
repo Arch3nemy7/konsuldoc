@@ -2,7 +2,19 @@ import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:konsuldoc/core/constants/constants.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
+import 'package:konsuldoc/core/utils/formatter.dart';
+import 'package:konsuldoc/domain/enums/role.dart';
+import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
+import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
+import 'package:konsuldoc/presentations/providers/user_role_provider.dart';
+import 'package:konsuldoc/presentations/widgets/button/primary_button.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 
 @RoutePage()
 class DoctorDetailPage extends ConsumerWidget {
@@ -12,207 +24,191 @@ class DoctorDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final doctorFuture = ref.watch(fetchDoctorByIdProvider(id));
+    final theme = Theme.of(context);
+    final user = ref.watch(authStateProvider);
+    final role = ref.watch(userRoleProvider);
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const AutoLeadingButton(),
         title: const Text('Dokter'),
+        actions: [
+          if (user?.id == id)
+            IconButton(
+              onPressed: () {
+                ref.read(authControllerProvider).signOut();
+              },
+              icon: const Icon(Icons.logout),
+            )
+        ],
         centerTitle: true,
-        backgroundColor: const Color(0xFFF6FAFE),
       ),
-      body: doctorFuture.when(
-        data: (doctor) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 124.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.white,
-                      boxShadow: kElevationToShadow[4],
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CircleAvatar(
-                            radius: 50.0,
-                            backgroundImage: doctor.avatar != null
-                                ? NetworkImage(doctor.avatar!)
-                                : null,
+      body: ref.watch(fetchDoctorByIdProvider(id)).when(
+            data: (doctor) => SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 124.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: theme.colorScheme.background,
+                        boxShadow: kElevationToShadow[4],
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: NetworkImage(doctor.avatar!),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 10.0),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                doctor.name,
-                                style: const TextStyle(
-                                  color: Color(0xFF1F2A37),
-                                  fontSize: 20.0,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  height: 1,
+                          const SizedBox(width: 10.0),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  doctor.name,
+                                  style: const TextStyle(
+                                    fontSize: 20.0,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w700,
+                                    height: 1,
+                                  ),
                                 ),
-                              ),
-                              const Divider(),
-                              Text(
-                                doctor.specialist.label,
-                                style: const TextStyle(
-                                  color: Color(0xFF4B5563),
-                                  fontSize: 14.0,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.8,
+                                const Divider(),
+                                Text(
+                                  doctor.specialist.label,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onBackground
+                                        .withOpacity(0.7),
+                                    fontSize: 14.0,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.8,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(width: 10.0),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height:
+                            24), // Memberikan jarak antara card dan teks "Tentang Dokter"
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Tentang Dokter',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.50,
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Tentang Dokter',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.50,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ExpandableText(
-                      doctor.about,
-                      maxLines: 2,
-                      animationDuration: const Duration(milliseconds: 500),
-                      expandText: 'lihat selengkapnya',
-                      collapseText: 'lihat lebih sedikit',
-                      style: const TextStyle(
-                        color: Color(0xFF6B7280),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ExpandableText(
+                        doctor.about,
+                        maxLines: 2,
+                        animationDuration: const Duration(milliseconds: 500),
+                        expandText: 'lihat selengkapnya',
+                        collapseText: 'lihat lebih sedikit',
+                        style: TextStyle(
+                          color:
+                              theme.colorScheme.onBackground.withOpacity(0.7),
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Jadwal Praktik',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        height: 1.2,
-                        letterSpacing: 0.10,
+                    const SizedBox(
+                        height:
+                            24), // Memberikan jarak antara "Tentang Dokter" dan "Jadwal Praktik"
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'Jadwal Praktik',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          height: 1.2,
+                          letterSpacing: 0.10,
+                        ),
                       ),
                     ),
-                  ),
-                  ...doctor.schedules.asMap().entries.map((entry) {
-                    final dayIndex = entry.key;
-                    final sessions = entry.value;
-                    final dayName = _getDayName(dayIndex);
-
-                    return Padding(
+                    Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            dayName,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              height: 1.2,
-                            ),
-                          ),
-                          ...sessions.map((session) {
-                            return Text(
-                              '${session.timeStart.format(context)} - ${session.timeEnd.format(context)} (Quota: ${session.quota})',
-                              style: const TextStyle(
-                                color: Color(0xFF6B7280),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                height: 1.5,
+                        children: doctor.schedules
+                            .mapWithIndex(
+                              (sessions, index) => Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      Constants.days[index],
+                                      style: GoogleFonts.inter().copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    ...(sessions.isEmpty
+                                        ? [const Text('\tLibur')]
+                                        : sessions.mapWithIndex(
+                                            (sessionData, session) => Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text("\tSesi ${session + 1}"),
+                                                Text(
+                                                    "${sessionData.timeStart.toTimeString()}-${sessionData.timeEnd.toTimeString()}")
+                                              ],
+                                            ),
+                                          ))
+                                  ],
+                                ),
                               ),
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                  const SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Aksi ketika tombol Buat Janji ditekan
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF004C69),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        minimumSize: const Size(double.infinity, 45),
-                      ),
-                      child: const Text(
-                        'Buat Janji',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                        ),
+                            )
+                            .toList(),
                       ),
                     ),
-                  ),
-                ],
+                    if (role == Role.member)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: PrimaryButton(
+                          onPressed: () {
+                            context.pushRoute(
+                                CreateAppointmentRoute(idDoctor: id));
+                          },
+                          label: 'Buat Janji',
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) =>
-            const Center(child: Text('Error loading data')),
-      ),
+            error: (error, stackTrace) {
+              return ErrorView(
+                message: error.toString(),
+              );
+            },
+            loading: () => const Loader(),
+          ),
     );
-  }
-
-  String _getDayName(int index) {
-    switch (index) {
-      case 0:
-        return 'SENIN';
-      case 1:
-        return 'SELASA';
-      case 2:
-        return 'RABU';
-      case 3:
-        return 'KAMIS';
-      case 4:
-        return 'JUMAT';
-      default:
-        return 'Unknown';
-    }
   }
 }

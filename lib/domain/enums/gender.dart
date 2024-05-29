@@ -1,4 +1,8 @@
 enum Gender {
-  male,
-  female,
+  male("Laki-laki"),
+  female("Perempuan");
+
+  const Gender(this.label);
+
+  final String label;
 }

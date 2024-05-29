@@ -39,11 +39,15 @@ class DoctorController {
     required String name,
     required String email,
     required String password,
-    required Specialist specialist,
+    required Specialist? specialist,
     required String phone,
     required String about,
     required List<List<DoctorSession>> schedules,
   }) async {
+    if (specialist == null) {
+      BotToast.showText(text: "Spesialis wajib diisi");
+      return false;
+    }
     if (avatar == null) {
       BotToast.showText(text: "Foto profil wajib diisi");
       return false;
@@ -79,11 +83,16 @@ class DoctorController {
     File? avatar,
     required String name,
     required String email,
-    required Specialist specialist,
+    required Specialist? specialist,
     required String phone,
     required String about,
     required List<List<DoctorSession>> schedules,
   }) async {
+    if (specialist == null) {
+      BotToast.showText(text: "Spesialis wajib diisi");
+      return false;
+    }
+
     final cancel = showLoading();
     final res = await handleError(_repository.edit(
       id,

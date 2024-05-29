@@ -10,6 +10,7 @@ class Appointment {
   final DateTime date;
   final int session;
   final String? complaints;
+  final String? note;
   final AppointmentStatus status;
 
   Appointment({
@@ -20,6 +21,7 @@ class Appointment {
     required this.date,
     required this.session,
     this.complaints,
+    this.note,
     required this.status,
   });
 }

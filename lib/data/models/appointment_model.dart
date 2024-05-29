@@ -12,6 +12,7 @@ class AppointmentModel extends Appointment {
     required super.date,
     required super.session,
     required super.complaints,
+    required super.note,
     required super.status,
   });
 
@@ -24,6 +25,7 @@ class AppointmentModel extends Appointment {
       date: DateTime.parse(map['date']),
       session: map['session'],
       complaints: map['complaints'],
+      note: map['note'],
       status: AppointmentStatus.values[map['status']],
     );
   }

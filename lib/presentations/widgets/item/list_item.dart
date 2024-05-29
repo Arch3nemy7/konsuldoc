@@ -5,6 +5,8 @@ class ListItem extends StatelessWidget {
   final String title;
   final String? subtitle;
   final Widget? bottom;
+  final Widget? trailing;
+  final bool enabled;
   final VoidCallback? onTap;
 
   const ListItem({
@@ -13,6 +15,8 @@ class ListItem extends StatelessWidget {
     required this.title,
     this.subtitle,
     this.bottom,
+    this.trailing,
+    this.enabled = true,
     this.onTap,
   });
 
@@ -25,20 +29,21 @@ class ListItem extends StatelessWidget {
       margin: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: theme.colorScheme.secondaryContainer,
+        color: enabled
+            ? theme.colorScheme.secondaryContainer
+            : theme.colorScheme.outline,
       ),
       child: InkWell(
         onTap: onTap,
         child: Row(
           children: [
-            if (avatar != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 14),
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(avatar!),
-                  radius: 27,
-                ),
+            Padding(
+              padding: const EdgeInsets.only(right: 14),
+              child: CircleAvatar(
+                backgroundImage: avatar == null ? null : NetworkImage(avatar!),
+                radius: 27,
               ),
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +62,8 @@ class ListItem extends StatelessWidget {
                   if (bottom != null) bottom!
                 ],
               ),
-            )
+            ),
+            if (trailing != null) trailing!
           ],
         ),
       ),

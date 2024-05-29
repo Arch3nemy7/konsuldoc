@@ -17,9 +17,12 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
 
   @override
   Future<List<AppointmentModel>> fetch({
+    String? doctorId,
     String? memberId,
+    DateTime? date,
+    int? session,
     AppointmentFilter? filter,
-    DateTime? after,
+    int page = 1,
     required int perPage,
   }) async {
     var result = _supabase.from(TableConstants.appointments).select(
@@ -34,15 +37,25 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       ''',
     );
     if (memberId != null) result = result.eq('id_member', memberId);
-    if (after != null) result = result.gt('date', after.toIso8601String());
+    if (doctorId != null) result = result.eq('id_doctor', doctorId);
+    if (date != null) result = result.eq('date', date.toIso8601String());
+    if (session != null) result = result.eq('session', session);
 
     if (filter == AppointmentFilter.upcoming) {
-      result = result.gt('date', DateTime.now().toIso8601String());
+      result = result
+          .gte('date', DateTime.now().toIso8601String())
+          .eq('status', AppointmentStatus.waiting.index);
     } else if (filter == AppointmentFilter.past) {
-      result = result.lt('date', DateTime.now().toIso8601String());
+      result = result
+          .lte('date', DateTime.now().toIso8601String())
+          .eq('status', AppointmentStatus.done.index);
     }
 
-    return (await result.order('date').limit(perPage))
+    return (await result
+            .order('date', ascending: filter == AppointmentFilter.upcoming)
+            .order('session')
+            .order('number')
+            .range((page - 1) * perPage, page * perPage - 1))
         .map(AppointmentModel.fromMap)
         .toList();
   }
@@ -86,7 +99,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
           'id_member': _supabase.auth.currentUser!.id,
           'id_doctor': idDoctor,
           'date': date.toIso8601String(),
-          'complaints': complaints,
+          'complaints': complaints?.isEmpty ?? true ? null : complaints,
           'session': session,
         })
         .select('id')
@@ -120,11 +133,13 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   }
 
   @override
-  Future<List<AppointmentSession>> fetchBookedSession(String idDoctor) async {
+  Future<List<AppointmentSession>> fetchBookedSession(
+      String idDoctor, String idMember) async {
     final List<Map<String, dynamic>> res = await _supabase.rpc(
       'get_fully_booked_appointments',
       params: {
         'p_id_doctor': idDoctor,
+        'p_id_member': idMember,
         'after_date': DateTime.now().toIso8601String()
       },
     );

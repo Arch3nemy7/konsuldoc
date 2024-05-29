@@ -58,7 +58,7 @@ class MemberRepositoryImpl implements MemberRepository {
       'phone': phone,
       'address': address,
       'dob': dob?.toIso8601String(),
-      'gender': gender,
+      'gender': gender?.name,
     };
 
     if (avatar != null) {

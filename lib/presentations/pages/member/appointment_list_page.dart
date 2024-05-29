@@ -23,8 +23,7 @@ class AppointmentListPage extends ConsumerStatefulWidget {
 }
 
 class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
-  final _pagingController =
-      PagingController<DateTime?, Appointment>(firstPageKey: null);
+  final _pagingController = PagingController<int, Appointment>(firstPageKey: 1);
   AppointmentFilter filter = AppointmentFilter.upcoming;
 
   @override
@@ -33,11 +32,11 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
     super.dispose();
   }
 
-  Future<List<Appointment>> fetchData(DateTime? after, int perPage) {
+  Future<List<Appointment>> fetchData(int page, int perPage) {
     return ref.read(appointmentRepositoryProvider).fetch(
           memberId: ref.read(authStateProvider)?.id,
           filter: filter,
-          after: after,
+          page: page,
           perPage: perPage,
         );
   }
@@ -91,7 +90,6 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
                 pagingController: _pagingController,
                 perPage: 10,
                 fetchData: fetchData,
-                getPageKey: (lastPage, items) => items.lastOrNull?.date,
                 child: PagedListView(
                   pagingController: _pagingController,
                   builderDelegate: PaginatedChildBuilderDelegate(
@@ -105,25 +103,25 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
                         avatar: item.doctor.avatar,
                         title: item.doctor.name,
                         subtitle: item.doctor.specialist.label,
+                        trailing: Padding(
+                          padding: const EdgeInsets.all(8.0).copyWith(left: 16),
+                          child: Text("#${item.number}"),
+                        ),
                         bottom: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Icon(Icons.schedule, size: 15),
-                            const SizedBox(width: 3.5),
-                            Text(
-                              item.date.toTimeString(),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Spacer(),
                             Text(
                               item.date.toDateString(),
                               style: theme.textTheme.labelSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 7),
+                            Text(
+                              "Sesi ${item.session + 1}",
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                       );

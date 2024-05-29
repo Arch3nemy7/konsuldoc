@@ -78,7 +78,7 @@ class MemberController {
 
     return res.fold(
       (l) {
-        BotToast.showText(text: "Gagal mengedit data member");
+        BotToast.showText(text: l.message);
         return false;
       },
       (r) {
