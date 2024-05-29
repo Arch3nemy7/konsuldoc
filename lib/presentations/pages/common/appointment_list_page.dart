@@ -1,43 +1,55 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:konsuldoc/core/dependencies/repositories.dart';
+import 'package:konsuldoc/core/router/member_router.gr.dart';
 import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
-import 'package:konsuldoc/domain/entities/doctor_basic.dart';
-import 'package:konsuldoc/domain/entities/member_basic.dart';
-import 'package:konsuldoc/domain/enums/appointment_status.dart';
-import 'package:konsuldoc/domain/enums/specialist.dart';
+import 'package:konsuldoc/domain/enums/appointment_filter.dart';
+import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
 import 'package:konsuldoc/presentations/widgets/item/list_item.dart';
 import 'package:konsuldoc/presentations/widgets/item/option_item.dart';
+import 'package:konsuldoc/presentations/widgets/pagination/paginated_child_builder_delegate.dart';
+import 'package:konsuldoc/presentations/widgets/pagination/paginated_view.dart';
 
 @RoutePage()
-class AppointmentListPage extends StatefulWidget {
+class AppointmentListPage extends ConsumerStatefulWidget {
   const AppointmentListPage({super.key});
 
   @override
-  State<AppointmentListPage> createState() => _AppointmentListPageState();
+  ConsumerState<AppointmentListPage> createState() =>
+      _AppointmentListPageState();
 }
 
-class _AppointmentListPageState extends State<AppointmentListPage> {
-  final appointmentList = List.generate(
-      30,
-      (index) => Appointment(
-            id: index.toString(),
-            member: MemberBasic(
-              id: index.toString(),
-              avatar: 'https://i.pravatar.cc/300?u=$index',
-              name: 'Member $index',
-            ),
-            doctor: DoctorBasic(
-              id: index.toString(),
-              avatar: 'https://i.pravatar.cc/300?u=d$index',
-              name: 'Doctor $index',
-              specialist: Specialist.cardiology,
-            ),
-            date: DateTime.now(),
-            status: AppointmentStatus.waiting,
-          ));
-  bool upcoming = true;
-  AppointmentStatus? status;
+class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
+  final _pagingController =
+      PagingController<DateTime?, Appointment>(firstPageKey: null);
+  AppointmentFilter filter = AppointmentFilter.upcoming;
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  Future<List<Appointment>> fetchData(DateTime? after, int perPage) {
+    return ref.read(appointmentRepositoryProvider).fetch(
+          memberId: ref.read(authStateProvider)?.id,
+          filter: filter,
+          after: after,
+          perPage: perPage,
+        );
+  }
+
+  void updateFilter(AppointmentFilter value) {
+    if (value == filter) return;
+
+    setState(() {
+      filter = value;
+    });
+    _pagingController.refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +63,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
             Padding(
               padding: const EdgeInsets.all(14).copyWith(bottom: 0),
               child: Text(
-                'Pilih status janji temu',
+                'Daftar janji temu',
                 style: theme.textTheme.titleMedium,
               ),
             ),
@@ -62,26 +74,11 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                 padding: const EdgeInsets.all(7),
                 child: Row(
                   children: [
-                    OptionItem(
-                      selected: upcoming,
-                      onPressed: () {
-                        if (!upcoming) {
-                          setState(() {
-                            upcoming = true;
-                            status = null;
-                          });
-                        }
-                      },
-                      label: 'Mendatang',
-                    ),
-                    ...(AppointmentStatus.values.map(
+                    ...(AppointmentFilter.values.map(
                       (e) => OptionItem(
-                        selected: status == e,
-                        onPressed: () => setState(() {
-                          if (upcoming) upcoming = false;
-                          status = e;
-                        }),
-                        label: e.name,
+                        selected: filter == e,
+                        onPressed: () => updateFilter(e),
+                        label: e.label,
                       ),
                     ))
                   ],
@@ -90,39 +87,50 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
             ),
             const Divider(height: 1),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(7),
-                itemCount: appointmentList.length,
-                itemBuilder: (context, index) {
-                  final appointment = appointmentList[index];
-
-                  return ListItem(
-                    avatar: appointment.doctor.avatar,
-                    title: appointment.doctor.name,
-                    subtitle: appointment.doctor.specialist.label,
-                    bottom: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.schedule, size: 15),
-                        const SizedBox(width: 3.5),
-                        Text(
-                          appointment.date.toTimeString(),
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+              child: PaginatedView(
+                pagingController: _pagingController,
+                perPage: 10,
+                fetchData: fetchData,
+                getPageKey: (lastPage, items) => items.lastOrNull?.date,
+                child: PagedListView(
+                  pagingController: _pagingController,
+                  builderDelegate: PaginatedChildBuilderDelegate(
+                    itemBuilder: (context, item, index) {
+                      return ListItem(
+                        onTap: () {
+                          context.pushRoute(
+                            AppointmentDetailRoute(id: item.id),
+                          );
+                        },
+                        avatar: item.doctor.avatar,
+                        title: item.doctor.name,
+                        subtitle: item.doctor.specialist.label,
+                        bottom: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.schedule, size: 15),
+                            const SizedBox(width: 3.5),
+                            Text(
+                              item.date.toTimeString(),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              item.date.toDateString(),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                          ],
                         ),
-                        const Spacer(),
-                        Text(
-                          appointment.date.toDateString(),
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 7),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                    pagingController: _pagingController,
+                  ),
+                ),
               ),
             )
           ],

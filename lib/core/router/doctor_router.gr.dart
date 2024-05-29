@@ -45,9 +45,13 @@ abstract class $DoctorRouter extends _i7.RootStackRouter {
       );
     },
     DoctorDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<DoctorDetailRouteArgs>();
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.DoctorDetailPage(),
+        child: _i3.DoctorDetailPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     DoctorHomeRoute.name: (routeData) {
@@ -63,9 +67,13 @@ abstract class $DoctorRouter extends _i7.RootStackRouter {
       );
     },
     MemberDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<MemberDetailRouteArgs>();
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i6.MemberDetailPage(),
+        child: _i6.MemberDetailPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
   };
@@ -126,16 +134,40 @@ class AppointmentListRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.DoctorDetailPage]
-class DoctorDetailRoute extends _i7.PageRouteInfo<void> {
-  const DoctorDetailRoute({List<_i7.PageRouteInfo>? children})
-      : super(
+class DoctorDetailRoute extends _i7.PageRouteInfo<DoctorDetailRouteArgs> {
+  DoctorDetailRoute({
+    _i8.Key? key,
+    required String id,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
           DoctorDetailRoute.name,
+          args: DoctorDetailRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'DoctorDetailRoute';
 
-  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+  static const _i7.PageInfo<DoctorDetailRouteArgs> page =
+      _i7.PageInfo<DoctorDetailRouteArgs>(name);
+}
+
+class DoctorDetailRouteArgs {
+  const DoctorDetailRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i8.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'DoctorDetailRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for
@@ -168,14 +200,38 @@ class DoctorRootRoute extends _i7.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.MemberDetailPage]
-class MemberDetailRoute extends _i7.PageRouteInfo<void> {
-  const MemberDetailRoute({List<_i7.PageRouteInfo>? children})
-      : super(
+class MemberDetailRoute extends _i7.PageRouteInfo<MemberDetailRouteArgs> {
+  MemberDetailRoute({
+    _i8.Key? key,
+    required String id,
+    List<_i7.PageRouteInfo>? children,
+  }) : super(
           MemberDetailRoute.name,
+          args: MemberDetailRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'MemberDetailRoute';
 
-  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+  static const _i7.PageInfo<MemberDetailRouteArgs> page =
+      _i7.PageInfo<MemberDetailRouteArgs>(name);
+}
+
+class MemberDetailRouteArgs {
+  const MemberDetailRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i8.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'MemberDetailRouteArgs{key: $key, id: $id}';
+  }
 }

@@ -96,8 +96,10 @@ class DoctorRepositoryImpl implements DoctorRepository {
       'specialist': specialist.name,
       'phone': phone,
       'about': about,
-      'schedules': List<List<DoctorSessionModel>>.from(schedules)
-          .map((e) => e.map((s) => s.toMap())),
+      'schedules': schedules
+          .map((e) =>
+              e.map((s) => DoctorSessionModel.fromEntity(s).toMap()).toList())
+          .toList(),
     };
 
     if (avatar != null) {

@@ -5,19 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 
 @RoutePage()
-class DoctorDetailPage extends ConsumerStatefulWidget {
-  final String doctorId;
+class DoctorDetailPage extends ConsumerWidget {
+  final String id;
 
-  const DoctorDetailPage({super.key, required this.doctorId});
+  const DoctorDetailPage({super.key, required this.id});
 
   @override
-  _DoctorDetailPageState createState() => _DoctorDetailPageState();
-}
-
-class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
-  @override
-  Widget build(BuildContext context) {
-    final doctorFuture = ref.watch(fetchDoctorByIdProvider(widget.doctorId));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final doctorFuture = ref.watch(fetchDoctorByIdProvider(id));
 
     return Scaffold(
       appBar: AppBar(
@@ -52,8 +47,7 @@ class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
                             radius: 50.0,
                             backgroundImage: doctor.avatar != null
                                 ? NetworkImage(doctor.avatar!)
-                                : AssetImage('assets/default_avatar.png')
-                                    as ImageProvider,
+                                : null,
                           ),
                         ),
                         const SizedBox(width: 10.0),

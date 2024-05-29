@@ -14,7 +14,7 @@ class DoctorRootPage extends ConsumerWidget {
       routes: [
         const DoctorHomeRoute(),
         const AppointmentListRoute(),
-        DoctorDetailRoute(doctorId: ref.watch(authStateProvider)!.id),
+        DoctorDetailRoute(id: ref.watch(authStateProvider)!.id),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => NavigationBar(
         selectedIndex: tabsRouter.activeIndex,

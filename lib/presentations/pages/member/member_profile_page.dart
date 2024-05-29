@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +58,7 @@ class MemberProfilePage extends ConsumerWidget {
   }
 
   _profilePict(String? avatar) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Center(
         child: Column(
@@ -68,10 +66,11 @@ class MemberProfilePage extends ConsumerWidget {
             SizedBox(
               height: 200,
               width: 200,
-              child:avatar == null ? null : CircleAvatar(
-                backgroundImage:  NetworkImage(
-                    avatar),
-              ),
+              child: avatar == null
+                  ? null
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(avatar),
+                    ),
             ),
           ],
         ),

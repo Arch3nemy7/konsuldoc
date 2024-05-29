@@ -4,18 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/presentations/controllers/member_controller.dart';
 
 @RoutePage()
-class MemberDetailPage extends ConsumerStatefulWidget {
-  final String memberId;
-  const MemberDetailPage({super.key, required this.memberId});
+class MemberDetailPage extends ConsumerWidget {
+  final String id;
+
+  const MemberDetailPage({super.key, required this.id});
 
   @override
-  _MemberDetailPageState createState() => _MemberDetailPageState();
-}
-
-class _MemberDetailPageState extends ConsumerState<MemberDetailPage> {
-  @override
-  Widget build(BuildContext context) {
-    final memberStream = ref.watch(fetchMemberByIdProvider(widget.memberId));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final memberStream = ref.watch(fetchMemberByIdProvider(id));
 
     return Scaffold(
       appBar: AppBar(
