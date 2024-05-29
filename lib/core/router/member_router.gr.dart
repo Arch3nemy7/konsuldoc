@@ -74,9 +74,13 @@ abstract class $MemberRouter extends _i11.RootStackRouter {
       );
     },
     MemberDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<MemberDetailRouteArgs>();
       return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i5.MemberDetailPage(),
+        child: _i5.MemberDetailPage(
+          key: args.key,
+          id: args.id,
+        ),
       );
     },
     MemberFormRoute.name: (routeData) {
@@ -252,16 +256,40 @@ class DoctorDetailRouteArgs {
 
 /// generated route for
 /// [_i5.MemberDetailPage]
-class MemberDetailRoute extends _i11.PageRouteInfo<void> {
-  const MemberDetailRoute({List<_i11.PageRouteInfo>? children})
-      : super(
+class MemberDetailRoute extends _i11.PageRouteInfo<MemberDetailRouteArgs> {
+  MemberDetailRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
           MemberDetailRoute.name,
+          args: MemberDetailRouteArgs(
+            key: key,
+            id: id,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'MemberDetailRoute';
 
-  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
+  static const _i11.PageInfo<MemberDetailRouteArgs> page =
+      _i11.PageInfo<MemberDetailRouteArgs>(name);
+}
+
+class MemberDetailRouteArgs {
+  const MemberDetailRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'MemberDetailRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for

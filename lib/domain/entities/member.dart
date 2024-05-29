@@ -21,4 +21,5 @@ class Member extends User {
     required this.dob,
     required this.gender,
   }) : super(role: Role.member);
+
 }

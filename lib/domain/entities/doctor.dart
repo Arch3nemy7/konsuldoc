@@ -22,4 +22,5 @@ class Doctor extends User {
     required this.about,
     required this.schedules,
   }) : super(role: Role.doctor);
+
 }

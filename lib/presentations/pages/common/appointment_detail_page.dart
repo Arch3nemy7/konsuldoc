@@ -128,8 +128,11 @@ class AppointmentDetailPage extends ConsumerWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    context
-                                        .pushRoute(const MemberDetailRoute());
+                                    context.pushRoute(
+                                      MemberDetailRoute(
+                                        id: appointment.member.id,
+                                      ),
+                                    );
                                   },
                                   child: Row(
                                     children: [
