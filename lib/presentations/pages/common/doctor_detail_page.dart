@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konsuldoc/domain/enums/specialist.dart';
-import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 
 @RoutePage()
@@ -17,30 +15,6 @@ class DoctorDetailPage extends ConsumerStatefulWidget {
 }
 
 class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
-  void updateDoctorDetail() async {
-    final doctorController = ref.read(doctorControllerProvider);
-    final result = await doctorController.edit(
-      widget.doctorId,
-      name: "Updated Name",
-      email: "updated.email@example.com",
-      specialist: Specialist.cardiology,
-      phone: "1234567890",
-      about: "Updated about text",
-      schedules: [],
-    );
-    if (result) {
-      context.maybePop();
-    }
-  }
-
-  void deleteDoctor() async {
-    final doctorController = ref.read(authControllerProvider);
-    final result = await doctorController.deleteUser(widget.doctorId);
-    if (result) {
-      context.maybePop();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final doctorFuture = ref.watch(fetchDoctorByIdProvider(widget.doctorId));
