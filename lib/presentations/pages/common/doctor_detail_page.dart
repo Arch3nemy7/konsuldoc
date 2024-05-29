@@ -29,7 +29,7 @@ class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
       schedules: [],
     );
     if (result) {
-      // Perform any additional actions on success
+      context.maybePop();
     }
   }
 
@@ -43,7 +43,7 @@ class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final doctorStream = ref.watch(fetchDoctorByIdProvider(widget.doctorId));
+    final doctorFuture = ref.watch(fetchDoctorByIdProvider(widget.doctorId));
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +55,7 @@ class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
         centerTitle: true,
         backgroundColor: const Color(0xFFF6FAFE),
       ),
-      body: doctorStream.when(
+      body: doctorFuture.when(
         data: (doctor) {
           return SingleChildScrollView(
             child: Padding(
@@ -77,8 +77,9 @@ class _DoctorDetailPageState extends ConsumerState<DoctorDetailPage> {
                           child: CircleAvatar(
                             radius: 50.0,
                             backgroundImage: doctor.avatar != null
-                                ? NetworkImage(doctor.avatarUrl)
-                                : null,
+                                ? NetworkImage(doctor.avatar!)
+                                : AssetImage('assets/default_avatar.png')
+                                    as ImageProvider,
                           ),
                         ),
                         const SizedBox(width: 10.0),

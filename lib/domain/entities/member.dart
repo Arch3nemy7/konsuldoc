@@ -22,5 +22,4 @@ class Member extends User {
     required this.gender,
   }) : super(role: Role.member);
 
-  get avatarUrl => null;
 }

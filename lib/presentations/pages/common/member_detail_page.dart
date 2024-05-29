@@ -35,8 +35,10 @@ class _MemberDetailPageState extends ConsumerState<MemberDetailPage> {
               children: [
                 CircleAvatar(
                   radius: 75,
-                  backgroundImage: NetworkImage(member.avatarUrl ??
-                      'https://via.placeholder.com/120x120'),
+                  backgroundImage: member.avatar != null
+                      ? NetworkImage(member.avatar!)
+                      : AssetImage('assets/default_avatar.png')
+                          as ImageProvider,
                 ),
                 const SizedBox(height: 20),
                 buildDetailRow('Nama', member.name),

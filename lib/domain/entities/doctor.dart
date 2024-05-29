@@ -23,5 +23,4 @@ class Doctor extends User {
     required this.schedules,
   }) : super(role: Role.doctor);
 
-  get avatarUrl => null;
 }
