@@ -38,6 +38,10 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
     super.dispose();
   }
 
+  bool isAfter(TimeOfDay t1, TimeOfDay t2) {
+    return t1.hour > t2.hour || (t1.hour == t2.hour && t1.minute > t2.minute);
+  }
+
   void _showRescheduleBottomSheet(
     BuildContext context,
     Appointment appointment,
@@ -76,6 +80,13 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                     final session =
                         doctor.schedules[appointment.date.weekday - 1]
                             [appointment.session];
+                    final timeLimit = DateTime(
+                      appointment.date.year,
+                      appointment.date.month,
+                      appointment.date.day,
+                      session.timeStart.hour,
+                      session.timeStart.minute,
+                    );
 
                     return SingleChildScrollView(
                       padding: const EdgeInsets.all(20),
@@ -353,16 +364,19 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                               ],
                             ),
                           if (role == Role.member &&
-                              DateTime.now().compareTo(appointment.date) < 0)
+                              appointment.status == AppointmentStatus.waiting)
                             PrimaryButton(
-                              onPressed: () {
-                                _showRescheduleBottomSheet(
-                                  context,
-                                  appointment,
-                                );
-                              },
+                              onPressed: DateTime.now().isBefore(timeLimit
+                                      .subtract(const Duration(hours: 1)))
+                                  ? () {
+                                      _showRescheduleBottomSheet(
+                                        context,
+                                        appointment,
+                                      );
+                                    }
+                                  : null,
                               label: 'Ubah jadwal',
-                            ),
+                            )
                         ],
                       ),
                     );
