@@ -42,7 +42,7 @@ class MemberProfilePage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 20),
                   _editProfile(context, member),
-                  _history(),
+                  _history(context, member),
                   _signOut(ref),
                 ],
               );
@@ -150,13 +150,16 @@ class MemberProfilePage extends ConsumerWidget {
     );
   }
 
-  _history() {
+  _history(BuildContext context, Member member) {
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              // context.pushRoute(MemberHistoryRoute(id: member.id));
+              context.pushRoute(MemberHistoryRoute(id: member.id));
+            },
             child: const Row(
               children: [
                 Icon(

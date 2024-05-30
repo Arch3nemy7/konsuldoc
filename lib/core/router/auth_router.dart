@@ -10,7 +10,7 @@ class AuthRouter extends $AuthRouter {
   @override
   List<AutoRoute> get routes => [
         CustomRoute(
-          initial: !_box.get(HiveConstants.onboarding, defaultValue: false),
+          initial: _box.get(HiveConstants.onboarding, defaultValue: false),
           page: SignInRoute.page,
           transitionsBuilder: TransitionsBuilders.noTransition,
         ),
@@ -19,7 +19,7 @@ class AuthRouter extends $AuthRouter {
           transitionsBuilder: TransitionsBuilders.noTransition,
         ),
         CustomRoute(
-          initial: _box.get(HiveConstants.onboarding, defaultValue: false),
+          initial: !_box.get(HiveConstants.onboarding, defaultValue: false),
           page: OnBoardingRoute.page,
           transitionsBuilder: TransitionsBuilders.noTransition,
         ),

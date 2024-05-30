@@ -8,9 +8,9 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i10;
-import 'package:flutter/material.dart' as _i11;
-import 'package:konsuldoc/domain/entities/member.dart' as _i12;
+import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:flutter/material.dart' as _i12;
+import 'package:konsuldoc/domain/entities/member.dart' as _i13;
 import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
     as _i1;
 import 'package:konsuldoc/presentations/pages/common/doctor_detail_page.dart'
@@ -23,21 +23,23 @@ import 'package:konsuldoc/presentations/pages/member/create_appointment_page.dar
     as _i3;
 import 'package:konsuldoc/presentations/pages/member/member_form_page.dart'
     as _i6;
-import 'package:konsuldoc/presentations/pages/member/member_home_page.dart'
+import 'package:konsuldoc/presentations/pages/member/member_history_page.dart'
     as _i7;
-import 'package:konsuldoc/presentations/pages/member/member_profile_page.dart'
+import 'package:konsuldoc/presentations/pages/member/member_home_page.dart'
     as _i8;
-import 'package:konsuldoc/presentations/pages/member/member_root_page.dart'
+import 'package:konsuldoc/presentations/pages/member/member_profile_page.dart'
     as _i9;
+import 'package:konsuldoc/presentations/pages/member/member_root_page.dart'
+    as _i10;
 
-abstract class $MemberRouter extends _i10.RootStackRouter {
+abstract class $MemberRouter extends _i11.RootStackRouter {
   $MemberRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i10.PageFactory> pagesMap = {
+  final Map<String, _i11.PageFactory> pagesMap = {
     AppointmentDetailRoute.name: (routeData) {
       final args = routeData.argsAs<AppointmentDetailRouteArgs>();
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i1.AppointmentDetailPage(
           key: args.key,
@@ -47,14 +49,14 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
       );
     },
     AppointmentListRoute.name: (routeData) {
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i2.AppointmentListPage(),
       );
     },
     CreateAppointmentRoute.name: (routeData) {
       final args = routeData.argsAs<CreateAppointmentRouteArgs>();
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i3.CreateAppointmentPage(
           key: args.key,
@@ -64,7 +66,7 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
     },
     DoctorDetailRoute.name: (routeData) {
       final args = routeData.argsAs<DoctorDetailRouteArgs>();
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i4.DoctorDetailPage(
           key: args.key,
@@ -74,7 +76,7 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
     },
     MemberDetailRoute.name: (routeData) {
       final args = routeData.argsAs<MemberDetailRouteArgs>();
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i5.MemberDetailPage(
           key: args.key,
@@ -84,7 +86,7 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
     },
     MemberFormRoute.name: (routeData) {
       final args = routeData.argsAs<MemberFormRouteArgs>();
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i6.MemberFormPage(
           key: args.key,
@@ -92,22 +94,32 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
         ),
       );
     },
-    MemberHomeRoute.name: (routeData) {
-      return _i10.AutoRoutePage<dynamic>(
+    MemberHistoryRoute.name: (routeData) {
+      final args = routeData.argsAs<MemberHistoryRouteArgs>();
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i7.MemberHomePage(),
+        child: _i7.MemberHistoryPage(
+          key: args.key,
+          id: args.id,
+        ),
+      );
+    },
+    MemberHomeRoute.name: (routeData) {
+      return _i11.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i8.MemberHomePage(),
       );
     },
     MemberProfileRoute.name: (routeData) {
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i8.MemberProfilePage(),
+        child: const _i9.MemberProfilePage(),
       );
     },
     MemberRootRoute.name: (routeData) {
-      return _i10.AutoRoutePage<dynamic>(
+      return _i11.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i9.MemberRootPage(),
+        child: const _i10.MemberRootPage(),
       );
     },
   };
@@ -116,12 +128,12 @@ abstract class $MemberRouter extends _i10.RootStackRouter {
 /// generated route for
 /// [_i1.AppointmentDetailPage]
 class AppointmentDetailRoute
-    extends _i10.PageRouteInfo<AppointmentDetailRouteArgs> {
+    extends _i11.PageRouteInfo<AppointmentDetailRouteArgs> {
   AppointmentDetailRoute({
-    _i11.Key? key,
+    _i12.Key? key,
     required String id,
     bool canConfirm = false,
-    List<_i10.PageRouteInfo>? children,
+    List<_i11.PageRouteInfo>? children,
   }) : super(
           AppointmentDetailRoute.name,
           args: AppointmentDetailRouteArgs(
@@ -134,8 +146,8 @@ class AppointmentDetailRoute
 
   static const String name = 'AppointmentDetailRoute';
 
-  static const _i10.PageInfo<AppointmentDetailRouteArgs> page =
-      _i10.PageInfo<AppointmentDetailRouteArgs>(name);
+  static const _i11.PageInfo<AppointmentDetailRouteArgs> page =
+      _i11.PageInfo<AppointmentDetailRouteArgs>(name);
 }
 
 class AppointmentDetailRouteArgs {
@@ -145,7 +157,7 @@ class AppointmentDetailRouteArgs {
     this.canConfirm = false,
   });
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final String id;
 
@@ -159,8 +171,8 @@ class AppointmentDetailRouteArgs {
 
 /// generated route for
 /// [_i2.AppointmentListPage]
-class AppointmentListRoute extends _i10.PageRouteInfo<void> {
-  const AppointmentListRoute({List<_i10.PageRouteInfo>? children})
+class AppointmentListRoute extends _i11.PageRouteInfo<void> {
+  const AppointmentListRoute({List<_i11.PageRouteInfo>? children})
       : super(
           AppointmentListRoute.name,
           initialChildren: children,
@@ -168,17 +180,17 @@ class AppointmentListRoute extends _i10.PageRouteInfo<void> {
 
   static const String name = 'AppointmentListRoute';
 
-  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
+  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i3.CreateAppointmentPage]
 class CreateAppointmentRoute
-    extends _i10.PageRouteInfo<CreateAppointmentRouteArgs> {
+    extends _i11.PageRouteInfo<CreateAppointmentRouteArgs> {
   CreateAppointmentRoute({
-    _i11.Key? key,
+    _i12.Key? key,
     required String idDoctor,
-    List<_i10.PageRouteInfo>? children,
+    List<_i11.PageRouteInfo>? children,
   }) : super(
           CreateAppointmentRoute.name,
           args: CreateAppointmentRouteArgs(
@@ -190,8 +202,8 @@ class CreateAppointmentRoute
 
   static const String name = 'CreateAppointmentRoute';
 
-  static const _i10.PageInfo<CreateAppointmentRouteArgs> page =
-      _i10.PageInfo<CreateAppointmentRouteArgs>(name);
+  static const _i11.PageInfo<CreateAppointmentRouteArgs> page =
+      _i11.PageInfo<CreateAppointmentRouteArgs>(name);
 }
 
 class CreateAppointmentRouteArgs {
@@ -200,7 +212,7 @@ class CreateAppointmentRouteArgs {
     required this.idDoctor,
   });
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final String idDoctor;
 
@@ -212,11 +224,11 @@ class CreateAppointmentRouteArgs {
 
 /// generated route for
 /// [_i4.DoctorDetailPage]
-class DoctorDetailRoute extends _i10.PageRouteInfo<DoctorDetailRouteArgs> {
+class DoctorDetailRoute extends _i11.PageRouteInfo<DoctorDetailRouteArgs> {
   DoctorDetailRoute({
-    _i11.Key? key,
+    _i12.Key? key,
     required String id,
-    List<_i10.PageRouteInfo>? children,
+    List<_i11.PageRouteInfo>? children,
   }) : super(
           DoctorDetailRoute.name,
           args: DoctorDetailRouteArgs(
@@ -228,8 +240,8 @@ class DoctorDetailRoute extends _i10.PageRouteInfo<DoctorDetailRouteArgs> {
 
   static const String name = 'DoctorDetailRoute';
 
-  static const _i10.PageInfo<DoctorDetailRouteArgs> page =
-      _i10.PageInfo<DoctorDetailRouteArgs>(name);
+  static const _i11.PageInfo<DoctorDetailRouteArgs> page =
+      _i11.PageInfo<DoctorDetailRouteArgs>(name);
 }
 
 class DoctorDetailRouteArgs {
@@ -238,7 +250,7 @@ class DoctorDetailRouteArgs {
     required this.id,
   });
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final String id;
 
@@ -250,11 +262,11 @@ class DoctorDetailRouteArgs {
 
 /// generated route for
 /// [_i5.MemberDetailPage]
-class MemberDetailRoute extends _i10.PageRouteInfo<MemberDetailRouteArgs> {
+class MemberDetailRoute extends _i11.PageRouteInfo<MemberDetailRouteArgs> {
   MemberDetailRoute({
-    _i11.Key? key,
+    _i12.Key? key,
     required String id,
-    List<_i10.PageRouteInfo>? children,
+    List<_i11.PageRouteInfo>? children,
   }) : super(
           MemberDetailRoute.name,
           args: MemberDetailRouteArgs(
@@ -266,8 +278,8 @@ class MemberDetailRoute extends _i10.PageRouteInfo<MemberDetailRouteArgs> {
 
   static const String name = 'MemberDetailRoute';
 
-  static const _i10.PageInfo<MemberDetailRouteArgs> page =
-      _i10.PageInfo<MemberDetailRouteArgs>(name);
+  static const _i11.PageInfo<MemberDetailRouteArgs> page =
+      _i11.PageInfo<MemberDetailRouteArgs>(name);
 }
 
 class MemberDetailRouteArgs {
@@ -276,7 +288,7 @@ class MemberDetailRouteArgs {
     required this.id,
   });
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final String id;
 
@@ -288,11 +300,11 @@ class MemberDetailRouteArgs {
 
 /// generated route for
 /// [_i6.MemberFormPage]
-class MemberFormRoute extends _i10.PageRouteInfo<MemberFormRouteArgs> {
+class MemberFormRoute extends _i11.PageRouteInfo<MemberFormRouteArgs> {
   MemberFormRoute({
-    _i11.Key? key,
-    required _i12.Member member,
-    List<_i10.PageRouteInfo>? children,
+    _i12.Key? key,
+    required _i13.Member member,
+    List<_i11.PageRouteInfo>? children,
   }) : super(
           MemberFormRoute.name,
           args: MemberFormRouteArgs(
@@ -304,8 +316,8 @@ class MemberFormRoute extends _i10.PageRouteInfo<MemberFormRouteArgs> {
 
   static const String name = 'MemberFormRoute';
 
-  static const _i10.PageInfo<MemberFormRouteArgs> page =
-      _i10.PageInfo<MemberFormRouteArgs>(name);
+  static const _i11.PageInfo<MemberFormRouteArgs> page =
+      _i11.PageInfo<MemberFormRouteArgs>(name);
 }
 
 class MemberFormRouteArgs {
@@ -314,9 +326,9 @@ class MemberFormRouteArgs {
     required this.member,
   });
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
-  final _i12.Member member;
+  final _i13.Member member;
 
   @override
   String toString() {
@@ -325,9 +337,47 @@ class MemberFormRouteArgs {
 }
 
 /// generated route for
-/// [_i7.MemberHomePage]
-class MemberHomeRoute extends _i10.PageRouteInfo<void> {
-  const MemberHomeRoute({List<_i10.PageRouteInfo>? children})
+/// [_i7.MemberHistoryPage]
+class MemberHistoryRoute extends _i11.PageRouteInfo<MemberHistoryRouteArgs> {
+  MemberHistoryRoute({
+    _i12.Key? key,
+    required String id,
+    List<_i11.PageRouteInfo>? children,
+  }) : super(
+          MemberHistoryRoute.name,
+          args: MemberHistoryRouteArgs(
+            key: key,
+            id: id,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'MemberHistoryRoute';
+
+  static const _i11.PageInfo<MemberHistoryRouteArgs> page =
+      _i11.PageInfo<MemberHistoryRouteArgs>(name);
+}
+
+class MemberHistoryRouteArgs {
+  const MemberHistoryRouteArgs({
+    this.key,
+    required this.id,
+  });
+
+  final _i12.Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'MemberHistoryRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
+/// [_i8.MemberHomePage]
+class MemberHomeRoute extends _i11.PageRouteInfo<void> {
+  const MemberHomeRoute({List<_i11.PageRouteInfo>? children})
       : super(
           MemberHomeRoute.name,
           initialChildren: children,
@@ -335,13 +385,13 @@ class MemberHomeRoute extends _i10.PageRouteInfo<void> {
 
   static const String name = 'MemberHomeRoute';
 
-  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
+  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i8.MemberProfilePage]
-class MemberProfileRoute extends _i10.PageRouteInfo<void> {
-  const MemberProfileRoute({List<_i10.PageRouteInfo>? children})
+/// [_i9.MemberProfilePage]
+class MemberProfileRoute extends _i11.PageRouteInfo<void> {
+  const MemberProfileRoute({List<_i11.PageRouteInfo>? children})
       : super(
           MemberProfileRoute.name,
           initialChildren: children,
@@ -349,13 +399,13 @@ class MemberProfileRoute extends _i10.PageRouteInfo<void> {
 
   static const String name = 'MemberProfileRoute';
 
-  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
+  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i9.MemberRootPage]
-class MemberRootRoute extends _i10.PageRouteInfo<void> {
-  const MemberRootRoute({List<_i10.PageRouteInfo>? children})
+/// [_i10.MemberRootPage]
+class MemberRootRoute extends _i11.PageRouteInfo<void> {
+  const MemberRootRoute({List<_i11.PageRouteInfo>? children})
       : super(
           MemberRootRoute.name,
           initialChildren: children,
@@ -363,5 +413,5 @@ class MemberRootRoute extends _i10.PageRouteInfo<void> {
 
   static const String name = 'MemberRootRoute';
 
-  static const _i10.PageInfo<void> page = _i10.PageInfo<void>(name);
+  static const _i11.PageInfo<void> page = _i11.PageInfo<void>(name);
 }
