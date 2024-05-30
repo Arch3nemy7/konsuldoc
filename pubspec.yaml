@@ -40,9 +40,9 @@ dev_dependencies:
   riverpod_lint: ^2.3.10
 
 flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icon/icon.png"
+  android: "ic_launcher"
+  adaptive_icon_background: #ffffffff
+  image_path: "assets/images/icon.png"
   min_sdk_android: 21
 
 flutter:
