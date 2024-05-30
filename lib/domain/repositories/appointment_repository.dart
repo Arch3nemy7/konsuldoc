@@ -4,11 +4,17 @@ import 'package:konsuldoc/domain/enums/appointment_filter.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
 
 abstract interface class AppointmentRepository {
-  Future<List<AppointmentSession>> fetchBookedSession(String idDoctor);
+  Future<List<AppointmentSession>> fetchBookedSession(
+    String idDoctor,
+    String idMember,
+  );
   Future<List<Appointment>> fetch({
+    String? doctorId,
     String? memberId,
-    DateTime? after,
+    DateTime? date,
+    int? session,
     AppointmentFilter? filter,
+    int page,
     required int perPage,
   });
   Stream<Appointment> fetchById(String id);

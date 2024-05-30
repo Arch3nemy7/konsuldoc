@@ -12,12 +12,12 @@ import 'package:auto_route/auto_route.dart' as _i7;
 import 'package:flutter/material.dart' as _i8;
 import 'package:konsuldoc/presentations/pages/common/appointment_detail_page.dart'
     as _i1;
-import 'package:konsuldoc/presentations/pages/common/appointment_list_page.dart'
-    as _i2;
 import 'package:konsuldoc/presentations/pages/common/doctor_detail_page.dart'
     as _i3;
 import 'package:konsuldoc/presentations/pages/common/member_detail_page.dart'
     as _i6;
+import 'package:konsuldoc/presentations/pages/doctor/doctor_appointment_list_page.dart'
+    as _i2;
 import 'package:konsuldoc/presentations/pages/doctor/doctor_home_page.dart'
     as _i4;
 import 'package:konsuldoc/presentations/pages/doctor/doctor_root_page.dart'
@@ -35,13 +35,14 @@ abstract class $DoctorRouter extends _i7.RootStackRouter {
         child: _i1.AppointmentDetailPage(
           key: args.key,
           id: args.id,
+          canConfirm: args.canConfirm,
         ),
       );
     },
-    AppointmentListRoute.name: (routeData) {
+    DoctorAppointmentListRoute.name: (routeData) {
       return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i2.AppointmentListPage(),
+        child: const _i2.DoctorAppointmentListPage(),
       );
     },
     DoctorDetailRoute.name: (routeData) {
@@ -86,12 +87,14 @@ class AppointmentDetailRoute
   AppointmentDetailRoute({
     _i8.Key? key,
     required String id,
+    bool canConfirm = false,
     List<_i7.PageRouteInfo>? children,
   }) : super(
           AppointmentDetailRoute.name,
           args: AppointmentDetailRouteArgs(
             key: key,
             id: id,
+            canConfirm: canConfirm,
           ),
           initialChildren: children,
         );
@@ -106,28 +109,31 @@ class AppointmentDetailRouteArgs {
   const AppointmentDetailRouteArgs({
     this.key,
     required this.id,
+    this.canConfirm = false,
   });
 
   final _i8.Key? key;
 
   final String id;
 
+  final bool canConfirm;
+
   @override
   String toString() {
-    return 'AppointmentDetailRouteArgs{key: $key, id: $id}';
+    return 'AppointmentDetailRouteArgs{key: $key, id: $id, canConfirm: $canConfirm}';
   }
 }
 
 /// generated route for
-/// [_i2.AppointmentListPage]
-class AppointmentListRoute extends _i7.PageRouteInfo<void> {
-  const AppointmentListRoute({List<_i7.PageRouteInfo>? children})
+/// [_i2.DoctorAppointmentListPage]
+class DoctorAppointmentListRoute extends _i7.PageRouteInfo<void> {
+  const DoctorAppointmentListRoute({List<_i7.PageRouteInfo>? children})
       : super(
-          AppointmentListRoute.name,
+          DoctorAppointmentListRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'AppointmentListRoute';
+  static const String name = 'DoctorAppointmentListRoute';
 
   static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
 }

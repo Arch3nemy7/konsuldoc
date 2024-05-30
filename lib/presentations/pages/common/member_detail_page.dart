@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/presentations/controllers/member_controller.dart';
 
 @RoutePage()
@@ -21,7 +22,6 @@ class MemberDetailPage extends ConsumerWidget {
         ),
         title: const Text('Pasien'),
         centerTitle: true,
-        backgroundColor: const Color(0xFFF6FAFE),
       ),
       body: memberStream.when(
         data: (member) {
@@ -33,24 +33,19 @@ class MemberDetailPage extends ConsumerWidget {
                   radius: 75,
                   backgroundImage: member.avatar != null
                       ? NetworkImage(member.avatar!)
-                      : AssetImage('assets/default_avatar.png')
-                          as ImageProvider,
+                      : null,
                 ),
                 const SizedBox(height: 20),
                 buildDetailRow('Nama', member.name),
-                buildDetailRow('Nomor Ponsel', member.phone ?? ''),
+                buildDetailRow('Nomor Ponsel', member.phone ?? '-'),
+                buildDetailRow('Jenis Kelamin', member.gender?.label ?? '-'),
                 buildDetailRow(
-                    'Jenis Kelamin', member.gender?.toString() ?? ''),
-                buildDetailRow('Tanggal Lahir', member.dob?.toString() ?? ''),
-                buildDetailRow('Alamat', member.address ?? '',
-                    isMultiline: true),
-                const SizedBox(height: 20),
-                buildDetailRow('Jadwal', ''),
-                const SizedBox(height: 10),
-                buildScheduleBox('01:00 PM'),
-                const SizedBox(height: 10),
-                buildScheduleBox('Jumat 1 Maret 2024'),
-                const SizedBox(height: 20),
+                    'Tanggal Lahir', member.dob?.toDateString() ?? '-'),
+                buildDetailRow(
+                  'Alamat',
+                  member.address ?? '-',
+                  isMultiline: true,
+                ),
               ],
             ),
           );
@@ -61,8 +56,11 @@ class MemberDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget buildDetailRow(String title, String value,
-      {bool isMultiline = false}) {
+  Widget buildDetailRow(
+    String title,
+    String value, {
+    bool isMultiline = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -74,7 +72,6 @@ class MemberDetailPage extends ConsumerWidget {
             child: Text(
               title,
               style: const TextStyle(
-                color: Colors.black,
                 fontSize: 18,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
@@ -87,7 +84,6 @@ class MemberDetailPage extends ConsumerWidget {
             child: Text(
               value,
               style: const TextStyle(
-                color: Colors.black,
                 fontSize: 16,
                 fontFamily: 'Inter',
               ),
@@ -111,7 +107,6 @@ class MemberDetailPage extends ConsumerWidget {
         child: Text(
           text,
           style: const TextStyle(
-            color: Colors.white,
             fontSize: 16,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w700,

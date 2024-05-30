@@ -1,6 +1,6 @@
 enum AppointmentFilter {
   upcoming('Mendatang'),
-  past('Lampau');
+  past('Riwayat');
 
   const AppointmentFilter(this.label);
 

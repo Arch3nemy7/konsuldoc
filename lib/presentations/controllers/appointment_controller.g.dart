@@ -25,7 +25,7 @@ final appointmentControllerProvider =
 typedef AppointmentControllerRef
     = AutoDisposeProviderRef<AppointmentController>;
 String _$fetchBookedSessionsHash() =>
-    r'35c21d375e6a9f8138269ad6d8d508c9b34aec04';
+    r'e20c12315c06f8d95b093d32dbe2f5579e96eb20';
 
 /// Copied from Dart SDK
 class _SystemHash {

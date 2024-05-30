@@ -19,6 +19,7 @@ class MemberRouter extends $MemberRouter {
           ],
         ),
         CustomRoute(page: DoctorDetailRoute.page),
+        CustomRoute(page: MemberDetailRoute.page),
         CustomRoute(page: AppointmentDetailRoute.page),
         CustomRoute(page: CreateAppointmentRoute.page),
         CustomRoute(page: AppointmentDetailRoute.page),

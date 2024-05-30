@@ -14,7 +14,7 @@ class DoctorRouter extends $DoctorRouter {
           transitionsBuilder: TransitionsBuilders.noTransition,
           children: [
             AutoRoute(page: DoctorHomeRoute.page),
-            AutoRoute(page: AppointmentListRoute.page),
+            AutoRoute(page: DoctorAppointmentListRoute.page),
             AutoRoute(page: DoctorDetailRoute.page),
           ],
         ),

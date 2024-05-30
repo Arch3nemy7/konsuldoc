@@ -91,17 +91,15 @@ class MemberProfilePage extends ConsumerWidget {
               children: [
                 Icon(
                   Icons.edit,
-                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(
                   'Edit Profile',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Spacer(),
                 Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.black,
                   size: 20,
                 ),
               ],
@@ -131,12 +129,11 @@ class MemberProfilePage extends ConsumerWidget {
               children: [
                 Icon(
                   Icons.logout,
-                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(
                   'Logout',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Spacer(),
               ],
@@ -164,20 +161,17 @@ class MemberProfilePage extends ConsumerWidget {
               children: [
                 Icon(
                   Icons.schedule,
-                  color: Colors.black,
                 ),
                 SizedBox(width: 15),
                 Text(
                   'History',
                   style: TextStyle(
-                    color: Colors.black,
                     fontSize: 20,
                   ),
                 ),
                 Spacer(),
                 Icon(
                   Icons.arrow_forward_ios,
-                  color: Colors.black,
                   size: 20,
                 ),
               ],

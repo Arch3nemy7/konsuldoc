@@ -13,7 +13,7 @@ class DoctorRootPage extends ConsumerWidget {
     return AutoTabsScaffold(
       routes: [
         const DoctorHomeRoute(),
-        const AppointmentListRoute(),
+        const DoctorAppointmentListRoute(),
         DoctorDetailRoute(id: ref.watch(authStateProvider)!.id),
       ],
       bottomNavigationBuilder: (context, tabsRouter) => NavigationBar(

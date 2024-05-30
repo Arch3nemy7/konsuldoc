@@ -5,13 +5,16 @@ import 'package:konsuldoc/presentations/widgets/loader.dart';
 
 class PaginatedChildBuilderDelegate<PageKeyType, ItemType>
     extends PagedChildBuilderDelegate<ItemType> {
+  final String emptyMessage;
+
   PaginatedChildBuilderDelegate({
     double? loaderHeight,
+    this.emptyMessage = 'Tidak menemukan data',
     required super.itemBuilder,
     required PagingController<PageKeyType, ItemType> pagingController,
   }) : super(
-          noItemsFoundIndicatorBuilder: (context) => const ErrorView(
-            message: 'Tidak menemukan data',
+          noItemsFoundIndicatorBuilder: (context) => ErrorView(
+            message: emptyMessage,
           ),
           firstPageProgressIndicatorBuilder: (context) => SizedBox(
             height: loaderHeight,
