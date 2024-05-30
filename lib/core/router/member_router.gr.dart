@@ -17,14 +17,14 @@ import 'package:konsuldoc/presentations/pages/common/doctor_detail_page.dart'
     as _i4;
 import 'package:konsuldoc/presentations/pages/common/member_detail_page.dart'
     as _i5;
+import 'package:konsuldoc/presentations/pages/common/member_history_page.dart'
+    as _i7;
 import 'package:konsuldoc/presentations/pages/member/appointment_list_page.dart'
     as _i2;
 import 'package:konsuldoc/presentations/pages/member/create_appointment_page.dart'
     as _i3;
 import 'package:konsuldoc/presentations/pages/member/member_form_page.dart'
     as _i6;
-import 'package:konsuldoc/presentations/pages/member/member_history_page.dart'
-    as _i7;
 import 'package:konsuldoc/presentations/pages/member/member_home_page.dart'
     as _i8;
 import 'package:konsuldoc/presentations/pages/member/member_profile_page.dart'

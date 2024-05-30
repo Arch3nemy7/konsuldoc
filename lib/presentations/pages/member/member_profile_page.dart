@@ -5,6 +5,7 @@ import 'package:konsuldoc/core/router/member_router.gr.dart';
 import 'package:konsuldoc/domain/entities/member.dart';
 import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
 import 'package:konsuldoc/presentations/providers/user_state_provider.dart';
+import 'package:konsuldoc/presentations/widgets/button/history_button.dart';
 import 'package:konsuldoc/presentations/widgets/error_view.dart';
 import 'package:konsuldoc/presentations/widgets/loader.dart';
 
@@ -42,7 +43,7 @@ class MemberProfilePage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 20),
                   _editProfile(context, member),
-                  _history(context, member),
+                  HistoryButton(member: member),
                   _signOut(ref),
                 ],
               );
@@ -136,47 +137,6 @@ class MemberProfilePage extends ConsumerWidget {
                   style: TextStyle(fontSize: 20),
                 ),
                 Spacer(),
-              ],
-            ),
-          ),
-        ),
-        const Divider(
-          indent: 20,
-          endIndent: 20,
-          height: 1,
-          thickness: 1,
-        ),
-      ],
-    );
-  }
-
-  _history(BuildContext context, Member member) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: TextButton(
-            onPressed: () {
-              // context.pushRoute(MemberHistoryRoute(id: member.id));
-              context.pushRoute(MemberHistoryRoute(id: member.id));
-            },
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.schedule,
-                ),
-                SizedBox(width: 15),
-                Text(
-                  'History',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                Spacer(),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 20,
-                ),
               ],
             ),
           ),
