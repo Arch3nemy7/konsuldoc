@@ -117,8 +117,7 @@ class _AppointmentListPageState
                       return ListItem(
                         onTap: () {
                           context.pushRoute(
-                            AppointmentDetailRoute(
-                                id: item.id, canConfirm: true),
+                            AppointmentDetailRoute(id: item.id),
                           );
                         },
                         avatar: item.member.avatar,

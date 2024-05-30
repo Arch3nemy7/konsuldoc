@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/presentations/controllers/member_controller.dart';
+import 'package:konsuldoc/presentations/widgets/button/history_button.dart';
 
 @RoutePage()
 class MemberDetailPage extends ConsumerWidget {
@@ -46,6 +47,7 @@ class MemberDetailPage extends ConsumerWidget {
                   member.address ?? '-',
                   isMultiline: true,
                 ),
+                HistoryButton(member: member),
               ],
             ),
           );

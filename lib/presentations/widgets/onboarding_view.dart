@@ -33,10 +33,12 @@ class OnboardingView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            Text(
-              content,
-              style: messageTextStyle,
-              textAlign: TextAlign.center,
+            Flexible(
+              child: Text(
+                content,
+                style: messageTextStyle,
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),

@@ -86,7 +86,6 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
         .add(widget.idDoctor, date!, session!, complaints)
         .then((value) {
       if (value != null) {
-        print(value);
         context.replaceRoute(AppointmentDetailRoute(id: value));
       }
     });

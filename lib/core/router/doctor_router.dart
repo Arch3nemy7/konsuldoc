@@ -20,5 +20,6 @@ class DoctorRouter extends $DoctorRouter {
         ),
         CustomRoute(page: AppointmentDetailRoute.page),
         CustomRoute(page: MemberDetailRoute.page),
+        CustomRoute(page: MemberHistoryRoute.page),
       ];
 }
