@@ -41,7 +41,8 @@ class _DoctorFilterDrawerState extends State<DoctorFilterDrawer> {
                         selected: selected == specialist,
                         onPressed: () {
                           setState(() {
-                            selected = specialist;
+                            selected =
+                                selected == specialist ? null : specialist;
                           });
                         },
                         icon: specialist.icon,

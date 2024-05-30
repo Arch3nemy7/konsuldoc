@@ -128,7 +128,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
               ),
               validator: (value) {
                 if (value!.isEmpty ||
-                    !RegExp(r'^[a-zA-Z ]+$').hasMatch(value)) {
+                    !RegExp(r'^[a-zA-Z., ]+$').hasMatch(value)) {
                   return "Masukkan nama yang valid";
                 }
                 return null;
