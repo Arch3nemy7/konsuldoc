@@ -1,3 +1,5 @@
+test_main.dart
+
 # Miscellaneous
 *.class
 *.log
@@ -30,6 +32,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+/linux/
+/macos/
+/windows/
 
 # Symbolication related
 app.*.symbols
@@ -41,3 +46,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
