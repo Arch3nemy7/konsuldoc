@@ -8,6 +8,8 @@ class ListItem extends StatelessWidget {
   final Widget? trailing;
   final bool enabled;
   final VoidCallback? onTap;
+  final ShapeBorder avatarShape;
+  final IconData? leadingIcon;
 
   const ListItem({
     super.key,
@@ -18,53 +20,126 @@ class ListItem extends StatelessWidget {
     this.trailing,
     this.enabled = true,
     this.onTap,
+    this.avatarShape = const CircleBorder(),
+    this.leadingIcon,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(7),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: enabled
-            ? theme.colorScheme.secondaryContainer
-            : theme.colorScheme.outline,
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
       ),
       child: InkWell(
-        onTap: onTap,
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 14),
-              child: CircleAvatar(
-                backgroundImage: avatar == null ? null : NetworkImage(avatar!),
-                radius: 27,
+        borderRadius: BorderRadius.circular(20),
+        onTap: enabled ? onTap : null,
+        splashColor: theme.colorScheme.primary.withOpacity(0.2),
+        highlightColor: theme.colorScheme.primary.withOpacity(0.1),
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+          decoration: BoxDecoration(
+            gradient: enabled
+                ? LinearGradient(
+                    colors: [
+                      theme.colorScheme.primaryContainer.withOpacity(0.9),
+                      theme.colorScheme.secondaryContainer.withOpacity(0.9),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: !enabled
+                ? theme.colorScheme.onBackground.withOpacity(0.1)
+                : null,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 5),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+            ],
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              if (leadingIcon != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Icon(
+                    leadingIcon,
+                    color: enabled
+                        ? theme.colorScheme.onPrimaryContainer
+                        : theme.colorScheme.onSurface.withOpacity(0.5),
+                    size: 30,
+                  ),
+                ),
+              if (avatar != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Material(
+                    elevation: 4,
+                    shape: avatarShape,
+                    clipBehavior: Clip.antiAlias,
+                    child: Ink.image(
+                      image: NetworkImage(avatar!),
+                      fit: BoxFit.cover,
+                      width: 60,
+                      height: 60,
+                      child: InkWell(
+                        onTap: enabled ? onTap : null,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
-                  if (subtitle != null)
+                ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
-                      subtitle!,
-                      style: theme.textTheme.labelSmall,
+                      title,
+                      maxLines: 1,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: enabled
+                            ? theme.colorScheme.onPrimaryContainer
+                            : theme.colorScheme.onSurface.withOpacity(0.5),
+                      ),
                     ),
-                  if (bottom != null) bottom!
-                ],
+                    if (subtitle != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Text(
+                          subtitle!,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: enabled
+                                ? theme.colorScheme.onPrimaryContainer
+                                : theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                        ),
+                      ),
+                    if (bottom != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: bottom!,
+                      ),
+                  ],
+                ),
               ),
-            ),
-            if (trailing != null) trailing!
-          ],
+              if (trailing != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: trailing!,
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:konsuldoc/core/router/member_router.gr.dart' as member_router;
 import 'package:konsuldoc/core/router/doctor_router.gr.dart' as doctor_router;
+import 'package:konsuldoc/core/router/member_router.gr.dart' as member_router;
 import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
 import 'package:konsuldoc/domain/enums/appointment_status.dart';
@@ -211,49 +211,81 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
-                            child: Text(
-                              'Waktu',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Waktu',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Spacer(),
+                                if (appointment.number > 1)
+                                  Text(
+                                    "estimasi ${(appointment.number - 1) * 15} menit",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.red),
+                                  ),
+                              ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: null,
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  disabledForegroundColor:
-                                      theme.colorScheme.onBackground,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                          SizedBox(
+                            height: 50,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    disabledForegroundColor:
+                                        theme.colorScheme.onBackground,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
+                                  child: Text("# ${appointment.number}"),
                                 ),
-                                child: Text("Sesi ${appointment.session + 1}"),
-                              ),
-                              const SizedBox(width: 10),
-                              ElevatedButton(
-                                onPressed: null,
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  disabledForegroundColor:
-                                      theme.colorScheme.onBackground,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                const SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    disabledForegroundColor:
+                                        theme.colorScheme.onBackground,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
+                                  child:
+                                      Text("Sesi ${appointment.session + 1}"),
                                 ),
-                                child: Text(
-                                    "${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}"),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: ElevatedButton(
+                                const SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: null,
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    disabledForegroundColor:
+                                        theme.colorScheme.onBackground,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                      "${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}"),
+                                ),
+                                const SizedBox(width: 10),
+                                ElevatedButton(
                                   onPressed: null,
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
@@ -269,8 +301,8 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                                     appointment.date.toDateString(),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(vertical: 5),
