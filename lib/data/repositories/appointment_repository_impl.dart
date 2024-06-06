@@ -112,13 +112,15 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
   Future<void> editStatus(
     String id, {
     AppointmentStatus? status,
-    String? note,
+    String? diagnosis,
+    String? suggestion,
   }) async {
-    if (status == null && note == null) return;
+    if (status == null && diagnosis == null && suggestion == null) return;
 
     final data = {};
     if (status != null) data['status'] = status.index;
-    if (note != null) data['note'] = note;
+    if (diagnosis != null) data['diagnosis'] = diagnosis;
+    if (suggestion != null) data['suggestion'] = suggestion;
 
     await _supabase.from(TableConstants.appointments).update(data).eq('id', id);
   }

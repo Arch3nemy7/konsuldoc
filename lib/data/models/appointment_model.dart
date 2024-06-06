@@ -12,8 +12,9 @@ class AppointmentModel extends Appointment {
     required super.date,
     required super.session,
     required super.complaints,
-    required super.note,
+    required super.diagnosis,
     required super.status,
+    required super.suggestions,
   });
 
   factory AppointmentModel.fromMap(Map<String, dynamic> map) {
@@ -25,8 +26,9 @@ class AppointmentModel extends Appointment {
       date: DateTime.parse(map['date']),
       session: map['session'],
       complaints: map['complaints'],
-      note: map['note'],
+      diagnosis: map['diagnosis'],
       status: AppointmentStatus.values[map['status']],
+      suggestions: map['suggestion'],
     );
   }
 }

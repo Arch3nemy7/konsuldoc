@@ -73,13 +73,15 @@ class AppointmentController {
   Future<bool> editStatus(
     String id, {
     AppointmentStatus? status,
-    String? note,
+    String? diagnosis,
+    String? suggestion,
   }) async {
     final cancel = showLoading();
     final res = await handleError(_repository.editStatus(
       id,
       status: status,
-      note: note,
+      diagnosis: diagnosis,
+      suggestion: suggestion,
     ));
     cancel();
 

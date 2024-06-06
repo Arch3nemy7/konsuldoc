@@ -7,9 +7,13 @@ import 'package:konsuldoc/core/router/doctor_router.gr.dart';
 import 'package:konsuldoc/core/utils/comparator.dart';
 import 'package:konsuldoc/core/utils/formatter.dart';
 import 'package:konsuldoc/domain/entities/appointment.dart';
+import 'package:konsuldoc/domain/entities/doctor.dart';
 import 'package:konsuldoc/presentations/providers/auth_state_provider.dart';
+import 'package:konsuldoc/presentations/providers/user_state_provider.dart';
+import 'package:konsuldoc/presentations/widgets/error_view.dart';
 import 'package:konsuldoc/presentations/widgets/item/list_item.dart';
 import 'package:konsuldoc/presentations/widgets/item/option_item.dart';
+import 'package:konsuldoc/presentations/widgets/loader.dart';
 import 'package:konsuldoc/presentations/widgets/pagination/paginated_child_builder_delegate.dart';
 import 'package:konsuldoc/presentations/widgets/pagination/paginated_view.dart';
 
@@ -106,38 +110,57 @@ class _AppointmentListPageState
             ),
             const Divider(height: 1),
             Expanded(
-              child: PaginatedView(
-                pagingController: _pagingController,
-                perPage: 10,
-                fetchData: fetchData,
-                child: PagedListView(
-                  pagingController: _pagingController,
-                  builderDelegate: PaginatedChildBuilderDelegate(
-                    emptyTitle: 'Tidak Ada Janji',
-                    emptyMessage:
-                        'Tidak ada pasien yang mendaftar pada hari ini, silahkan tunggu dihari berikutnya!',
-                    itemBuilder: (context, item, index) {
-                      return ListItem(
-                        onTap: () {
-                          context.pushRoute(
-                            AppointmentDetailRoute(id: item.id),
-                          );
-                        },
-                        avatar: item.member.avatar,
-                        title: item.member.name,
-                        bottom: Text(
-                          "Sesi ${item.number}",
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+              child: ref.watch(userStateProvider).when(
+                    data: (doctor) => PaginatedView(
+                      pagingController: _pagingController,
+                      perPage: 10,
+                      fetchData: fetchData,
+                      child: PagedListView(
+                        pagingController: _pagingController,
+                        builderDelegate: PaginatedChildBuilderDelegate(
+                          emptyTitle: 'Tidak Ada Janji',
+                          emptyMessage:
+                              'Tidak ada pasien yang mendaftar pada hari ini, silahkan tunggu dihari berikutnya!',
+                          itemBuilder: (context, item, index) {
+                            final session = (doctor as Doctor)
+                                .schedules[item.date.weekday - 1][item.session];
+
+                            return ListItem(
+                              onTap: () {
+                                context.pushRoute(
+                                  AppointmentDetailRoute(id: item.id),
+                                );
+                              },
+                              avatar: item.member.avatar,
+                              title: item.member.name,
+                              bottom: Row(
+                                children: [
+                                  Text(
+                                    '${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    "Sesi ${item.number}",
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              trailing: Text("#${item.number.toString()}"),
+                            );
+                          },
+                          pagingController: _pagingController,
                         ),
-                        trailing: Text("#${item.number.toString()}"),
-                      );
-                    },
-                    pagingController: _pagingController,
+                      ),
+                    ),
+                    error: (error, stackTrace) =>
+                        ErrorView(message: error.toString()),
+                    loading: () => const Loader(),
                   ),
-                ),
-              ),
             )
           ],
         ),
