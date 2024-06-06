@@ -41,6 +41,10 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
     super.dispose();
   }
 
+  bool isAfter(TimeOfDay t1, TimeOfDay t2) {
+    return t1.hour > t2.hour || (t1.hour == t2.hour && t1.minute > t2.minute);
+  }
+
   void _showRescheduleBottomSheet(
     BuildContext context,
     Appointment appointment,
@@ -206,15 +210,15 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
 
   Widget _buildRescheduleButton(Appointment appointment, DateTime timeLimit) {
     return PrimaryButton(
-      onPressed:
-          DateTime.now().isBefore(timeLimit.subtract(const Duration(hours: 1)))
-              ? () {
-                  _showRescheduleBottomSheet(
-                    context,
-                    appointment,
-                  );
-                }
-              : null,
+      onPressed: DateTime.now().isBefore(timeLimit
+              .subtract(const Duration(hours: 1)))
+          ? () {
+              _showRescheduleBottomSheet(
+                context,
+                appointment,
+              );
+            }
+          : null,
       label: 'Ubah jadwal',
     );
   }
