@@ -103,11 +103,11 @@ class _MemberFormPageState extends ConsumerState<MemberFormPage> {
                             ? DecorationImage(
                                 fit: BoxFit.cover,
                                 image: FileImage(avatarFile!))
-                            : widget.member?.avatar != null
+                            : widget.member.avatar != null
                                 ? DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                      widget.member!.avatar!,
+                                      widget.member.avatar!,
                                     ),
                                   )
                                 : null,

@@ -40,7 +40,7 @@ class ListItem extends StatelessWidget {
         splashColor: theme.colorScheme.primary.withOpacity(0.2),
         highlightColor: theme.colorScheme.primary.withOpacity(0.1),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
             gradient: enabled
                 ? LinearGradient(
@@ -60,7 +60,7 @@ class ListItem extends StatelessWidget {
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
                 blurRadius: 10,
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
               ),
             ],
           ),
