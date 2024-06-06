@@ -53,102 +53,144 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
       body: ref.watch(userStateProvider).when(
             data: (data) {
               final member = data as Member;
-              return SafeArea(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(22)
-                          .copyWith(bottom: 14, right: 14),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Hi, ${member.name}',
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                Text(
-                                  'Temukan Spesialis Anda',
-                                  style: theme.textTheme.titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
+
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    expandedHeight: 250,
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hi, ${member.name}',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        Text(
+                          'Temukan Spesialis Anda',
+                          style: theme.textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    actions: const [ThemeModeSwitch()],
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Container(
+                        margin: const EdgeInsets.all(20.0).copyWith(top: 100),
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          boxShadow: kElevationToShadow[4],
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Utamakan untuk selalu periksa!',
+                              style: TextStyle(
+                                color: theme.colorScheme.onPrimary,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const ThemeModeSwitch()
-                        ],
+                            const SizedBox(height: 16.0),
+                            Text(
+                              'Jadwalkan appointment dan konsultasi dengan dokter secara langsung.',
+                              style: TextStyle(
+                                color: theme.colorScheme.onPrimary,
+                                fontSize: 16.0,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child: DoctorSearchBar(
-                        onSubmitted: search,
+                  ),
+                  SliverAppBar(
+                    primary: false,
+                    pinned: true,
+                    titleSpacing: 0,
+                    toolbarHeight: 120,
+                    actions: const [SizedBox()],
+                    title: Column(children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14)
+                            .copyWith(top: 10),
+                        child: DoctorSearchBar(
+                          onSubmitted: search,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 61,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.all(7),
-                        itemCount: Specialist.values.length,
-                        itemBuilder: (context, index) {
-                          final data = Specialist.values[index];
-                          final selected = specialist == data;
+                      SizedBox(
+                        height: 61,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.all(7),
+                          itemCount: Specialist.values.length,
+                          itemBuilder: (context, index) {
+                            final data = Specialist.values[index];
+                            final selected = specialist == data;
 
-                          return OptionItem(
-                            selected: selected,
-                            onPressed: () {
-                              selectSpecialist(selected ? null : data);
-                            },
-                            icon: data.icon,
-                            activeIcon: data.activeIcon,
-                            label: data.label,
-                          );
-                        },
+                            return OptionItem(
+                              selected: selected,
+                              onPressed: () {
+                                selectSpecialist(selected ? null : data);
+                              },
+                              icon: data.icon,
+                              activeIcon: data.activeIcon,
+                              label: data.label,
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    const Divider(height: 1),
-                    Expanded(
-                      child: ref.watch(fetchAllDoctorProvider).when(
-                            data: (data) {
-                              final filtered = data.filter((t) {
-                                if (query != null && !t.name.contains(query!)) {
-                                  return false;
-                                }
-                                if (specialist != null &&
-                                    t.specialist != specialist) {
-                                  return false;
-                                }
+                      const Divider(height: 1),
+                    ]),
+                  ),
+                  ref.watch(fetchAllDoctorProvider).when(
+                        data: (data) {
+                          final filtered = data.filter((t) {
+                            if (query != null &&
+                                !t.name
+                                    .toLowerCase()
+                                    .contains(query!.toLowerCase())) {
+                              return false;
+                            }
+                            if (specialist != null &&
+                                t.specialist != specialist) {
+                              return false;
+                            }
 
-                                return true;
-                              }).toList();
+                            return true;
+                          }).toList();
 
-                              return ListView.builder(
-                                itemBuilder: (context, index) {
-                                  final doctor = filtered[index];
+                          return SliverList.builder(
+                            itemCount: filtered.length,
+                            itemBuilder: (context, index) {
+                              final doctor = filtered[index];
 
-                                  return ListItem(
-                                    onTap: () => context.pushRoute(
-                                        DoctorDetailRoute(id: doctor.id)),
-                                    avatar: doctor.avatar,
-                                    title: doctor.name,
-                                    subtitle: doctor.specialist.label,
-                                  );
-                                },
-                                itemCount: filtered.length,
+                              return ListItem(
+                                onTap: () => context.pushRoute(
+                                  DoctorDetailRoute(id: doctor.id),
+                                ),
+                                avatar: doctor.avatar,
+                                title: doctor.name,
+                                subtitle: doctor.specialist.label,
                               );
                             },
-                            error: (error, stackTrace) {
-                              return ErrorView(message: error.toString());
-                            },
-                            loading: () => const Loader(),
-                          ),
-                    ),
-                  ],
-                ),
+                          );
+                        },
+                        error: (error, stackTrace) {
+                          return SliverToBoxAdapter(
+                            child: ErrorView(message: error.toString()),
+                          );
+                        },
+                        loading: () => const SliverToBoxAdapter(
+                          child: Loader(),
+                        ),
+                      ),
+                ],
               );
             },
             error: (error, stackTrace) {

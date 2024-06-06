@@ -93,6 +93,9 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
                 child: PagedListView(
                   pagingController: _pagingController,
                   builderDelegate: PaginatedChildBuilderDelegate(
+                    emptyTitle: 'Tidak ada janji',
+                    emptyMessage:
+                        'Silakan buat Janji Temu dengan\nDokter Kami terlebih dahulu!',
                     itemBuilder: (context, item, index) {
                       return ListItem(
                         onTap: () {

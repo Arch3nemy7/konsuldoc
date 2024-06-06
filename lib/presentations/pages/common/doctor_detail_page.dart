@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:konsuldoc/core/constants/constants.dart';
 import 'package:konsuldoc/core/router/member_router.gr.dart';
@@ -101,9 +100,7 @@ class DoctorDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                        height:
-                            24), // Memberikan jarak antara card dan teks "Tentang Dokter"
+                    const SizedBox(height: 24),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
@@ -133,9 +130,7 @@ class DoctorDetailPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                        height:
-                            24), // Memberikan jarak antara "Tentang Dokter" dan "Jadwal Praktik"
+                    const SizedBox(height: 24),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
@@ -150,41 +145,52 @@ class DoctorDetailPage extends ConsumerWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: doctor.schedules
-                            .mapWithIndex(
-                              (sessions, index) => Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
+                      child: Table(
+                        border: TableBorder.all(color: theme.dividerColor),
+                        columnWidths: const {
+                          0: FlexColumnWidth(1),
+                          1: FlexColumnWidth(2),
+                        },
+                        children: [
+                          for (var i = 0; i < doctor.schedules.length; i++) ...[
+                            TableRow(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  Constants.days[i],
+                                  style: GoogleFonts.inter().copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      Constants.days[index],
-                                      style: GoogleFonts.inter().copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    ...(sessions.isEmpty
-                                        ? [const Text('\tLibur')]
-                                        : sessions.mapWithIndex(
-                                            (sessionData, session) => Row(
+                                  children: doctor.schedules[i].isEmpty
+                                      ? [const Text('Libur')]
+                                      : doctor.schedules[i].map((session) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 2.0),
+                                            child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text("\tSesi ${session + 1}"),
                                                 Text(
-                                                    "${sessionData.timeStart.toTimeString()}-${sessionData.timeEnd.toTimeString()}")
+                                                    "Sesi ${doctor.schedules[i].indexOf(session) + 1}"),
+                                                Text(
+                                                    "${session.timeStart.toTimeString()}-${session.timeEnd.toTimeString()}")
                                               ],
                                             ),
-                                          ))
-                                  ],
+                                          );
+                                        }).toList(),
                                 ),
                               ),
-                            )
-                            .toList(),
+                            ])
+                          ]
+                        ],
                       ),
                     ),
                     if (role == Role.member)

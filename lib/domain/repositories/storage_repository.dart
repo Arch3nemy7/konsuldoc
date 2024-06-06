@@ -6,5 +6,5 @@ abstract interface class StorageRepository {
     required String bucket,
     required String id,
   });
-  void deleteFile(String bucket, String id);
+  Future<void> deleteFile(String bucket, String id);
 }

@@ -60,6 +60,7 @@ class DoctorRepositoryImpl implements DoctorRepository {
       password: password,
       role: Role.doctor,
     );
+
     await _supabase.from(TableConstants.doctors).insert({
       'id': id,
       'avatar': await _storageRepository.uploadFile(
@@ -103,6 +104,7 @@ class DoctorRepositoryImpl implements DoctorRepository {
     };
 
     if (avatar != null) {
+      await _storageRepository.deleteFile(BucketConstants.avatars, id);
       data['avatar'] = await _storageRepository.uploadFile(
         file: avatar,
         bucket: BucketConstants.avatars,

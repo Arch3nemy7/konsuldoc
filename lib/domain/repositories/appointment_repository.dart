@@ -24,6 +24,6 @@ abstract interface class AppointmentRepository {
     int session,
     String? complaints,
   );
-  Future<void> editStatus(String id, {AppointmentStatus? status, String? note});
+  Future<void> editStatus(String id, {AppointmentStatus? status, String? diagnosis, String? suggestion});
   Future<void> reschedule(String id, DateTime date, int session);
 }

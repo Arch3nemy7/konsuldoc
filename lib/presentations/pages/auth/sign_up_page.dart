@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/router/auth_router.gr.dart';
 import 'package:konsuldoc/core/theme/styles.dart';
 import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
-import 'package:konsuldoc/presentations/widgets/custom_divider.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
-import 'package:konsuldoc/presentations/widgets/custom_outlined_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_text_field.dart';
 
 @RoutePage()
@@ -76,7 +74,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   hintStyle: inputFieldHintStyle,
                   borderSide: inputFieldBorderSide,
                 ),
-                const SizedBox(height: 39),
+                const SizedBox(height: 32),
                 CustomElevatedButton(
                   onPressed: signUp,
                   text: 'Buat Akun',
@@ -84,18 +82,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   height: 40,
                 ),
                 const SizedBox(height: 32),
-                const CustomDivider(),
-                const SizedBox(height: 19),
-                CustomOutlinedButton(
-                  onPressed: () {},
-                  leading: Image.asset(
-                    'assets/images/google_icon.png',
-                    width: 40,
-                    height: 40,
-                  ),
-                  text: 'Masuk dengan Google',
-                ),
-                const SizedBox(height: 19),
                 Text.rich(
                   TextSpan(
                     children: [

@@ -47,7 +47,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
     super.dispose();
   }
 
-  void selectBannerImage() async {
+  void selectImage() async {
     final res = await pickImage();
 
     if (res != null) {
@@ -96,7 +96,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
               child: Stack(
                 children: [
                   GestureDetector(
-                    onTap: selectBannerImage,
+                    onTap: selectImage,
                     child: Container(
                       width: 150,
                       height: 150,
