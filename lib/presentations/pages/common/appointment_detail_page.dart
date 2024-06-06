@@ -210,15 +210,15 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
 
   Widget _buildRescheduleButton(Appointment appointment, DateTime timeLimit) {
     return PrimaryButton(
-      onPressed: DateTime.now().isBefore(timeLimit
-              .subtract(const Duration(hours: 1)))
-          ? () {
-              _showRescheduleBottomSheet(
-                context,
-                appointment,
-              );
-            }
-          : null,
+      onPressed:
+          DateTime.now().isBefore(timeLimit.subtract(const Duration(hours: 1)))
+              ? () {
+                  _showRescheduleBottomSheet(
+                    context,
+                    appointment,
+                  );
+                }
+              : null,
       label: 'Ubah jadwal',
     );
   }
@@ -391,14 +391,17 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                             appointment.complaints ?? 'Tidak ada',
                             theme,
                           ),
-                          if (!widget.canConfirm || appointment.status == AppointmentStatus.done)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                            _buildSection('Diagnosis dokter', appointment.diagnosis, theme),
-                            _buildSection('Saran dokter', appointment.suggestions, theme),
-                            ],
-                          ),
+                          if (!widget.canConfirm ||
+                              appointment.status == AppointmentStatus.done)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildSection('Diagnosis dokter',
+                                    appointment.diagnosis, theme),
+                                _buildSection('Saran dokter',
+                                    appointment.suggestions, theme),
+                              ],
+                            ),
                           const SizedBox(height: 15),
                           if (role == Role.doctor &&
                               appointment.status == AppointmentStatus.waiting &&

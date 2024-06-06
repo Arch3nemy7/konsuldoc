@@ -4,12 +4,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'supabase.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Supabase supabase(SupabaseRef ref) {
   return Supabase.instance;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 SupabaseClient supabaseAdmin(SupabaseAdminRef ref) {
   return SupabaseClient(
     SupabaseConstants.url,

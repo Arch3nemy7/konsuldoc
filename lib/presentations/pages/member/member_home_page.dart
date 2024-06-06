@@ -53,6 +53,7 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
       body: ref.watch(userStateProvider).when(
             data: (data) {
               final member = data as Member;
+
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -147,45 +148,48 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                       const Divider(height: 1),
                     ]),
                   ),
-                  SliverFillRemaining(
-                    hasScrollBody: true,
-                    child: ref.watch(fetchAllDoctorProvider).when(
-                          data: (data) {
-                            final filtered = data.filter((t) {
-                              if (query != null && !t.name.contains(query!)) {
-                                return false;
-                              }
-                              if (specialist != null &&
-                                  t.specialist != specialist) {
-                                return false;
-                              }
+                  ref.watch(fetchAllDoctorProvider).when(
+                        data: (data) {
+                          final filtered = data.filter((t) {
+                            if (query != null &&
+                                !t.name
+                                    .toLowerCase()
+                                    .contains(query!.toLowerCase())) {
+                              return false;
+                            }
+                            if (specialist != null &&
+                                t.specialist != specialist) {
+                              return false;
+                            }
 
-                              return true;
-                            }).toList();
+                            return true;
+                          }).toList();
 
-                            return ListView.builder(
-                              padding: const EdgeInsets.all(0),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                final doctor = filtered[index];
+                          return SliverList.builder(
+                            itemCount: filtered.length,
+                            itemBuilder: (context, index) {
+                              final doctor = filtered[index];
 
-                                return ListItem(
-                                  onTap: () => context.pushRoute(
-                                      DoctorDetailRoute(id: doctor.id)),
-                                  avatar: doctor.avatar,
-                                  title: doctor.name,
-                                  subtitle: doctor.specialist.label,
-                                );
-                              },
-                              itemCount: filtered.length,
-                            );
-                          },
-                          error: (error, stackTrace) {
-                            return ErrorView(message: error.toString());
-                          },
-                          loading: () => const Loader(),
+                              return ListItem(
+                                onTap: () => context.pushRoute(
+                                  DoctorDetailRoute(id: doctor.id),
+                                ),
+                                avatar: doctor.avatar,
+                                title: doctor.name,
+                                subtitle: doctor.specialist.label,
+                              );
+                            },
+                          );
+                        },
+                        error: (error, stackTrace) {
+                          return SliverToBoxAdapter(
+                            child: ErrorView(message: error.toString()),
+                          );
+                        },
+                        loading: () => const SliverToBoxAdapter(
+                          child: Loader(),
                         ),
-                  )
+                      ),
                 ],
               );
             },

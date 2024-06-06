@@ -91,38 +91,43 @@ class _MemberHistoryPageState extends ConsumerState<MemberHistoryPage> {
         child: PagedListView(
           pagingController: _pagingController,
           builderDelegate: PaginatedChildBuilderDelegate(
+            emptyMessage: 'Masih kosong',
             itemBuilder: (context, item, index) {
               return ListItem(
                 onTap: () {
-                  if(role == Role.member) {
+                  if (role == Role.member) {
                     context.pushRoute(
-                    member_router.AppointmentDetailRoute(id: item.id),
-                  );
+                      member_router.AppointmentDetailRoute(id: item.id),
+                    );
                   } else {
                     context.pushRoute(
-                    doctor_router.AppointmentDetailRoute(id: item.id),
-                  );
+                      doctor_router.AppointmentDetailRoute(id: item.id),
+                    );
                   }
                 },
                 avatar: item.member.avatar,
                 title: item.member.name,
+                trailing: Padding(
+                  padding: const EdgeInsets.all(8.0).copyWith(left: 16),
+                  child: Text("#${item.number}"),
+                ),
                 bottom: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Sesi ${item.number}",
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     Text(
                       item.date.toDateString(),
                       style: theme.textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    Text(
+                      "Sesi ${item.session + 1}",
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
-                trailing: Text("#${item.number.toString()}"),
               );
             },
             pagingController: _pagingController,

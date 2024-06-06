@@ -63,7 +63,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   hintStyle: inputFieldHintStyle,
                   borderSide: inputFieldBorderSide,
                 ),
-                
                 const SizedBox(height: 32),
                 CustomElevatedButton(
                   onPressed: signIn,
@@ -72,8 +71,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   height: 40,
                 ),
                 const SizedBox(height: 33),
-                
-                
                 Text.rich(
                   TextSpan(
                     children: [

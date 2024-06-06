@@ -63,20 +63,6 @@ class _AdminListPageState extends ConsumerState<AdminListPage> {
                   const MaterialStatePropertyAll(EdgeInsets.only(left: 14)),
               constraints: const BoxConstraints.tightFor(height: 48),
               hintText: 'Pencarian',
-              trailing: [
-                IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                  color: theme.colorScheme.onSecondaryContainer,
-                  style: IconButton.styleFrom(
-                    backgroundColor: theme.colorScheme.secondaryContainer,
-                    elevation: 4,
-                    shadowColor: theme.colorScheme.shadow,
-                  ),
-                  icon: const Icon(Icons.tune),
-                )
-              ],
             ),
           ),
           Expanded(

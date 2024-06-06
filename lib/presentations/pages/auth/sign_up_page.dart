@@ -82,9 +82,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   height: 40,
                 ),
                 const SizedBox(height: 32),
-                
-                
-                
                 Text.rich(
                   TextSpan(
                     children: [

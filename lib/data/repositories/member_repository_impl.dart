@@ -62,6 +62,7 @@ class MemberRepositoryImpl implements MemberRepository {
     };
 
     if (avatar != null) {
+      await _storageRepository.deleteFile(BucketConstants.avatars, id);
       data['avatar'] = await _storageRepository.uploadFile(
         file: avatar,
         bucket: BucketConstants.avatars,

@@ -131,7 +131,9 @@ class _DoctorHomePageState extends ConsumerState<DoctorHomePage> {
                                     pagingController: _pagingController,
                                     builderDelegate:
                                         PaginatedChildBuilderDelegate(
-                                      emptyMessage: 'Tidak ada jadwal',
+                                      emptyTitle: 'Tidak ada janji',
+                                      emptyMessage:
+                                          'Tidak ada jadwal janji temu untuk hari ini\nSelamat beristirahat',
                                       itemBuilder: (context, item, index) =>
                                           ListItem(
                                         onTap: () {

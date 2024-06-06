@@ -60,7 +60,7 @@ class MemberProfilePage extends ConsumerWidget {
 
   _profilePict(String? avatar) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Center(
         child: Column(
           children: [
