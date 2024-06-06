@@ -101,9 +101,7 @@ class DoctorDetailPage extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                        height:
-                            24), // Memberikan jarak antara card dan teks "Tentang Dokter"
+                    const SizedBox(height: 24),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
@@ -133,9 +131,7 @@ class DoctorDetailPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                        height:
-                            24), // Memberikan jarak antara "Tentang Dokter" dan "Jadwal Praktik"
+                    const SizedBox(height: 24),
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(

@@ -13,6 +13,16 @@ import 'package:konsuldoc/presentations/widgets/item/option_item.dart';
 import 'package:konsuldoc/presentations/widgets/pagination/paginated_child_builder_delegate.dart';
 import 'package:konsuldoc/presentations/widgets/pagination/paginated_view.dart';
 
+class DoctorSession {
+  TimeOfDay timeStart;
+  TimeOfDay timeEnd;
+
+  DoctorSession({
+    required this.timeStart,
+    required this.timeEnd,
+  });
+}
+
 @RoutePage()
 class AppointmentListPage extends ConsumerStatefulWidget {
   const AppointmentListPage({super.key});
@@ -53,6 +63,11 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    DoctorSession session = DoctorSession(
+      timeStart: const TimeOfDay(hour: 9, minute: 0),
+      timeEnd: const TimeOfDay(hour: 10, minute: 0),
+    );
 
     return Scaffold(
       body: SafeArea(
@@ -103,26 +118,45 @@ class _AppointmentListPageState extends ConsumerState<AppointmentListPage> {
                         avatar: item.doctor.avatar,
                         title: item.doctor.name,
                         subtitle: item.doctor.specialist.label,
-                        trailing: Padding(
-                          padding: const EdgeInsets.all(8.0).copyWith(left: 16),
-                          child: Text("#${item.number}"),
+                        trailing: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFA4CFC3),
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "#${item.number}",
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "Sesi ${item.session + 1}",
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "${session.timeStart.format(context)} - ${session.timeEnd.format(context)}",
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        bottom: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              item.date.toDateString(),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Sesi ${item.session + 1}",
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        bottom: Text(
+                          item.date.toDateString(),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       );
                     },
