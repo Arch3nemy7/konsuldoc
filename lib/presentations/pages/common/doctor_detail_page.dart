@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:konsuldoc/core/constants/constants.dart';
 import 'package:konsuldoc/core/router/member_router.gr.dart';
