@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:konsuldoc/core/constants/hive_constants.dart';
+import 'package:konsuldoc/core/router/auth_router.gr.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
 import 'package:konsuldoc/presentations/widgets/onboarding_view.dart';
-import 'package:konsuldoc/core/router/auth_router.gr.dart';
 
 @RoutePage()
 class OnBoardingPage extends StatefulWidget {
@@ -73,11 +75,18 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   ),
                 CustomElevatedButton(
                   onPressed: () {
-                    _currentPage == 0 ? 
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                    ) : context.pushRoute(const SignInRoute());
+                    if (_currentPage == 0) {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    } else {
+                      Hive.box(HiveConstants.box).put(
+                        HiveConstants.onboarding,
+                        true,
+                      );
+                      context.pushRoute(const SignInRoute());
+                    }
                   },
                   text: 'Next',
                   width: 92,
