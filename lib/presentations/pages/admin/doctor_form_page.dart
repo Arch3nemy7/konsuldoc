@@ -154,7 +154,6 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.perm_identity_rounded),
               ),
-              
               validator: (value) {
                 if (value!.isEmpty ||
                     !RegExp(r'^[a-zA-Z., ]+$').hasMatch(value)) {
