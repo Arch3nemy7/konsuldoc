@@ -53,6 +53,7 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
       body: ref.watch(userStateProvider).when(
             data: (data) {
               final member = data as Member;
+
               return CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -75,8 +76,8 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                     actions: const [ThemeModeSwitch()],
                     flexibleSpace: FlexibleSpaceBar(
                       background: Container(
-                        margin: EdgeInsets.all(20.0).copyWith(top: 100),
-                        padding: EdgeInsets.all(16.0),
+                        margin: const EdgeInsets.all(20.0).copyWith(top: 100),
+                        padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
                           boxShadow: kElevationToShadow[4],
                           color: theme.colorScheme.primary,
@@ -93,7 +94,7 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 16.0),
+                            const SizedBox(height: 16.0),
                             Text(
                               'Jadwalkan appointment dan konsultasi dengan dokter secara langsung.',
                               style: TextStyle(
@@ -124,7 +125,7 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                       SizedBox(
                         height: 61,
                         child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.all(7),
                           itemCount: Specialist.values.length,
@@ -147,45 +148,48 @@ class _MemberHomePageState extends ConsumerState<MemberHomePage> {
                       const Divider(height: 1),
                     ]),
                   ),
-                  SliverFillRemaining(
-                    hasScrollBody: true,
-                    child: ref.watch(fetchAllDoctorProvider).when(
-                          data: (data) {
-                            final filtered = data.filter((t) {
-                              if (query != null && !t.name.contains(query!)) {
-                                return false;
-                              }
-                              if (specialist != null &&
-                                  t.specialist != specialist) {
-                                return false;
-                              }
+                  ref.watch(fetchAllDoctorProvider).when(
+                        data: (data) {
+                          final filtered = data.filter((t) {
+                            if (query != null &&
+                                !t.name
+                                    .toLowerCase()
+                                    .contains(query!.toLowerCase())) {
+                              return false;
+                            }
+                            if (specialist != null &&
+                                t.specialist != specialist) {
+                              return false;
+                            }
 
-                              return true;
-                            }).toList();
+                            return true;
+                          }).toList();
 
-                            return ListView.builder(
-                              padding: EdgeInsets.all(0),
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                final doctor = filtered[index];
+                          return SliverList.builder(
+                            itemCount: filtered.length,
+                            itemBuilder: (context, index) {
+                              final doctor = filtered[index];
 
-                                return ListItem(
-                                  onTap: () => context.pushRoute(
-                                      DoctorDetailRoute(id: doctor.id)),
-                                  avatar: doctor.avatar,
-                                  title: doctor.name,
-                                  subtitle: doctor.specialist.label,
-                                );
-                              },
-                              itemCount: filtered.length,
-                            );
-                          },
-                          error: (error, stackTrace) {
-                            return ErrorView(message: error.toString());
-                          },
-                          loading: () => const Loader(),
+                              return ListItem(
+                                onTap: () => context.pushRoute(
+                                  DoctorDetailRoute(id: doctor.id),
+                                ),
+                                avatar: doctor.avatar,
+                                title: doctor.name,
+                                subtitle: doctor.specialist.label,
+                              );
+                            },
+                          );
+                        },
+                        error: (error, stackTrace) {
+                          return SliverToBoxAdapter(
+                            child: ErrorView(message: error.toString()),
+                          );
+                        },
+                        loading: () => const SliverToBoxAdapter(
+                          child: Loader(),
                         ),
-                  )
+                      ),
                 ],
               );
             },

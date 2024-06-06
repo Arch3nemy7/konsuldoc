@@ -19,11 +19,12 @@ class StorageRepositoryImpl implements StorageRepository {
     required String bucket,
     required String id,
   }) async {
+    final path = 'id/${DateTime.now().millisecondsSinceEpoch}';
     await _supabase.storage.from(bucket).upload(
-          id,
+          path,
           file,
           fileOptions: const FileOptions(upsert: true),
         );
-    return _supabase.storage.from(bucket).getPublicUrl(id);
+    return _supabase.storage.from(bucket).getPublicUrl(path);
   }
 }

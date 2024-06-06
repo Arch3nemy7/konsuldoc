@@ -28,6 +28,7 @@ dependencies:
   google_fonts: ^6.2.1
   time_range_picker: ^2.3.0
   flutter_launcher_icons: ^0.13.1
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

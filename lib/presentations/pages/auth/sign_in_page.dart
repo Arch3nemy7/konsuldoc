@@ -5,9 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:konsuldoc/core/router/auth_router.gr.dart';
 import 'package:konsuldoc/core/theme/styles.dart';
 import 'package:konsuldoc/presentations/controllers/auth_controller.dart';
-import 'package:konsuldoc/presentations/widgets/custom_divider.dart';
 import 'package:konsuldoc/presentations/widgets/custom_elevated_button.dart';
-import 'package:konsuldoc/presentations/widgets/custom_outlined_button.dart';
 import 'package:konsuldoc/presentations/widgets/custom_text_field.dart';
 
 @RoutePage()
@@ -65,7 +63,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   hintStyle: inputFieldHintStyle,
                   borderSide: inputFieldBorderSide,
                 ),
-                
                 const SizedBox(height: 32),
                 CustomElevatedButton(
                   onPressed: signIn,
@@ -74,8 +71,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   height: 40,
                 ),
                 const SizedBox(height: 33),
-                
-                
                 Text.rich(
                   TextSpan(
                     children: [

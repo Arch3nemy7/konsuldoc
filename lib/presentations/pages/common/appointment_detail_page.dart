@@ -337,7 +337,7 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                                 const Padding(
                                   padding: EdgeInsets.symmetric(vertical: 5),
                                   child: Text(
-                                    'Catatan dokter',
+                                    'Diagnosa dokter',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -376,7 +376,7 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                                           AppointmentStatus.waiting &&
                                       widget.canConfirm,
                                   decoration: const InputDecoration(
-                                    labelText: 'Catatan dokter',
+                                    labelText: 'Diagnosa dokter',
                                     border: OutlineInputBorder(),
                                   ),
                                 ),

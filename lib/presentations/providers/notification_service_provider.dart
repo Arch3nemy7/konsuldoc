@@ -32,7 +32,7 @@ class NotificationService extends _$NotificationService {
   }
 
   void init() async {
-    FirebaseMessaging.onMessage.listen((event) {});
+    FirebaseMessaging.onMessage.listen(_handleMessage);
 
     await _plugin.initialize(
       const InitializationSettings(
@@ -102,7 +102,7 @@ class NotificationService extends _$NotificationService {
     final data = jsonDecode(response.payload!);
     final String? id = data['id'];
     if (id == null) return;
-      ref.read(routerProvider).push(AppointmentDetailRoute(id: id));
+    ref.read(routerProvider).push(AppointmentDetailRoute(id: id));
   }
 
   void onToken(String? newToken) async {
@@ -124,7 +124,7 @@ class NotificationService extends _$NotificationService {
       });
     }
     if (token != null) {
-      await _supabase.from(TableConstants.token).insert({
+      await _supabase.from(TableConstants.token).upsert({
         'id_user': id,
         'token': token,
       });

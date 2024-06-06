@@ -113,6 +113,9 @@ class _AppointmentListPageState
                 child: PagedListView(
                   pagingController: _pagingController,
                   builderDelegate: PaginatedChildBuilderDelegate(
+                    emptyTitle: 'Tidak Ada Janji',
+                    emptyMessage:
+                        'Tidak ada pasien yang mendaftar pada hari ini, silahkan tunggu dihari berikutnya!',
                     itemBuilder: (context, item, index) {
                       return ListItem(
                         onTap: () {
