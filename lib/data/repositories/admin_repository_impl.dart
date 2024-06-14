@@ -72,6 +72,7 @@ class AdminRepositoryImpl implements AdminRepository {
     File? avatar,
     required String email,
     required String name,
+    String? password,
     String? phone,
   }) async {
     final data = {
@@ -87,6 +88,9 @@ class AdminRepositoryImpl implements AdminRepository {
         bucket: BucketConstants.avatars,
         id: id,
       );
+    }
+    if (password != null && password.isNotEmpty) {
+      await _authRepository.changePassword(id, password);
     }
 
     await _supabase.from(TableConstants.admins).update(data).eq('id', id);

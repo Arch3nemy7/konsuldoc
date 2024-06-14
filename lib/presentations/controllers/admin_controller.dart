@@ -65,6 +65,7 @@ class AdminController {
     File? avatar,
     required String email,
     required String name,
+    String? password,
     String? phone,
   }) async {
     final cancel = showLoading();
@@ -74,6 +75,7 @@ class AdminController {
       email: email,
       name: name,
       phone: phone,
+      password: password,
     ));
     cancel();
 

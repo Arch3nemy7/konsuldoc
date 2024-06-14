@@ -14,6 +14,7 @@ abstract interface class AppointmentRepository {
     DateTime? date,
     int? session,
     AppointmentFilter? filter,
+    bool? ascending,
     int page,
     required int perPage,
   });
@@ -24,6 +25,8 @@ abstract interface class AppointmentRepository {
     int session,
     String? complaints,
   );
-  Future<void> editStatus(String id, {AppointmentStatus? status, String? diagnosis, String? suggestion});
+  Future<void> editStatus(String id,
+      {AppointmentStatus? status, String? diagnosis, String? suggestion});
+  Future<void> cancel(String id);
   Future<void> reschedule(String id, DateTime date, int session);
 }

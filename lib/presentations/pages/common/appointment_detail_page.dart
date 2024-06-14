@@ -11,6 +11,7 @@ import 'package:konsuldoc/domain/enums/role.dart';
 import 'package:konsuldoc/presentations/controllers/appointment_controller.dart';
 import 'package:konsuldoc/presentations/controllers/doctor_controller.dart';
 import 'package:konsuldoc/presentations/providers/user_role_provider.dart';
+import 'package:konsuldoc/presentations/widgets/button/danger_button.dart';
 import 'package:konsuldoc/presentations/widgets/button/primary_button.dart';
 import 'package:konsuldoc/presentations/widgets/reschedule_bottomsheet.dart';
 
@@ -209,9 +210,11 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
   }
 
   Widget _buildRescheduleButton(Appointment appointment, DateTime timeLimit) {
-    return PrimaryButton(
-      onPressed:
-          DateTime.now().isBefore(timeLimit.subtract(const Duration(hours: 1)))
+    return Column(
+      children: [
+        PrimaryButton(
+          onPressed: DateTime.now()
+                  .isBefore(timeLimit.subtract(const Duration(hours: 1)))
               ? () {
                   _showRescheduleBottomSheet(
                     context,
@@ -219,7 +222,23 @@ class _AppointmentDetailPageState extends ConsumerState<AppointmentDetailPage> {
                   );
                 }
               : null,
-      label: 'Ubah jadwal',
+          label: 'Ubah jadwal',
+        ),
+        DangerButton(
+          onPressed: DateTime.now()
+                  .isBefore(timeLimit.subtract(const Duration(hours: 1)))
+              ? () {
+                  ref
+                      .read(appointmentControllerProvider)
+                      .cancel(appointment.id)
+                      .then((value) {
+                    if (value) context.maybePop();
+                  });
+                }
+              : null,
+          label: 'Batalkan',
+        ),
+      ],
     );
   }
 

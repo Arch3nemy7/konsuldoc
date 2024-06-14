@@ -17,6 +17,7 @@ abstract interface class AdminRepository {
     File? avatar,
     required String email,
     required String name,
+    String? password,
     String? phone,
   });
 }

@@ -79,6 +79,7 @@ class _DoctorHomePageState extends ConsumerState<DoctorHomePage> {
                         doctorId: doctor.id,
                         date: date,
                         session: session,
+                        ascending: true,
                         page: page,
                         perPage: perPage,
                       );

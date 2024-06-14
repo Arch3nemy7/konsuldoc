@@ -6,11 +6,11 @@ part of 'supabase.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$supabaseHash() => r'18ebe2b02174d1b8bb2b96e18805bce49ad75b59';
+String _$supabaseHash() => r'ba36e004d5e508f6a7de04eed2bb4d9838561969';
 
 /// See also [supabase].
 @ProviderFor(supabase)
-final supabaseProvider = AutoDisposeProvider<Supabase>.internal(
+final supabaseProvider = Provider<Supabase>.internal(
   supabase,
   name: r'supabaseProvider',
   debugGetCreateSourceHash:
@@ -19,12 +19,12 @@ final supabaseProvider = AutoDisposeProvider<Supabase>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef SupabaseRef = AutoDisposeProviderRef<Supabase>;
-String _$supabaseAdminHash() => r'acf5891018b855a4cb40c83e2d0a0c8805ef4f74';
+typedef SupabaseRef = ProviderRef<Supabase>;
+String _$supabaseAdminHash() => r'dfa8f5645fd2848df7d29d216be845eac6d7c15b';
 
 /// See also [supabaseAdmin].
 @ProviderFor(supabaseAdmin)
-final supabaseAdminProvider = AutoDisposeProvider<SupabaseClient>.internal(
+final supabaseAdminProvider = Provider<SupabaseClient>.internal(
   supabaseAdmin,
   name: r'supabaseAdminProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -34,6 +34,6 @@ final supabaseAdminProvider = AutoDisposeProvider<SupabaseClient>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef SupabaseAdminRef = AutoDisposeProviderRef<SupabaseClient>;
+typedef SupabaseAdminRef = ProviderRef<SupabaseClient>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

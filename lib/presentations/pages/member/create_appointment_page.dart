@@ -42,7 +42,7 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
 
   List<DateTime> getNext10Weekdays() {
     List<DateTime> weekdays = [];
-    DateTime currentDate = DateTime.now().add(const Duration(days: 1));
+    DateTime currentDate = DateTime.now();
 
     while (weekdays.length < 10) {
       if (!isWeekend(currentDate)) {
@@ -280,11 +280,20 @@ class _CreateAppointmentPageState extends ConsumerState<CreateAppointmentPage> {
                                   final item = doctor
                                       .schedules[date!.weekday - 1][index];
                                   final selected = index == session;
+                                  final timeLimit = DateTime(
+                                    date!.year,
+                                    date!.month,
+                                    date!.day,
+                                    item.timeStart.hour,
+                                    item.timeStart.minute,
+                                  );
                                   final booked = item.quota < 1 ||
                                       bookedSession.contains(AppointmentSession(
                                         date: date!,
                                         session: index,
-                                      ));
+                                      )) ||
+                                      DateTime.now().isAfter(timeLimit
+                                          .subtract(const Duration(hours: 1)));
 
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(

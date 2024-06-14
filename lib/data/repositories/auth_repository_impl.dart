@@ -79,4 +79,12 @@ class AuthRepositoryImp implements AuthRepository {
   Future<void> deleteUser(String id) async {
     await _supabaseAdmin.auth.admin.deleteUser(id);
   }
+
+  @override
+  Future<void> changePassword(String id, String password) async {
+    await _supabaseAdmin.auth.admin.updateUserById(
+      id,
+      attributes: AdminUserAttributes(password: password),
+    );
+  }
 }

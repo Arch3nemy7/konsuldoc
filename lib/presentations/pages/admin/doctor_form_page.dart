@@ -33,6 +33,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
   late final _aboutController = TextEditingController(text: doctor?.about);
   late final _emailController = TextEditingController(text: doctor?.email);
   late final _passwordController = TextEditingController();
+  late final _confirmPasswordController = TextEditingController();
   late final _phoneController = TextEditingController(text: doctor?.phone);
 
   bool obscurePassword = true;
@@ -43,6 +44,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
     _aboutController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     _phoneController.dispose();
     super.dispose();
   }
@@ -154,7 +156,6 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.perm_identity_rounded),
               ),
-              
               validator: (value) {
                 if (value!.isEmpty ||
                     !RegExp(r'^[a-zA-Z., ]+$').hasMatch(value)) {
@@ -182,24 +183,41 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
               },
             ),
             const SizedBox(height: 15),
-            if (doctor == null)
-              TextFormField(
-                controller: _passwordController,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: obscurePassword,
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty || value.length < 6) {
-                    return "Password harus memiliki setidaknya 6 karakter";
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: _passwordController,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: obscurePassword,
+              decoration: const InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
               ),
-            if (doctor == null) const SizedBox(height: 15),
+              validator: (value) {
+                if ((doctor == null && value!.isEmpty) && value.length < 6) {
+                  return "Password harus memiliki setidaknya 6 karakter";
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: _confirmPasswordController,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: "Konfirmasi Password",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
+              ),
+              validator: (value) {
+                if ((doctor == null && value!.isEmpty) ||
+                    value != _passwordController.text) {
+                  return "Password tidak cocok";
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 15),
             TextFormField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
@@ -373,6 +391,7 @@ class _DoctorFormPageState extends ConsumerState<DoctorFormPage> {
           specialist: selectedSpecialist,
           phone: _phoneController.text,
           about: _aboutController.text,
+          password: _passwordController.text,
           schedules: schedules,
         )
         .then((value) {

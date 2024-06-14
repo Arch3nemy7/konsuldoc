@@ -86,6 +86,7 @@ class DoctorController {
     required Specialist? specialist,
     required String phone,
     required String about,
+    String? password,
     required List<List<DoctorSession>> schedules,
   }) async {
     if (specialist == null) {
@@ -102,6 +103,7 @@ class DoctorController {
       specialist: specialist,
       phone: phone,
       about: about,
+      password: password,
       schedules: schedules,
     ));
     cancel();

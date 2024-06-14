@@ -78,25 +78,14 @@ class ListItem extends StatelessWidget {
                     size: 30,
                   ),
                 ),
-              if (avatar != null)
-                Padding(
+              Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Material(
-                    elevation: 4,
-                    shape: avatarShape,
-                    clipBehavior: Clip.antiAlias,
-                    child: Ink.image(
-                      image: NetworkImage(avatar!),
-                      fit: BoxFit.cover,
-                      width: 60,
-                      height: 60,
-                      child: InkWell(
-                        onTap: enabled ? onTap : null,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: theme.colorScheme.background,
+                    backgroundImage:
+                        avatar == null ? null : NetworkImage(avatar!),
+                  )),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
