@@ -133,24 +133,49 @@ class _AppointmentListPageState
                               },
                               avatar: item.member.avatar,
                               title: item.member.name,
-                              bottom: Row(
-                                children: [
-                                  Text(
-                                    '${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}',
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
+                              trailing: Container(
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.secondary,
+                                  borderRadius: BorderRadius.circular(11),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "#${item.number}",
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    "Sesi ${item.number}",
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      "Sesi ${item.session + 1}",
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
-                                  )
-                                ],
+                                    Text(
+                                      "${session.timeStart.toTimeString()} - ${session.timeEnd.toTimeString()}",
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              trailing: Text("#${item.number.toString()}"),
+                              bottom: Text(
+                                item.date.toDateString(),
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             );
                           },
                           pagingController: _pagingController,

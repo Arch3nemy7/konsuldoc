@@ -22,6 +22,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
     DateTime? date,
     int? session,
     AppointmentFilter? filter,
+    bool? ascending,
     int page = 1,
     required int perPage,
   }) async {
@@ -54,7 +55,7 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
     return (await result
             .order('date', ascending: filter == AppointmentFilter.upcoming)
             .order('session')
-            .order('number')
+            .order('number', ascending: ascending ?? false)
             .range((page - 1) * perPage, page * perPage - 1))
         .map(AppointmentModel.fromMap)
         .toList();
@@ -132,6 +133,11 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       'status': AppointmentStatus.waiting.index,
       'session': session
     }).eq('id', id);
+  }
+
+  @override
+  Future<void> cancel(String id) async {
+    await _supabase.from(TableConstants.appointments).delete().eq('id', id);
   }
 
   @override

@@ -25,6 +25,7 @@ abstract interface class DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
+    String? password,
     required List<List<DoctorSession>> schedules,
   });
 }

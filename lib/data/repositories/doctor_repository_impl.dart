@@ -89,6 +89,7 @@ class DoctorRepositoryImpl implements DoctorRepository {
     required Specialist specialist,
     required String phone,
     required String about,
+    String? password,
     required List<List<DoctorSession>> schedules,
   }) async {
     final data = {
@@ -111,6 +112,10 @@ class DoctorRepositoryImpl implements DoctorRepository {
         id: id,
       );
     }
+    if (password != null && password.isNotEmpty) {
+      await _authRepository.changePassword(id, password);
+    }
+
     await _supabase.from(TableConstants.doctors).update(data).eq('id', id);
   }
 }

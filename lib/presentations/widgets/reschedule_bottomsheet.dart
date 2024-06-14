@@ -32,7 +32,7 @@ class _BottomsheetRescheduleState extends ConsumerState<BottomsheetReschedule> {
 
   List<DateTime> getNext10Weekdays() {
     List<DateTime> weekdays = [];
-    DateTime currentDate = DateTime.now().add(const Duration(days: 1));
+    DateTime currentDate = DateTime.now();
 
     while (weekdays.length < 10) {
       if (!isWeekend(currentDate)) {

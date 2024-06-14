@@ -97,6 +97,23 @@ class AppointmentController {
     );
   }
 
+  Future<bool> cancel(String id) async {
+    final cancel = showLoading();
+    final res = await handleError(_repository.cancel(id));
+    cancel();
+
+    return res.fold(
+      (l) {
+        BotToast.showText(text: "Gagal membatalkan janji temu");
+        return false;
+      },
+      (r) {
+        BotToast.showText(text: "Janji temu berhasil dibatalkan");
+        return true;
+      },
+    );
+  }
+
   Future<bool> reschedule(
     String id,
     DateTime date,

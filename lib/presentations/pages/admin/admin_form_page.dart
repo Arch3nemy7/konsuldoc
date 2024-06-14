@@ -168,45 +168,41 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
                 return null;
               },
             ),
-            if (admin == null)
-              Column(
-                children: [
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: _passwordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: obscurePassword,
-                    decoration: const InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 6) {
-                        return "Password harus memiliki setidaknya 6 karakter";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 15),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: "Konfirmasi Password",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty || value != _passwordController.text) {
-                        return "Password tidak cocok";
-                      }
-                      return null;
-                    },
-                  ),
-                ],
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: _passwordController,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: obscurePassword,
+              decoration: const InputDecoration(
+                labelText: "Password",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
               ),
+              validator: (value) {
+                if ((admin == null && value!.isEmpty) && value.length < 6) {
+                  return "Password harus memiliki setidaknya 6 karakter";
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              controller: _confirmPasswordController,
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: "Konfirmasi Password",
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.lock),
+              ),
+              validator: (value) {
+                if ((admin == null && value!.isEmpty) ||
+                    value != _passwordController.text) {
+                  return "Password tidak cocok";
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 15),
             PrimaryButton(
               onPressed: () {
@@ -249,6 +245,7 @@ class _AdminFormPageState extends ConsumerState<AdminFormPage> {
           name: _nameController.text,
           email: _emailController.text,
           phone: _phoneController.text,
+          password: _passwordController.text,
           avatar: avatarFile,
         )
         .then((value) {
